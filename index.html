@@ -233,8 +233,8 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
 
 <section class="card" id="genc">
   <button type="button" class="sbgo" id="sbBtn">🎨 나만의 스케쥴표 만들어보기!</button>
-  <button type="button" class="sbgo attgo" id="attBtn">📤 출근부(52시간) 복붙 엑셀 받기 🔒</button>
-  <p class="hint" id="attHint">비밀번호가 필요해요. 급여 기준(16일~다음 달 15일)으로, 16일이 있는 주의 월요일부터 위에서 고른 기간 끝날까지 누적해서 담겨요. 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 선택해 복사 → 출근부 <b>D10</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸 시간만 채워져요.</p>
+  <button type="button" class="sbgo attgo" id="attBtn">📤 출근부(52시간) 복붙 엑셀 받기</button>
+  <p class="hint" id="attHint">급여 기준(16일~다음 달 15일)으로, 16일이 있는 주의 월요일부터 위에서 고른 기간 끝날까지 누적해서 담겨요. 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 선택해 복사 → 출근부 <b>D10</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸 시간만 채워져요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
   <p class="hint" style="margin-top:0">위에서 만들 <b>연도·월·기간</b>을 먼저 고르세요. 지금 선택: <b id="genper"></b></p>
   <div class="gf"><label for="gnames">인원 <small id="gcnt"></small></label><input id="gnames" placeholder="이름을 공백으로 구분"></div>
@@ -284,7 +284,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 14:50b</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 15:35</p>
 </main>
 
 <script>
@@ -1362,7 +1362,7 @@ async function attExport(){
   const f2=d=>(d.getMonth()+1)+'.'+d.getDate();X.writeFile(wb,'출근부_'+W[0][0].getFullYear()+'_'+f2(W[0][0])+'-'+f2(RG.en)+'.xlsx');
   toast('ok','✅ 출근부 파일을 받았어요\n('+(W[0][0].getMonth()+1)+'/'+W[0][0].getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+' 누적)');
 }
-$('#attBtn').addEventListener('click',()=>gate(()=>attExport()));
+$('#attBtn').addEventListener('click',()=>{if(confirm('다운로드 받으시겠습니까?'))attExport()});
 /* 칸 폭 자동 맞춤: 가장 긴 칸에 맞춰 모든 칸을 같은 폭으로 */
 (function(){
   const g=$('#grid');if(!g)return;let raf=0;
