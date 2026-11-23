@@ -201,7 +201,7 @@ section.card.nextbd b{font-weight:900;color:#d6336c}
 #sbgrid sup{color:#e8590c;font-weight:700}#sbgrid .need{color:var(--bad);font-weight:700;font-size:11px}.sbbox .zbar{margin:8px 0 6px}
 .sbh{font-size:15px;margin:14px 0 6px}.sbbox .sum{font-size:13px}.sbbox .wl{max-height:none}
 .sbcnt{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px;margin-top:8px;font-size:12px}.sbcnt div{padding:4px 6px;border-radius:8px;border-left:4px solid var(--k);background:color-mix(in srgb,var(--k) 14%,var(--card))}
-body:not(.unl) #genc>*:not(#sbBtn){display:none!important}body:not(.unl) #genc{padding:14px 12px!important}body:not(.unl) #genc #sbBtn{margin:0}body:not(.unl) #xferc{display:none!important}
+body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!important}#genc #attBtn{margin-top:10px}.attgo{background:linear-gradient(180deg,#74c0fc,#1c7ed6)!important;border-color:#0b3b7a!important;box-shadow:0 4px 0 #0b3b7a,inset 0 2px 0 rgba(255,255,255,.45)!important}#attHint{margin:8px 2px 14px;font-size:12px}body:not(.unl) #genc{padding:14px 12px!important}body:not(.unl) #genc #sbBtn{margin:0}body:not(.unl) #attHint{margin-bottom:0}body:not(.unl) #xferc{display:none!important}
 .admtag{display:inline-block;margin-top:6px;padding:3px 14px;border-radius:99px;background:#0b1f4d;color:#ffd43b;font-family:var(--jua);font-size:15px;letter-spacing:1px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
 #chips .hc{font-size:12px;margin-left:3px}.hpop{position:absolute;z-index:80;pointer-events:none;font-size:22px;animation:hpop .85s ease-out forwards}@keyframes hpop{to{transform:translateY(-48px) scale(1.5);opacity:0}}#chips button.hbump{animation:hbump .25s}@keyframes hbump{50%{transform:scale(1.1)}}body.rdo #chips{pointer-events:auto!important}
 .sndbar{position:fixed;right:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;gap:6px}.sndbar button{padding:6px 12px!important;font-size:13px!important;border-radius:99px!important}.sndbar button:not(.on){filter:grayscale(.75);opacity:.85}
@@ -233,6 +233,8 @@ body:not(.unl) #genc>*:not(#sbBtn){display:none!important}body:not(.unl) #genc{p
 
 <section class="card" id="genc">
   <button type="button" class="sbgo" id="sbBtn">🎨 나만의 스케쥴표 만들어보기!</button>
+  <button type="button" class="sbgo attgo" id="attBtn">📤 출근부(52시간) 복붙 엑셀 받기 🔒</button>
+  <p class="hint" id="attHint">비밀번호가 필요해요. 받은 파일에서 <b>D열~마지막 열</b>을 복사 → 출근부 <b>D1</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b> 체크하면 노란 칸 시간만 채워져요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
   <p class="hint" style="margin-top:0">위에서 만들 <b>연도·월·기간</b>을 먼저 고르세요. 지금 선택: <b id="genper"></b></p>
   <div class="gf"><label for="gnames">인원 <small id="gcnt"></small></label><input id="gnames" placeholder="이름을 공백으로 구분"></div>
@@ -276,15 +278,13 @@ body:not(.unl) #genc>*:not(#sbBtn){display:none!important}body:not(.unl) #genc{p
 
 <section class="card" id="xferc">
   <h2>시트로 옮기기 · 불러오기</h2>
-  <div class="bar" style="margin-bottom:8px"><button type="button" class="gen-go" id="attBtn">📤 출근부(52시간) 엑셀 받기</button></div>
-  <p class="hint" style="margin:0 0 10px">위에서 고른 기간의 출근·퇴근 시간을 출근부 노란 칸과 같은 자리에 채운 파일이에요. 파일을 열어 <b>D열~마지막 열 머리글을 드래그해서 복사</b> → 출근부 <b>D1</b> 칸에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸의 시간만 채워져요. (B열 이름은 확인용이라 복사하지 마세요)</p>
-  <div class="bar"><button id="copyGrid">입력표 복사</button><button class="sec" id="copySum">합계 숫자 복사</button><span class="hint" id="msg"></span></div>
+    <div class="bar"><button id="copyGrid">입력표 복사</button><button class="sec" id="copySum">합계 숫자 복사</button><span class="hint" id="msg"></span></div>
   <label for="imp" style="margin-top:12px">복사한 입력표 붙여넣어 불러오기</label>
   <textarea id="imp" placeholder="날짜 / 휴무 / 오전조 / 중간조 / 마감조 순서의 표를 붙여넣으세요"></textarea>
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 14:00</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 14:10</p>
 </main>
 
 <script>
@@ -1350,7 +1350,7 @@ async function attExport(){
   X.writeFile(wb,'출근부_'+p.y+'-'+String(p.m).padStart(2,'0')+'_'+(p.h==='1'?'1-15':'16-'+p.e)+'.xlsx');
   toast('ok','✅ 엑셀 파일을 받았어요');
 }
-$('#attBtn').addEventListener('click',()=>attExport());
+$('#attBtn').addEventListener('click',()=>gate(()=>attExport()));
 /* 칸 폭 자동 맞춤: 가장 긴 칸에 맞춰 모든 칸을 같은 폭으로 */
 (function(){
   const g=$('#grid');if(!g)return;let raf=0;
