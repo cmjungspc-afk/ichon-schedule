@@ -1081,6 +1081,10 @@ function watchAround(){
   ks.forEach(watch);
 }
 function q(id,fn){wq[id]=(wq[id]||Promise.resolve()).then(fn);return wq[id]}
+let PENDW=0;
+function saveMsg(k){const el=$('#sync');if(!el)return;const t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+  const m={ing:['sync connecting','💾 저장하는 중…'],ok:['sync live','✅ 스케쥴 저장 완료 · '+hm+' · 모든 직원 화면에 반영됐어요'],fail:['sync err','⚠️ 저장 실패! 인터넷 연결을 확인하고 그 칸을 다시 고쳐 주세요'],locked:['sync err','🔒 잠금 상태라 저장되지 않았어요. 비밀번호를 넣고 다시 고쳐 주세요']}[k];
+  el.className=m[0];el.textContent=m[1];if(k==='fail'||k==='locked'){try{say&&0}catch(e){}}}
 function flush(key){
   const obj=pend[key];if(!obj||!DB)return;
   const days=new Set(Object.keys(obj));
@@ -1089,13 +1093,14 @@ function flush(key){
     const sk=key+'|'+d,j=cj(obj[d]);
     if(j===(sent[sk]===undefined?'{}':sent[sk]))continue;
     const body=clone(norm(obj[d]));
+    PENDW++;saveMsg('ing');
     q(sk,async()=>{
       try{
         const ref=DB.doc(dayPath(key,d));
         if(j==='{}')await ref.delete();else await ref.set(body);
-        sent[sk]=j;
+        sent[sk]=j;PENDW--;if(!PENDW)saveMsg('ok');
       }catch(e){
-        if(e&&e.code==='permission-denied'){}else setStatus('err');
+        PENDW--;saveMsg(e&&e.code==='permission-denied'?'locked':'fail');
       }
     });
   }
