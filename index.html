@@ -284,7 +284,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 14:50</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 14:50b</p>
 </main>
 
 <script>
@@ -1345,6 +1345,8 @@ async function attExport(){
   const hm=v=>typeof v==='number'?String(Math.floor(v)).padStart(2,'0')+':'+String(Math.round((v%1)*60)).padStart(2,'0'):v;
   view.push(['이름','날짜','요일','출근','퇴근']);
   const HD={font:{name:'맑은 고딕',sz:11,bold:true},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'D9E1F2'}},border:YEL.border};
+  const WKS={font:{name:'맑은 고딕',sz:12,bold:true,color:{rgb:'FFFFFF'}},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'38761D'}}};
+  ws['!merges']=[];W.forEach((wk,w)=>{const c=3+9*w;put(6,c,(w+1)+'주차',WKS);for(let k=1;k<7;k++)put(6,c+k,null,WKS);ws['!merges'].push({s:{r:6,c},e:{r:6,c:c+6}})});
   W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;put(7,c,(dt.getMonth()+1)+'/'+dt.getDate(),HD);put(8,c,'월화수목금토일'[k],Object.assign({},HD,{font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:k===5?'1C4FD6':k===6?'D62828':'000000'}}}))}));put(8,1,'이름',HD);
   R.forEach((n,i)=>{const r0=9+7*i;put(r0,1,n,NAMEST);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;put(r0,c,null,YEL);put(r0+1,c,null,YEL);const inP=dt>=W[0][0]&&dt<=RG.en,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0],YEL);put(r0+1,c,v[1],YEL)}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
   ws['!ref']=X.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(maxR,10),c:Math.max(maxC,10)}});
