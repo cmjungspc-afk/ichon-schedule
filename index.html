@@ -484,8 +484,9 @@ function openPw(then){
     if(FBON&&AUTH){
       $('#pwe').textContent='확인하는 중…';let good=false;
       try{await AUTH.signInWithEmailAndPassword(ADMIN_EMAIL,'ichon-'+v);good=true}catch(e){
-        if(FRESH()){if(v.length<4){$('#pwe').textContent='4자리 이상으로 정해 주세요';return}try{await AUTH.createUserWithEmailAndPassword(ADMIN_EMAIL,'ichon-'+v);good=true}catch(e2){}}
-        else if(e&&e.code==='auth/network-request-failed'){$('#pwe').textContent='인터넷 연결을 확인해 주세요';return}
+        if(e&&e.code==='auth/network-request-failed'){$('#pwe').textContent='인터넷 연결을 확인해 주세요';return}
+        if(FRESH()&&v.length<4){$('#pwe').textContent='4자리 이상으로 정해 주세요';return}
+        if(v.length>=4){try{await AUTH.createUserWithEmailAndPassword(ADMIN_EMAIL,'ichon-'+v);good=true}catch(e2){}}
       }
       if(good){ok();return}
     }else if(pwOk(v)){ok();return}
@@ -1033,8 +1034,7 @@ function pushSetting(patch){
   const p=clone(patch);
   setQ=setQ.then(async()=>{
     try{
-      if(settingsExists)await sref.update(flatP(p));
-      else{await sref.set(mergeAll(p));settingsExists=true}
+      await sref.update(flatP(p));settingsExists=true;
     }catch(e){
       if(e&&(e.code==='invalid_argument'||e.code==='not-found')){try{await sref.set(mergeAll(p));settingsExists=true}catch(_){setStatus('err')}}else if(e&&e.code==='permission-denied'){}
       else setStatus('err');
@@ -1194,7 +1194,7 @@ function hInit(){if(hSub||typeof DB==='undefined'||!DB)return;hSub=true;try{DB.d
 function hDraw(){hInit();document.querySelectorAll('#chips .hc').forEach(s=>{const v=HEARTS[s.dataset.h]||0;s.textContent=v?'❤️'+v:'🤍'})}
 function addHeart(n,bt){HEARTS[n]=(HEARTS[n]||0)+1;try{localStorage.setItem('hearts',JSON.stringify(HEARTS))}catch(e){}hDraw();
   if(bt){const r=bt.getBoundingClientRect(),h=document.createElement('span');h.className='hpop';h.textContent='❤️';h.style.left=(r.left+window.scrollX+r.width/2-10+(Math.random()*16-8))+'px';h.style.top=(r.top+window.scrollY-6)+'px';document.body.appendChild(h);setTimeout(()=>h.remove(),900);bt.classList.remove('hbump');void bt.offsetWidth;bt.classList.add('hbump')}
-  if(typeof DB!=='undefined'&&DB&&CANWRITE){const d=DB.doc('shared/hearts'),v=HEARTS[n],fb=()=>{try{const q=d.set(Object.assign({},HEARTS));if(q&&q.catch)q.catch(()=>{})}catch(_){}};try{const q=d.update({[n]:v});if(q&&q.catch)q.catch(fb)}catch(e){fb()}}}
+  if(typeof DB!=='undefined'&&DB&&CANWRITE){try{const inc=(window.firebase&&firebase.firestore.FieldValue&&firebase.firestore.FieldValue.increment)?firebase.firestore.FieldValue.increment(1):HEARTS[n];const q=DB.doc('shared/hearts').set({[n]:inc},{merge:true});if(q&&q.catch)q.catch(()=>{})}catch(e){}}}
 /* 🎨 나만의 스케쥴표 만들어보기 (연습용 · 저장 안 됨 · 실제 생성기와 같은 로직) */
 function sbPer(y,m,h){const s=h==='1'?1:16,e=h==='1'?15:new Date(y,m,0).getDate();return{y,m,h,s,e,key:'sch:'+y+'-'+m+'-'+h}}
 function sbGen(p,f){
