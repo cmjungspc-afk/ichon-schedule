@@ -187,6 +187,7 @@ button.sec.tog.on{background:linear-gradient(180deg,#9bf5b4,#2fbf5b);color:#0639
 
 section.card.nextbd{background:linear-gradient(135deg,#ffe3ef,#fff1b8)!important;border:3px solid #0b1f4d!important;color:#0b1f4d!important;font-size:17px;font-weight:700;opacity:1!important;filter:none!important}
 section.card.nextbd b{font-weight:900;color:#d6336c}
+#toast{position:fixed;left:50%;top:40%;z-index:99;transform:translate(-50%,-50%) scale(.9);opacity:0;pointer-events:none;padding:16px 22px;border-radius:16px;font-family:var(--jua);font-size:18px;line-height:1.5;text-align:center;white-space:pre-line;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:opacity .2s,transform .2s;max-width:86vw}#toast.on{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}#toast.t-ok{background:#2f9e44;color:#fff;border:3px solid #0d5a2a}#toast.t-bad{background:#e03131;color:#fff;border:3px solid #7a1212}
 .sbgo{display:block;width:100%;margin:0 0 12px;padding:12px 10px!important;font-size:17px!important;color:#fff!important;background:linear-gradient(180deg,#ff8fc8,#e64980)!important;border:3px solid #7a1240!important;box-shadow:0 4px 0 #7a1240,inset 0 2px 0 rgba(255,255,255,.45)!important;text-shadow:0 2px 0 rgba(0,0,0,.25)!important}
 .sbbox{position:relative;margin:auto;width:min(96vw,560px);max-height:90vh;overflow:auto;padding:14px 12px 16px;border-radius:18px;background:var(--card);color:var(--ink);animation:fzup .3s cubic-bezier(.2,1.2,.4,1)}.sbbox h3{margin:0 0 4px;padding-right:36px;font-size:18px}.sbbox .hint{margin:0 0 8px}
 .sbbox .gf{margin:6px 0}.sbbox .gslots{margin:6px 0;gap:8px}.sbbox .gslots b{width:30px}.sbper{display:flex;gap:6px}.sbper>*{flex:1}
@@ -1024,20 +1025,20 @@ function mergeAll(p){const all=allSettings();for(const k in p)all[k]=(p[k]&&type
 function flatP(p){const o={};for(const k in p){const v=p[k];if(v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length){for(const j in v)o[k+'.'+j]=v[j]}else o[k]=v}return o}
 let repaired=false;
 function repairSettings(s){
-  if(repaired||!UNL||!DB||!sref)return;repaired=true;
+  if(!UNL||!DB||!sref)return;
   const p={};
   for(const [f,L] of [['tags',TAGS],['stk',STK],['bday',BDAY]]){const r=(s&&s[f])||{};for(const k in L)if(r[k]===undefined&&L[k]!==undefined&&L[k]!=='')p[f+'.'+k]=L[k]}
-  if(Object.keys(p).length)sref.update(p).catch(()=>{});
+  const DT={유림:'부점장',은주:'부점장 ',유진:'조장',지은:'조장',지윤:'막냉이',창민:'점장'};for(const k in DT){const r=(s&&s.tags)||{};if(r[k]===undefined&&p['tags.'+k]===undefined)p['tags.'+k]=DT[k]}
+  if(Object.keys(p).length)sref.update(p).then(()=>toast('ok','✅ 생일·소개 문구를 서버에 다시 채웠어요')).catch(()=>{});
 }
 function pushSetting(patch){
   if(!DB||!CANWRITE||!sref)return;
   const p=clone(patch);
   setQ=setQ.then(async()=>{
     try{
-      await sref.update(flatP(p));settingsExists=true;
+      await sref.update(flatP(p));settingsExists=true;toast('ok','✅ 저장됐어요');
     }catch(e){
-      if(e&&(e.code==='invalid_argument'||e.code==='not-found')){try{await sref.set(mergeAll(p));settingsExists=true}catch(_){setStatus('err')}}else if(e&&e.code==='permission-denied'){}
-      else setStatus('err');
+      if(e&&(e.code==='invalid_argument'||e.code==='not-found')){try{await sref.set(mergeAll(p));settingsExists=true;toast('ok','✅ 저장됐어요')}catch(_){saveMsg('fail')}}else if(e&&e.code==='permission-denied'){saveMsg('locked')}else saveMsg('fail');
     }
   });
 }
@@ -1082,9 +1083,11 @@ function watchAround(){
 }
 function q(id,fn){wq[id]=(wq[id]||Promise.resolve()).then(fn);return wq[id]}
 let PENDW=0;
+function toast(k,msg){let el=document.getElementById('toast');if(!el){el=document.createElement('div');el.id='toast';document.body.appendChild(el);el.addEventListener('click',()=>el.classList.remove('on'))}
+  el.className='t-'+k+' on';el.textContent=msg;clearTimeout(el._t);if(k==='ok')el._t=setTimeout(()=>el.classList.remove('on'),2200)}
 function saveMsg(k){const el=$('#sync');if(!el)return;const t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
   const m={ing:['sync connecting','💾 저장하는 중…'],ok:['sync live','✅ 스케쥴 저장 완료 · '+hm+' · 모든 직원 화면에 반영됐어요'],fail:['sync err','⚠️ 저장 실패! 인터넷 연결을 확인하고 그 칸을 다시 고쳐 주세요'],locked:['sync err','🔒 잠금 상태라 저장되지 않았어요. 비밀번호를 넣고 다시 고쳐 주세요']}[k];
-  el.className=m[0];el.textContent=m[1];if(k==='fail'||k==='locked'){try{say&&0}catch(e){}}}
+  el.className=m[0];el.textContent=m[1];if(k==='ok')toast('ok','✅ 저장됐어요');else if(k==='fail')toast('bad','⚠️ 저장 실패!\n인터넷 연결을 확인하고 다시 고쳐 주세요\n(눌러서 닫기)');else if(k==='locked')toast('bad','🔒 잠금 상태라 저장되지 않았어요\n비밀번호를 넣고 다시 고쳐 주세요\n(눌러서 닫기)')}
 function flush(key){
   const obj=pend[key];if(!obj||!DB)return;
   const days=new Set(Object.keys(obj));
