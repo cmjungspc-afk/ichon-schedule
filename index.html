@@ -234,7 +234,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
 <section class="card" id="genc">
   <button type="button" class="sbgo" id="sbBtn">🎨 나만의 스케쥴표 만들어보기!</button>
   <button type="button" class="sbgo attgo" id="attBtn">📤 출근부(52시간) 복붙 엑셀 받기 🔒</button>
-  <p class="hint" id="attHint">비밀번호가 필요해요. 받은 파일에서 <b>D열~마지막 열</b>을 복사 → 출근부 <b>D1</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b> 체크하면 노란 칸 시간만 채워져요.</p>
+  <p class="hint" id="attHint">비밀번호가 필요해요. 급여 기준(16일~다음 달 15일)으로, 16일부터 위에서 고른 기간 끝날까지 누적해서 담겨요. 받은 파일에서 <b>D열~마지막 열</b>을 복사 → 출근부 <b>D1</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b> 체크하면 노란 칸 시간만 채워져요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
   <p class="hint" style="margin-top:0">위에서 만들 <b>연도·월·기간</b>을 먼저 고르세요. 지금 선택: <b id="genper"></b></p>
   <div class="gf"><label for="gnames">인원 <small id="gcnt"></small></label><input id="gnames" placeholder="이름을 공백으로 구분"></div>
@@ -284,7 +284,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 14:10</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 14:45</p>
 </main>
 
 <script>
@@ -1326,7 +1326,8 @@ function attCell(cat,suf){
   }
   return[s,e];
 }
-function attWeeks(p){const st=new Date(p.y,p.m-1,p.s),en=new Date(p.y,p.m-1,p.e);const mon=new Date(st);mon.setDate(st.getDate()-((st.getDay()+6)%7));const w=[];for(let d=new Date(mon);d<=en;d.setDate(d.getDate()+7)){w.push([0,1,2,3,4,5,6].map(i=>{const t=new Date(d);t.setDate(t.getDate()+i);return t}))}return w}
+function attRange(p){/* 급여 기준: 16일 ~ 다음 달 15일. 고른 기간까지 누적 */const st=p.h==='2'?new Date(p.y,p.m-1,16):new Date(p.y,p.m-2,16),en=new Date(p.y,p.m-1,p.e);return{st,en}}
+function attWeeks(p){const{st,en}=attRange(p);const mon=new Date(st);mon.setDate(st.getDate()-((st.getDay()+6)%7));const w=[];for(let d=new Date(mon);d<=en;d.setDate(d.getDate()+7)){w.push([0,1,2,3,4,5,6].map(i=>{const t=new Date(d);t.setDate(t.getDate()+i);return t}))}return w}
 function attDay(dt,name,R){
   const y=dt.getFullYear(),m=dt.getMonth()+1,d=dt.getDate(),r=(getData('sch:'+y+'-'+m+'-'+(d<=15?1:2))[d])||{};
   for(const c of ['open','mid','close','off'])for(const t of String(r[c]||'').split(/[\s,]+/).filter(Boolean)){if(who(t,R)===name)return attCell(c,t.slice(name.length))}
@@ -1334,7 +1335,8 @@ function attDay(dt,name,R){
 }
 function loadXLSX(){return new Promise((ok,no)=>{if(window.XLSX)return ok();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';s.onload=()=>ok();s.onerror=()=>no(new Error('load'));document.head.appendChild(s)})}
 async function attExport(){
-  const p=P(),R=roster(),W=attWeeks(p);
+  const p=P(),R=roster(),W=attWeeks(p),RG=attRange(p);
+  if(DB){const ks=new Set();for(let d=new Date(RG.st);d<=RG.en;d.setDate(d.getDate()+1))ks.add(keyFor(d.getFullYear(),d.getMonth()+1,d.getDate()));ks.forEach(watch);for(let t=0;t<30&&[...ks].some(k=>!ready[k]);t++)await new Promise(r=>setTimeout(r,100))}
   try{await loadXLSX()}catch(e){toast('bad','⚠️ 엑셀 도구를 불러오지 못했어요\n인터넷 연결을 확인해 주세요\n(눌러서 닫기)');return}
   const X=window.XLSX,ws={},view=[];let maxC=0,maxR=0;
   const YEL={fill:{patternType:'solid',fgColor:{rgb:'FFFF00'}},alignment:{horizontal:'center',vertical:'center'},font:{name:'맑은 고딕',sz:11},border:{top:{style:'thin',color:{rgb:'BFBFBF'}},bottom:{style:'thin',color:{rgb:'BFBFBF'}},left:{style:'thin',color:{rgb:'BFBFBF'}},right:{style:'thin',color:{rgb:'BFBFBF'}}}};
@@ -1342,13 +1344,13 @@ async function attExport(){
   const NAMEST={font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:'1F3864'}},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'FFFF00'}}};
   const hm=v=>typeof v==='number'?String(Math.floor(v)).padStart(2,'0')+':'+String(Math.round((v%1)*60)).padStart(2,'0'):v;
   view.push(['이름','날짜','요일','출근','퇴근']);
-  R.forEach((n,i)=>{const r0=9+7*i;put(r0,1,n,NAMEST);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;put(r0,c,null,YEL);put(r0+1,c,null,YEL);const inP=dt.getFullYear()===p.y&&dt.getMonth()+1===p.m&&dt.getDate()>=p.s&&dt.getDate()<=p.e,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0],YEL);put(r0+1,c,v[1],YEL)}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
+  R.forEach((n,i)=>{const r0=9+7*i;put(r0,1,n,NAMEST);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;put(r0,c,null,YEL);put(r0+1,c,null,YEL);const inP=dt>=RG.st&&dt<=RG.en,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0],YEL);put(r0+1,c,v[1],YEL)}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
   ws['!ref']=X.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(maxR,10),c:Math.max(maxC,10)}});
   ws['!cols']=Array.from({length:Math.max(maxC,10)+1},(_,i)=>({wch:i===1?8:7}));
   const wb=X.utils.book_new();X.utils.book_append_sheet(wb,ws,'붙여넣기용');
   const v2=X.utils.aoa_to_sheet(view);v2['!cols']=[{wch:8},{wch:7},{wch:5},{wch:7},{wch:7}];X.utils.book_append_sheet(wb,v2,'확인용');
-  X.writeFile(wb,'출근부_'+p.y+'-'+String(p.m).padStart(2,'0')+'_'+(p.h==='1'?'1-15':'16-'+p.e)+'.xlsx');
-  toast('ok','✅ 엑셀 파일을 받았어요');
+  const f2=d=>(d.getMonth()+1)+'.'+d.getDate();X.writeFile(wb,'출근부_'+RG.st.getFullYear()+'_'+f2(RG.st)+'-'+f2(RG.en)+'.xlsx');
+  toast('ok','✅ 출근부 파일을 받았어요\n('+(RG.st.getMonth()+1)+'/'+RG.st.getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+' 누적)');
 }
 $('#attBtn').addEventListener('click',()=>gate(()=>attExport()));
 /* 칸 폭 자동 맞춤: 가장 긴 칸에 맞춰 모든 칸을 같은 폭으로 */
