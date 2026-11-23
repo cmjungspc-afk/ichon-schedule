@@ -282,6 +282,7 @@ body:not(.unl) #genc>*:not(#sbBtn){display:none!important}body:not(.unl) #genc{p
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 12:35</p>
 </main>
 
 <script>
@@ -470,7 +471,7 @@ let AUTH=null;const FRESH=()=>FBON&&liveOnce&&!settingsExists;
 function pwOk(v){return hsh('ichon-lock|'+v)===PWH}
 function updateLock(){document.body.classList.toggle('unl',!!UNL);const b=$('#lockb');if(!b)return;b.hidden=!CANWRITE;applyLockState();b.className='lockb '+(UNL?'on':'');b.textContent=UNL?'🔓 수정 가능 · 눌러서 잠그기':'🔒 수정 잠김 · 눌러서 비밀번호 입력'}
 function gate(fn){if(!CANWRITE||UNL){fn();return}openPw(fn)}
-function setUnl(v){UNL=v;try{v?sessionStorage.setItem('unl','1'):sessionStorage.removeItem('unl')}catch(e){}updateLock();if(v&&window._lastS)setTimeout(()=>repairSettings(window._lastS),0)}
+function setUnl(v){UNL=v;try{v?sessionStorage.setItem('unl','1'):sessionStorage.removeItem('unl')}catch(e){}updateLock();if(v&&window._lastS)setTimeout(()=>{repairSettings(window._lastS);hashRestore()},0)}
 function openPw(then){
   const old=$('#pw');if(old)old.remove();
   const el=document.createElement('div');el.id='pw';el.className='fz pwm';
@@ -1024,6 +1025,14 @@ function allSettings(){return clone({roster:$('#roster').value,notice:$('#notice
 function mergeAll(p){const all=allSettings();for(const k in p)all[k]=(p[k]&&typeof p[k]==='object')?Object.assign(all[k]||{},p[k]):p[k];return all}
 function flatP(p){const o={};for(const k in p){const v=p[k];if(v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length){for(const j in v)o[k+'.'+j]=v[j]}else o[k]=v}return o}
 let repaired=false;
+function hashRestore(){
+  if(!UNL||!DB||!sref)return;const h=location.hash||'';if(h.indexOf('#fix=')!==0)return;
+  let o=null;try{const b=h.slice(5).replace(/-/g,'+').replace(/_/g,'/');o=JSON.parse(decodeURIComponent(escape(atob(b))))}catch(e){toast('bad','⚠️ 복구 링크가 올바르지 않아요\n(눌러서 닫기)');return}
+  const p={};for(const f of ['bday','tags'])for(const k in (o[f]||{}))p[f+'.'+k]=o[f][k];
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){location.hash=''}
+  if(!Object.keys(p).length)return;
+  sref.update(p).then(()=>{for(const k in (o.bday||{}))BDAY[k]=o.bday[k];for(const k in (o.tags||{}))TAGS[k]=o.tags[k];persistLocal('bday',BDAY);persistLocal('tags',TAGS);chips();refreshPn();renderToday();toast('ok','✅ 생일 '+Object.keys(o.bday||{}).length+'명 · 소개 문구 '+Object.keys(o.tags||{}).length+'명을 서버에 저장했어요')}).catch(e=>saveMsg(e&&e.code==='permission-denied'?'locked':'fail'));
+}
 function repairSettings(s){
   if(!UNL||!DB||!sref)return;
   const p={};
@@ -1050,7 +1059,7 @@ function applySettings(snap){
   for(const [f,L] of [['tags',TAGS],['stk',STK],['bday',BDAY]]){const r=s[f]||{};for(const k in r)if(!debPend.has(f+'.'+k)&&L[k]!==r[k]){L[k]=r[k];ui=true}persistLocal(f,L)}
   {const r=s.gens||{};let ch=false;for(const k in r)if(!debPend.has('gens')&&GENS[k]!==r[k]){GENS[k]=r[k];ch=true}if(ch){persistLocal('genf',GENS);const a=document.activeElement;if(!(a&&a.closest&&a.closest('#genc')))try{genLoad()}catch(e){}}}
   if(ui){const a=document.activeElement;if(!(a&&a.closest&&a.closest('#crew')))chips();refreshPn();sum()}
-  window._lastS=s;repairSettings(s);
+  window._lastS=s;repairSettings(s);hashRestore();
 }
 function onRemote(key){if(editing())deferred=true;else drawGrid()}
 function applySnap(key,snap){
@@ -1145,6 +1154,7 @@ async function initSync(){
   sref.onSnapshot(applySettings,onErr);
   AUTH.onAuthStateChanged(u=>{const a=!!u&&u.email===ADMIN_EMAIL;if(a!==UNL)setUnl(a);if(a)seedIfEmpty()});
   load();
+  if((location.hash||'').indexOf('#fix=')===0)setTimeout(()=>{if(!UNL)openPw()},1500);
 }
 
 
