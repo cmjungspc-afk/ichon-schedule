@@ -277,14 +277,14 @@ body:not(.unl) #genc>*:not(#sbBtn){display:none!important}body:not(.unl) #genc{p
 <section class="card" id="xferc">
   <h2>시트로 옮기기 · 불러오기</h2>
   <div class="bar" style="margin-bottom:8px"><button type="button" class="gen-go" id="attBtn">📤 출근부(52시간) 엑셀 받기</button></div>
-  <p class="hint" style="margin:0 0 10px">위에서 고른 기간의 출근·퇴근 시간을 출근부 노란 칸과 같은 자리에 채운 파일이에요. 파일을 열어 <b>모두 선택(Ctrl+A) → 복사</b> → 출근부 A1 칸에서 <b>선택하여 붙여넣기 → '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸만 채워져요.</p>
+  <p class="hint" style="margin:0 0 10px">위에서 고른 기간의 출근·퇴근 시간을 출근부 노란 칸과 같은 자리에 채운 파일이에요. 파일을 열어 <b>D열~마지막 열 머리글을 드래그해서 복사</b> → 출근부 <b>D1</b> 칸에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸의 시간만 채워져요. (B열 이름은 확인용이라 복사하지 마세요)</p>
   <div class="bar"><button id="copyGrid">입력표 복사</button><button class="sec" id="copySum">합계 숫자 복사</button><span class="hint" id="msg"></span></div>
   <label for="imp" style="margin-top:12px">복사한 입력표 붙여넣어 불러오기</label>
   <textarea id="imp" placeholder="날짜 / 휴무 / 오전조 / 중간조 / 마감조 순서의 표를 붙여넣으세요"></textarea>
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 13:50</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/23 14:00</p>
 </main>
 
 <script>
@@ -1332,16 +1332,19 @@ function attDay(dt,name,R){
   for(const c of ['open','mid','close','off'])for(const t of String(r[c]||'').split(/[\s,]+/).filter(Boolean)){if(who(t,R)===name)return attCell(c,t.slice(name.length))}
   return null;
 }
-function loadXLSX(){return new Promise((ok,no)=>{if(window.XLSX)return ok();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';s.onload=()=>ok();s.onerror=()=>no(new Error('load'));document.head.appendChild(s)})}
+function loadXLSX(){return new Promise((ok,no)=>{if(window.XLSX)return ok();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';s.onload=()=>ok();s.onerror=()=>no(new Error('load'));document.head.appendChild(s)})}
 async function attExport(){
   const p=P(),R=roster(),W=attWeeks(p);
   try{await loadXLSX()}catch(e){toast('bad','⚠️ 엑셀 도구를 불러오지 못했어요\n인터넷 연결을 확인해 주세요\n(눌러서 닫기)');return}
   const X=window.XLSX,ws={},view=[];let maxC=0,maxR=0;
-  const put=(r,c,v)=>{if(v===null||v===undefined||v==='')return;const a=X.utils.encode_cell({r,c});ws[a]=typeof v==='number'?{t:'n',v:v/24,z:'hh:mm'}:{t:'s',v:String(v)};maxC=Math.max(maxC,c);maxR=Math.max(maxR,r)};
+  const YEL={fill:{patternType:'solid',fgColor:{rgb:'FFFF00'}},alignment:{horizontal:'center',vertical:'center'},font:{name:'맑은 고딕',sz:11},border:{top:{style:'thin',color:{rgb:'BFBFBF'}},bottom:{style:'thin',color:{rgb:'BFBFBF'}},left:{style:'thin',color:{rgb:'BFBFBF'}},right:{style:'thin',color:{rgb:'BFBFBF'}}}};
+  const put=(r,c,v,st)=>{const a=X.utils.encode_cell({r,c});const has=!(v===null||v===undefined||v==='');if(!has&&!st)return;ws[a]=!has?{t:'z',s:st}:typeof v==='number'?{t:'n',v:v/24,z:'hh:mm',s:st}:{t:'s',v:String(v),s:st};maxC=Math.max(maxC,c);maxR=Math.max(maxR,r)};
+  const NAMEST={font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:'1F3864'}},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'FFFF00'}}};
   const hm=v=>typeof v==='number'?String(Math.floor(v)).padStart(2,'0')+':'+String(Math.round((v%1)*60)).padStart(2,'0'):v;
   view.push(['이름','날짜','요일','출근','퇴근']);
-  R.forEach((n,i)=>{const r0=9+7*i;W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k,inP=dt.getFullYear()===p.y&&dt.getMonth()+1===p.m&&dt.getDate()>=p.s&&dt.getDate()<=p.e,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0]);put(r0+1,c,v[1])}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
+  R.forEach((n,i)=>{const r0=9+7*i;put(r0,1,n,NAMEST);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;put(r0,c,null,YEL);put(r0+1,c,null,YEL);const inP=dt.getFullYear()===p.y&&dt.getMonth()+1===p.m&&dt.getDate()>=p.s&&dt.getDate()<=p.e,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0],YEL);put(r0+1,c,v[1],YEL)}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
   ws['!ref']=X.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(maxR,10),c:Math.max(maxC,10)}});
+  ws['!cols']=Array.from({length:Math.max(maxC,10)+1},(_,i)=>({wch:i===1?8:7}));
   const wb=X.utils.book_new();X.utils.book_append_sheet(wb,ws,'붙여넣기용');
   const v2=X.utils.aoa_to_sheet(view);v2['!cols']=[{wch:8},{wch:7},{wch:5},{wch:7},{wch:7}];X.utils.book_append_sheet(wb,v2,'확인용');
   X.writeFile(wb,'출근부_'+p.y+'-'+String(p.m).padStart(2,'0')+'_'+(p.h==='1'?'1-15':'16-'+p.e)+'.xlsx');
