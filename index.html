@@ -469,7 +469,7 @@ let AUTH=null;const FRESH=()=>FBON&&liveOnce&&!settingsExists;
 function pwOk(v){return hsh('ichon-lock|'+v)===PWH}
 function updateLock(){document.body.classList.toggle('unl',!!UNL);const b=$('#lockb');if(!b)return;b.hidden=!CANWRITE;applyLockState();b.className='lockb '+(UNL?'on':'');b.textContent=UNL?'🔓 수정 가능 · 눌러서 잠그기':'🔒 수정 잠김 · 눌러서 비밀번호 입력'}
 function gate(fn){if(!CANWRITE||UNL){fn();return}openPw(fn)}
-function setUnl(v){UNL=v;try{v?sessionStorage.setItem('unl','1'):sessionStorage.removeItem('unl')}catch(e){}updateLock()}
+function setUnl(v){UNL=v;try{v?sessionStorage.setItem('unl','1'):sessionStorage.removeItem('unl')}catch(e){}updateLock();if(v&&window._lastS)setTimeout(()=>repairSettings(window._lastS),0)}
 function openPw(then){
   const old=$('#pw');if(old)old.remove();
   const el=document.createElement('div');el.id='pw';el.className='fz pwm';
@@ -1020,12 +1020,20 @@ function onErr(e){setStatus(e&&e.code==='revoked'?'err':'slow')}
 function deb(id,fn,ms){debPend.add(id);clearTimeout(debT[id]);debT[id]=setTimeout(()=>{debPend.delete(id);fn()},ms||500)}
 function allSettings(){return clone({roster:$('#roster').value,notice:$('#notice').value,tags:TAGS,stk:STK,bday:BDAY,gens:GENS})}
 function mergeAll(p){const all=allSettings();for(const k in p)all[k]=(p[k]&&typeof p[k]==='object')?Object.assign(all[k]||{},p[k]):p[k];return all}
+function flatP(p){const o={};for(const k in p){const v=p[k];if(v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length){for(const j in v)o[k+'.'+j]=v[j]}else o[k]=v}return o}
+let repaired=false;
+function repairSettings(s){
+  if(repaired||!UNL||!DB||!sref)return;repaired=true;
+  const p={};
+  for(const [f,L] of [['tags',TAGS],['stk',STK],['bday',BDAY]]){const r=(s&&s[f])||{};for(const k in L)if(r[k]===undefined&&L[k]!==undefined&&L[k]!=='')p[f+'.'+k]=L[k]}
+  if(Object.keys(p).length)sref.update(p).catch(()=>{});
+}
 function pushSetting(patch){
   if(!DB||!CANWRITE||!sref)return;
   const p=clone(patch);
   setQ=setQ.then(async()=>{
     try{
-      if(settingsExists)await sref.update(p);
+      if(settingsExists)await sref.update(flatP(p));
       else{await sref.set(mergeAll(p));settingsExists=true}
     }catch(e){
       if(e&&(e.code==='invalid_argument'||e.code==='not-found')){try{await sref.set(mergeAll(p));settingsExists=true}catch(_){setStatus('err')}}else if(e&&e.code==='permission-denied'){}
@@ -1041,6 +1049,7 @@ function applySettings(snap){
   for(const [f,L] of [['tags',TAGS],['stk',STK],['bday',BDAY]]){const r=s[f]||{};for(const k in r)if(!debPend.has(f+'.'+k)&&L[k]!==r[k]){L[k]=r[k];ui=true}persistLocal(f,L)}
   {const r=s.gens||{};let ch=false;for(const k in r)if(!debPend.has('gens')&&GENS[k]!==r[k]){GENS[k]=r[k];ch=true}if(ch){persistLocal('genf',GENS);const a=document.activeElement;if(!(a&&a.closest&&a.closest('#genc')))try{genLoad()}catch(e){}}}
   if(ui){const a=document.activeElement;if(!(a&&a.closest&&a.closest('#crew')))chips();refreshPn();sum()}
+  window._lastS=s;repairSettings(s);
 }
 function onRemote(key){if(editing())deferred=true;else drawGrid()}
 function applySnap(key,snap){
