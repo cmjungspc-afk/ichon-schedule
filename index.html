@@ -209,7 +209,7 @@ section.card.nextbd b{font-weight:900;color:#d6336c}
 #sbgrid sup{color:#e8590c;font-weight:700}#sbgrid .need{color:var(--bad);font-weight:700;font-size:11px}.sbbox .zbar{margin:8px 0 6px}
 .sbh{font-size:15px;margin:14px 0 6px}.sbbox .sum{font-size:13px}.sbbox .wl{max-height:none}
 .sbcnt{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px;margin-top:8px;font-size:12px}.sbcnt div{padding:4px 6px;border-radius:8px;border-left:4px solid var(--k);background:color-mix(in srgb,var(--k) 14%,var(--card))}
-body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(#attHint2){display:none!important}#genc .sbgo.attY{background:linear-gradient(180deg,#ffe066,#fcc419)!important;color:#5c3d00!important;border-color:#8a6100!important;box-shadow:0 4px 0 #8a6100,inset 0 2px 0 rgba(255,255,255,.5)!important;text-shadow:none!important}#attBtn2{margin-top:6px}.xli{width:1.35em;height:1.35em;vertical-align:-.3em;margin-right:6px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}#attHint2{margin:8px 2px 14px;font-size:12px}body:not(.unl) #attHint2{margin-bottom:0}#genc #attBtn{margin-top:4px}.attgo{background:linear-gradient(180deg,#74c0fc,#1c7ed6)!important;border-color:#0b3b7a!important;box-shadow:0 4px 0 #0b3b7a,inset 0 2px 0 rgba(255,255,255,.45)!important}#attHint{margin:8px 2px 14px;font-size:12px}body:not(.unl) #genc{padding:14px 12px!important}body:not(.unl) #genc #sbBtn{margin:0}body:not(.unl) #attHint{margin-bottom:14px}body:not(.unl) #xferc{display:none!important}
+body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(#attHint2){display:none!important}#genc .sbgo.attY{background:linear-gradient(180deg,#ffe066,#fcc419)!important;color:#5c3d00!important;border-color:#8a6100!important;box-shadow:0 4px 0 #8a6100,inset 0 2px 0 rgba(255,255,255,.5)!important;text-shadow:none!important}#attBtn2{margin-top:6px}.attP{display:block;font-size:13px;font-weight:700;opacity:.9;margin-top:2px}.xli{width:1.35em;height:1.35em;vertical-align:-.3em;margin-right:6px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}#attHint2{margin:8px 2px 14px;font-size:12px}body:not(.unl) #attHint2{margin-bottom:0}#genc #attBtn{margin-top:4px}.attgo{background:linear-gradient(180deg,#74c0fc,#1c7ed6)!important;border-color:#0b3b7a!important;box-shadow:0 4px 0 #0b3b7a,inset 0 2px 0 rgba(255,255,255,.45)!important}#attHint{margin:8px 2px 14px;font-size:12px}body:not(.unl) #genc{padding:14px 12px!important}body:not(.unl) #genc #sbBtn{margin:0}body:not(.unl) #attHint{margin-bottom:14px}body:not(.unl) #xferc{display:none!important}
 .admtag{display:inline-block;margin-top:6px;padding:3px 14px;border-radius:99px;background:#0b1f4d;color:#ffd43b;font-family:var(--jua);font-size:15px;letter-spacing:1px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
 #chips .hc{font-size:12px;margin-left:3px}.hpop{position:absolute;z-index:80;pointer-events:none;font-size:22px;animation:hpop .85s ease-out forwards}@keyframes hpop{to{transform:translateY(-48px) scale(1.5);opacity:0}}#chips button.hbump{animation:hbump .25s}@keyframes hbump{50%{transform:scale(1.1)}}body.rdo #chips{pointer-events:auto!important}
 .sndbar{position:fixed;right:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;gap:6px}.sndbar button{padding:6px 12px!important;font-size:13px!important;border-radius:99px!important}.sndbar button:not(.on){filter:grayscale(.75);opacity:.85}
@@ -242,9 +242,9 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 
 <section class="card" id="genc">
   <button type="button" class="sbgo" id="sbBtn">🎨 나만의 스케쥴표 만들어보기!</button>
-  <button type="button" class="sbgo attgo attY" id="attBtn"><svg class="xli" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3.5" fill="#1f9d55" stroke="#fff" stroke-width="1.6"/><rect x="5" y="7" width="14" height="10" rx="1" fill="#fff"/><path d="M5 10.3h14M5 13.6h14M9.7 7v10M14.3 7v10" stroke="#1f9d55" stroke-width="1.2"/><rect x="5" y="7" width="14" height="3.3" fill="#c3f0d2"/></svg>52시간 시트 복붙 엑셀 받기</button>
+  <button type="button" class="sbgo attgo attY" id="attBtn"><svg class="xli" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3.5" fill="#1f9d55" stroke="#fff" stroke-width="1.6"/><rect x="5" y="7" width="14" height="10" rx="1" fill="#fff"/><path d="M5 10.3h14M5 13.6h14M9.7 7v10M14.3 7v10" stroke="#1f9d55" stroke-width="1.2"/><rect x="5" y="7" width="14" height="3.3" fill="#c3f0d2"/></svg>52시간 시트 복붙 엑셀 받기<small class="attP"></small></button>
   <p class="hint" id="attHint"><b style="color:#b08900">🟨 52시간 시트</b> · 급여 기준으로 항상 <b>16일 ~ 다음 달 15일 한 달 전체</b>가 담겨요 (16일이 주 중간이면 그 주 월요일부터). 받은 파일에서 직원 이름 옆 <b>노란 2줄(출근·퇴근)을 행째로 잡아 복사</b> → 출근부의 그 직원 <b>노란 2줄</b>에 그대로 붙여넣으세요.</p>
-    <button type="button" class="sbgo attgo" id="attBtn2"><svg class="xli" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3.5" fill="#1f9d55" stroke="#fff" stroke-width="1.6"/><rect x="5" y="7" width="14" height="10" rx="1" fill="#fff"/><path d="M5 10.3h14M5 13.6h14M9.7 7v10M14.3 7v10" stroke="#1f9d55" stroke-width="1.2"/><rect x="5" y="7" width="14" height="3.3" fill="#c3f0d2"/></svg>SPC IN 2.0 복붙 엑셀 받기</button>
+    <button type="button" class="sbgo attgo" id="attBtn2"><svg class="xli" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3.5" fill="#1f9d55" stroke="#fff" stroke-width="1.6"/><rect x="5" y="7" width="14" height="10" rx="1" fill="#fff"/><path d="M5 10.3h14M5 13.6h14M9.7 7v10M14.3 7v10" stroke="#1f9d55" stroke-width="1.2"/><rect x="5" y="7" width="14" height="3.3" fill="#c3f0d2"/></svg>SPC IN 2.0 복붙 엑셀 받기<small class="attP"></small></button>
   <p class="hint" id="attHint2"><b style="color:#1c7ed6">🟦 SPC IN 2.0</b> · 항상 <b>16일 ~ 다음 달 15일</b>(16일이 있는 주 월요일부터) 빈 열 없이 이어져요. 직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 파란 3줄(휴무는 00:00, 스케쥴 없는 날은 미정) 아래에 <b>하루 근무시간</b>(휴게 제외), <b>주별 합계(52시간 검증)</b>, 오른쪽에 <b>총휴무 · 총근무</b>가 나와요. 파란 3줄을 <b>16일 칸부터</b> 드래그해서 SPC IN 2.0에 붙여넣으세요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
   <p class="hint" style="margin-top:0">위에서 만들 <b>연도·월·기간</b>을 먼저 고르세요. 지금 선택: <b id="genper"></b></p>
@@ -295,7 +295,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 15:15</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 15:25</p>
 </main>
 
 <script>
@@ -1390,10 +1390,11 @@ async function attExport(mode){const SPC=mode==='spc',ST=SPC?6:7,CS=9;
   const f2=d=>(d.getMonth()+1)+'.'+d.getDate();const F0=W[0][0];X.writeFile(wb,(SPC?'SPC IN 복붙_':'출근부_')+F0.getFullYear()+'_'+f2(F0)+'-'+f2(RG.en)+'.xlsx');
   toast('ok','✅ '+(SPC?'SPC IN 2.0 복붙':'출근부')+' 파일을 받았어요\n('+(F0.getMonth()+1)+'/'+F0.getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+')');
 }
-function attAsk(t){const p=P(),RG=attRange(p),W0=attWeeks(p)[0][0],f=d=>(d.getMonth()+1)+'/'+d.getDate()+'('+WD[d.getDay()]+')';
-  return confirm(t+'\n\n📅 '+f(RG.st)+' ~ '+f(RG.en)+' 기간으로\n엑셀을 받으시겠습니까?'+(W0<RG.st?'\n\n(16일이 주 중간이라 '+f(W0)+'부터 함께 담겨요)':''))}
-$('#attBtn').addEventListener('click',()=>{if(attAsk('🟨 52시간 시트 복붙'))attExport()});
-$('#attBtn2').addEventListener('click',()=>{if(attAsk('🟦 SPC IN 2.0 복붙'))attExport('spc')});
+function attLbl(){try{const p=P(),RG=attRange(p),f=d=>(d.getMonth()+1)+'/'+d.getDate();document.querySelectorAll('.attP').forEach(e=>e.textContent='('+f(RG.st)+' ~ '+f(RG.en)+' 기간)')}catch(e){}}
+['year','month','half'].forEach(id=>{const e=document.getElementById(id);if(e){e.addEventListener('change',()=>setTimeout(attLbl,0));e.addEventListener('input',()=>setTimeout(attLbl,0))}});attLbl();setTimeout(attLbl,800);
+function attAsk(){return confirm('다운로드 받으시겠습니까?')}
+$('#attBtn').addEventListener('click',()=>{if(attAsk())attExport()});
+$('#attBtn2').addEventListener('click',()=>{if(attAsk())attExport('spc')});
 /* 칸 폭 자동 맞춤: 가장 긴 칸에 맞춰 모든 칸을 같은 폭으로 */
 (function(){
   const g=$('#grid');if(!g)return;let raf=0;
