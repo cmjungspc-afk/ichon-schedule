@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="이촌점 스케쥴">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest" id="mfl">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -18,7 +18,12 @@
 <script>
 /* ⚙️ Firebase 설정: Firebase 콘솔 > 프로젝트 설정 > 내 앱(웹)에 나오는 값을 그대로 붙여넣으세요 */
 const FIREBASE_CONFIG={apiKey:"AIzaSyDQc581uTIftCreCMgXrG46-7CX1_kGFKs",authDomain:"ichon-schedule.firebaseapp.com",projectId:"ichon-schedule",storageBucket:"ichon-schedule.firebasestorage.app",messagingSenderId:"156976976207",appId:"1:156976976207:web:ea6c92532387681f5b353a"};
-const ADMIN_EMAIL="admin@ichon-schedule.app";
+/* 🏪 점포: 주소 끝 ?store=강남점 처럼 붙이면 그 점포 전용 데이터·비밀번호로 따로 움직여요 (없으면 이촌점) */
+const STORE=(()=>{try{return(new URLSearchParams(location.search).get('store')||'').trim().slice(0,20)}catch(e){return''}})();
+const SID=STORE?(()=>{let h=2166136261;for(const c of STORE){h^=c.codePointAt(0);h=Math.imul(h,16777619)}return 's'+(h>>>0).toString(36)})():'';
+const FP=p=>STORE?'stores/'+SID+'/'+p:p;
+const ADMIN_EMAIL=STORE?'admin-'+SID+'@ichon-schedule.app':"admin@ichon-schedule.app";
+if(STORE){try{const P0='st:'+SID+':',SP=Storage.prototype,g=SP.getItem,st=SP.setItem,rm=SP.removeItem;SP.getItem=function(k){return g.call(this,P0+k)};SP.setItem=function(k,v){return st.call(this,P0+k,v)};SP.removeItem=function(k){return rm.call(this,P0+k)}}catch(e){}}
 const FBON=typeof firebase!=='undefined'&&!!FIREBASE_CONFIG.apiKey;
 </script>
 
@@ -299,12 +304,12 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 18:05</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 18:20</p>
 </main>
 
 <script>
 const $=s=>document.querySelector(s);
-const WD='일월화수목금토',CATS=['off','open','mid','close'],DEF='창민 유림 은주 유진 지은 혜성 예지 은지 지윤 지혜';
+const WD='일월화수목금토',CATS=['off','open','mid','close'],DEF=STORE?'':'창민 유림 은주 유진 지은 혜성 예지 은지 지윤 지혜';
 let data={},focus=null;
 const now=new Date();
 $('#year').value=now.getFullYear();
@@ -314,7 +319,7 @@ try{$('#roster').value=localStorage.getItem('roster')||DEF}catch(e){$('#roster')
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const roster=()=>$('#roster').value.split(/[\s,]+/).filter(Boolean);
 const P=()=>{const y=+$('#year').value,m=+$('#month').value,h=$('#half').value;const s=h==='1'?1:16,e=h==='1'?15:new Date(y,m,0).getDate();return{y,m,h,s,e,key:'sch:'+y+'-'+m+'-'+h}};
-const SEED={
+const SEED=STORE?{}:{
 'sch:2026-11-1':{
 1:['유림1','은주19 유진 은지','창민9','지은 예지 혜성12'],
 2:['은주1 창민1','유림 유진 은지','','지은 예지 혜성'],
@@ -358,7 +363,7 @@ function load(){
   if(!Object.values(data).some(r=>Object.values(r).some(v=>v))&&SEED[p.key]){data={};for(const d in SEED[p.key]){const a=SEED[p.key][d];data[d]={off:a[0],open:a[1],mid:a[2],close:a[3]}}save()}
   draw()}
 function save(){const p=P();persistLocal(p.key,data);if(DB&&CANWRITE){pend[p.key]=data;clearTimeout(flushT[p.key]);flushT[p.key]=setTimeout(()=>flush(p.key),400)}}
-const STAFF={유림:{e:'🌷',k:'#2f9e44',t:'부점장 · 진중'},은주:{e:'🌸',k:'#e64980',t:'부점장 · 발랄'},유진:{e:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1.15em" height="1.15em" style="vertical-align:-.22em"><g stroke="#b9b9c8" stroke-width=".9"><ellipse cx="11" cy="8.5" rx="3.3" ry="7.6" fill="#fff" transform="rotate(-12 11 8.5)"/><ellipse cx="21" cy="8.5" rx="3.3" ry="7.6" fill="#fff" transform="rotate(12 21 8.5)"/><ellipse cx="16" cy="20.5" rx="11.5" ry="9.5" fill="#fff"/></g><ellipse cx="11" cy="8.8" rx="1.5" ry="5.2" fill="#ffb3c7" transform="rotate(-12 11 8.8)"/><ellipse cx="21" cy="8.8" rx="1.5" ry="5.2" fill="#ffb3c7" transform="rotate(12 21 8.8)"/><circle cx="8.6" cy="23.6" r="1.7" fill="#ffc9d6"/><circle cx="23.4" cy="23.6" r="1.7" fill="#ffc9d6"/><circle cx="12" cy="19.2" r="1.3" fill="#333"/><circle cx="20" cy="19.2" r="1.3" fill="#333"/><g fill="rgba(255,255,255,.2)" stroke="#111" stroke-width="1.5"><circle cx="12" cy="19.2" r="3.5"/><circle cx="20" cy="19.2" r="3.5"/></g><path d="M15.5 18.8q.5-.9 1 0" fill="none" stroke="#111" stroke-width="1.3"/><path d="M8.5 18.6L6 17.8M23.5 18.6L26 17.8" stroke="#111" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="16" cy="23.6" rx="1.3" ry=".9" fill="#ff8fab"/><path d="M16 24.4q-.9 1.1-1.9.5M16 24.4q.9 1.1 1.9.5" fill="none" stroke="#666" stroke-width=".7" stroke-linecap="round"/></svg>',k:'#868e96',t:'메인 · 귀여움'},지은:{e:'🐱',k:'#7048e8',t:'메인 · 고양이 느낌'},혜성:{e:'🐻',k:'#a9743f',t:'중간급 · 소심'},예지:{e:'🐧',k:'#f783ac',t:'갓 막내 탈출 · 귀여움'},은지:{e:'<span style="filter:hue-rotate(22deg) saturate(1.4) brightness(1.2)">🦊</span>',k:'#fab005',t:'노란머리 · 기존쎔'},지윤:{e:'🐣',k:'#82c91e',t:'막내'},창민:{e:'⭐',k:'#e03131',t:'점장'},지효:{e:'🌿',k:'#6b8e6b',t:''},지혜:{e:'🌿',k:'#6b8e6b',t:''}};
+const STAFF=STORE?{}:{유림:{e:'🌷',k:'#2f9e44',t:'부점장 · 진중'},은주:{e:'🌸',k:'#e64980',t:'부점장 · 발랄'},유진:{e:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1.15em" height="1.15em" style="vertical-align:-.22em"><g stroke="#b9b9c8" stroke-width=".9"><ellipse cx="11" cy="8.5" rx="3.3" ry="7.6" fill="#fff" transform="rotate(-12 11 8.5)"/><ellipse cx="21" cy="8.5" rx="3.3" ry="7.6" fill="#fff" transform="rotate(12 21 8.5)"/><ellipse cx="16" cy="20.5" rx="11.5" ry="9.5" fill="#fff"/></g><ellipse cx="11" cy="8.8" rx="1.5" ry="5.2" fill="#ffb3c7" transform="rotate(-12 11 8.8)"/><ellipse cx="21" cy="8.8" rx="1.5" ry="5.2" fill="#ffb3c7" transform="rotate(12 21 8.8)"/><circle cx="8.6" cy="23.6" r="1.7" fill="#ffc9d6"/><circle cx="23.4" cy="23.6" r="1.7" fill="#ffc9d6"/><circle cx="12" cy="19.2" r="1.3" fill="#333"/><circle cx="20" cy="19.2" r="1.3" fill="#333"/><g fill="rgba(255,255,255,.2)" stroke="#111" stroke-width="1.5"><circle cx="12" cy="19.2" r="3.5"/><circle cx="20" cy="19.2" r="3.5"/></g><path d="M15.5 18.8q.5-.9 1 0" fill="none" stroke="#111" stroke-width="1.3"/><path d="M8.5 18.6L6 17.8M23.5 18.6L26 17.8" stroke="#111" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="16" cy="23.6" rx="1.3" ry=".9" fill="#ff8fab"/><path d="M16 24.4q-.9 1.1-1.9.5M16 24.4q.9 1.1 1.9.5" fill="none" stroke="#666" stroke-width=".7" stroke-linecap="round"/></svg>',k:'#868e96',t:'메인 · 귀여움'},지은:{e:'🐱',k:'#7048e8',t:'메인 · 고양이 느낌'},혜성:{e:'🐻',k:'#a9743f',t:'중간급 · 소심'},예지:{e:'🐧',k:'#f783ac',t:'갓 막내 탈출 · 귀여움'},은지:{e:'<span style="filter:hue-rotate(22deg) saturate(1.4) brightness(1.2)">🦊</span>',k:'#fab005',t:'노란머리 · 기존쎔'},지윤:{e:'🐣',k:'#82c91e',t:'막내'},창민:{e:'⭐',k:'#e03131',t:'점장'},지효:{e:'🌿',k:'#6b8e6b',t:''},지혜:{e:'🌿',k:'#6b8e6b',t:''}};
 function srt(a,R,f){const r=a.map((x,i)=>({x,i,o:(k=>k<0?999:k)(R.indexOf(who(f?f(x):x,R)))}));r.sort((p,q)=>p.o-q.o||p.i-q.i);return r}
 function pv(t){const R=roster();return srt((t||'').split(/[\s,]+/).filter(Boolean),R).map(z=>z.x).map(x=>{const n=who(x,R),s=STAFF[n]||{e:'',k:'#888'};return '<span class="ch" style="--k:'+s.k+'"><i>'+s.e+'</i>'+esc(n||x)+(n&&x.length>n.length?'<s>'+esc(x.slice(n.length))+'</s>':'')+'</span>'}).join('')}
 function lsj(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return {}}}
@@ -373,7 +378,7 @@ $('#crew').addEventListener('input',e=>{const n=e.target.dataset.n;if(n===undefi
 function stk(n){return STK[n]||0}
 $('#crew').addEventListener('click',e=>{const b=e.target.closest('.sk');if(!b||!CANWRITE)return;const n=b.parentNode.dataset.n,i=+b.dataset.i;STK[n]=(STK[n]||0)===i?i-1:i;persistLocal('stk',STK);pushSetting({stk:{[n]:STK[n]}});const c=STK[n];b.parentNode.querySelectorAll('.sk').forEach((x,k)=>{x.classList.toggle('on',k<c)});report()});
 $('#grid').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.d)e.preventDefault()});
-function chips(){setTimeout(applyLockState,0);applyIcons();setTimeout(heroIcons,0);const R=roster(),g=n=>STAFF[n]||{e:'',k:'#888',t:''};$('#chips').innerHTML=R.map(n=>'<button class="sec" type="button" style="--k:'+g(n).k+'" data-n="'+esc(n)+'">'+g(n).e+' '+esc(n)+' <span class="hc" data-h="'+esc(n)+'"></span></button>').join('');setTimeout(hDraw,0);$('#crew').innerHTML=R.map(n=>'<div style="--k:'+g(n).k+'"><b><button type="button" class="ico" data-ico="'+esc(n)+'" title="아이콘 바꾸기">'+g(n).e+'</button> '+esc(n)+'</b><input class="tg" data-n="'+esc(n)+'" value="'+esc(tag(n))+'" placeholder="소개 문구 입력" maxlength="30"><label class="bdl"><span class="ck'+'">'+cakeSvg(24)+'</span><input class="bdi" data-b="'+esc(n)+'" value="'+esc(bday(n))+'" placeholder="" maxlength="10"></label><label class="mbl"><span class="mbt">MBTI</span><input class="mbi" data-m="'+esc(n)+'" value="'+esc(MBTI[n]||'')+'" placeholder="" maxlength="4" autocapitalize="characters"></label>'+(n==='창민'?'':'<div class="stk" data-n="'+esc(n)+'"><span class="sl">칭찬스티커</span>'+[1,2,3,4,5].map(i=>'<button type="button" class="sk'+(i<=stk(n)?' on':'')+'" data-i="'+i+'">💮</button>').join('')+'</div>')+'</div>').join('')}
+function chips(){setTimeout(applyLockState,0);applyIcons();setTimeout(heroIcons,0);const R=roster(),g=n=>STAFF[n]||{e:'',k:'#888',t:''};$('#chips').innerHTML=R.map(n=>'<button class="sec" type="button" style="--k:'+g(n).k+'" data-n="'+esc(n)+'">'+g(n).e+' '+esc(n)+' <span class="hc" data-h="'+esc(n)+'"></span></button>').join('');setTimeout(hDraw,0);$('#crew').innerHTML=R.map(n=>'<div style="--k:'+g(n).k+'"><b><button type="button" class="ico" data-ico="'+esc(n)+'" title="아이콘 바꾸기">'+g(n).e+'</button> '+esc(n)+'</b><input class="tg" data-n="'+esc(n)+'" value="'+esc(tag(n))+'" placeholder="소개 문구 입력" maxlength="30"><label class="bdl"><span class="ck'+'">'+cakeSvg(24)+'</span><input class="bdi" data-b="'+esc(n)+'" value="'+esc(bday(n))+'" placeholder="" maxlength="10"></label><label class="mbl"><span class="mbt">MBTI</span><input class="mbi" data-m="'+esc(n)+'" value="'+esc(MBTI[n]||'')+'" placeholder="" maxlength="4" autocapitalize="characters"></label>'+(n===R[0]?'':'<div class="stk" data-n="'+esc(n)+'"><span class="sl">칭찬스티커</span>'+[1,2,3,4,5].map(i=>'<button type="button" class="sk'+(i<=stk(n)?' on':'')+'" data-i="'+i+'">💮</button>').join('')+'</div>')+'</div>').join('')}
 function noteHtml(d,c){const n=(data[d]||{}).n||{},k=c+'|전체';return n[k]?esc(n[k]):''}
 function pn(d,c){const pp=P(),R=roster(),txt=((data[d]||{})[c])||'',n=(data[d]||{}).n||{};return srt(txt.split(/[\s,]+/).filter(Boolean),R).map(z=>{const t=z.x,ti=z.i;const nm=who(t,R)||t,v=n[c+'|'+nm],a='data-nd="'+d+'" data-nc="'+c+'" data-nm="'+esc(nm)+'" data-ni="'+ti+'"';return '<span class="nm'+(v?' hn':'')+'"><span class="nx" '+a+'>'+esc(t)+(isBd(nm,pp.m,+d)?'<span class="cake">'+cakeSvg(15)+'</span>':'')+'</span>'+(v?'<span class="bb" '+a+'>'+esc(v)+'</span>':'')+'</span>'}).join('')}
 function findBtn(d,c,nm){return [...document.querySelectorAll('#grid [data-nm]')].find(x=>x.dataset.nd===d&&x.dataset.nc===c&&x.dataset.nm===nm)}
@@ -528,14 +533,14 @@ function askYN(msg,yes){const o=$('#yn');if(o)o.remove();const el=document.creat
   el.innerHTML='<div class="rkbox" role="dialog"><h3>확인</h3><p style="margin:0 0 12px;white-space:pre-line">'+esc(msg)+'</p><div class="bar" style="justify-content:center"><button type="button" class="sec ynn">취소</button><button type="button" class="yny">확인</button></div></div>';
   document.body.appendChild(el);el.addEventListener('click',e=>{if(e.target.closest('.yny')){el.remove();yes()}else if(e.target===el||e.target.closest('.ynn'))el.remove()})}
 /* 🗓️ 스케줄 자동 생성 */
-const GD={names:'창민 유림 은주 유진 지은 예지 은지 혜성 지윤',wo:3,wm:1,wc:3,eo:4,em:1,ec:3,lo:'유림 은주 창민 지은 유진',lc:'유림 은주 유진 지은',boss:'창민',sp:'',h52:true,hr:8,goff:3};
+const GD0={names:'창민 유림 은주 유진 지은 예지 은지 혜성 지윤',wo:3,wm:1,wc:3,eo:4,em:1,ec:3,lo:'유림 은주 창민 지은 유진',lc:'유림 은주 유진 지은',boss:'창민',sp:'',h52:true,hr:8,goff:3};const GD=STORE?Object.assign({},GD0,{names:'',lo:'',lc:'',boss:'',goff:0}):GD0;
 let GENS={},GK='';try{GENS=JSON.parse(localStorage.getItem('genf')||'{}')||{};if(GENS.names!==undefined)GENS={}}catch(e){GENS={}}
 const GZERO={names:'',wo:0,wm:0,wc:0,eo:0,em:0,ec:0,lo:'',lc:'',sp:'',h52:true,hr:8,goff:0};
 function genFill(g){$('#gnames').value=g.names;$('#gwo').value=g.wo;$('#gwm').value=g.wm;$('#gwc').value=g.wc;$('#geo').value=g.eo;$('#gem').value=g.em;$('#gec').value=g.ec;$('#glo').value=g.lo;$('#glc').value=g.lc;$('#gsp').value=g.sp||'';$('#ghr').value=g.hr;$('#goff').value=g.goff;g52Set(g.h52!==false)}
 function genBase(){const num=k=>{const m=/(\d+)-(\d+)-(\d)/.exec(k);return m?(+m[1])*100+(+m[2])+(+m[3])/10:0};let g={names:GD.names,lo:GD.lo,lc:GD.lc};const ks=Object.keys(GENS).filter(k=>k!==GK&&GENS[k]).sort((x,y)=>num(x)-num(y)),cur=num(GK),pk=ks.filter(k=>num(k)<cur).pop()||ks.pop();if(pk){try{const f=JSON.parse(GENS[pk]);['names','lo','lc'].forEach(x=>{if(f[x])g[x]=f[x]})}catch(e){}}return g}
 function genLoad(){GK=P().key;let f=null;try{f=GENS[GK]?JSON.parse(GENS[GK]):null}catch(e){}genFill(Object.assign({},GZERO,f||genBase()));genHead()}
 function genSaveForm(){if(!GK)return;const j=JSON.stringify(genRead());GENS[GK]=j;persistLocal('genf',GENS);const k=GK;deb('gens',()=>pushSetting({gens:{[k]:j}}))}
-function genRead(){return{names:$('#gnames').value,wo:+$('#gwo').value||0,wm:+$('#gwm').value||0,wc:+$('#gwc').value||0,eo:+$('#geo').value||0,em:+$('#gem').value||0,ec:+$('#gec').value||0,lo:$('#glo').value,lc:$('#glc').value,boss:'창민',sp:$('#gsp').value,h52:$('#g52').classList.contains('on'),hr:+$('#ghr').value||8,goff:+$('#goff').value||0}}
+function genRead(){return{names:$('#gnames').value,wo:+$('#gwo').value||0,wm:+$('#gwm').value||0,wc:+$('#gwc').value||0,eo:+$('#geo').value||0,em:+$('#gem').value||0,ec:+$('#gec').value||0,lo:$('#glo').value,lc:$('#glc').value,boss:(roster()[0]||''),sp:$('#gsp').value,h52:$('#g52').classList.contains('on'),hr:+$('#ghr').value||8,goff:+$('#goff').value||0}}
 function g52Set(v){const b=$('#g52');b.classList.toggle('on',v);b.textContent='⏱️ 주 52시간 준수 '+(v?'ON':'OFF')}
 $('#g52').addEventListener('click',()=>{g52Set(!$('#g52').classList.contains('on'));genSaveForm()});
 function genHead(){if(GK&&P().key!==GK){genLoad();return}genPrev();const p=P();$('#genper').textContent=p.y+'년 '+p.m+'월 '+p.s+'일 ~ '+p.e+'일';$('#gcnt').textContent='(총 '+$('#gnames').value.split(/[\s,]+/).filter(Boolean).length+'명)'}
@@ -723,7 +728,9 @@ document.addEventListener('click',e=>{
 try{$('#notice').value=localStorage.getItem('notice')||''}catch(e){}
 $('#notice').addEventListener('input',e=>{if(!CANWRITE)return;const v=e.target.value;try{localStorage.setItem('notice',v)}catch(_){}deb('notice',()=>pushSetting({notice:v}))});
 function heroIcons(){try{applyIcons();$('.hero p').innerHTML=roster().map(n=>(STAFF[n]||{e:'🙂'}).e).join(' ')}catch(e){}}heroIcons();
-const TITLE0='행복한 이촌점 스케쥴 시트';
+if(STORE){try{const B=new URL('./',location.href).href;const m={name:STORE+' 스케쥴',short_name:STORE+' 스케쥴',start_url:B+'?store='+encodeURIComponent(STORE),scope:B,display:'standalone',orientation:'portrait',background_color:'#e6f0fb',theme_color:'#1c7ed6',lang:'ko',icons:[{src:B+'icon-192.png',sizes:'192x192',type:'image/png'},{src:B+'icon-512.png',sizes:'512x512',type:'image/png'}]};
+  $('#mfl').href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(m));const at=document.querySelector('meta[name=apple-mobile-web-app-title]');if(at)at.content=STORE+' 스케쥴'}catch(e){}}
+const TITLE0=STORE?STORE+' 스케쥴 시트':'행복한 이촌점 스케쥴 시트';
 function setTitle(t){t=(t||'').trim()||TITLE0;$('.hero h1').textContent=t;document.title=t}
 try{setTitle(localStorage.getItem('title'))}catch(e){}
 function openTitle(){const old=$('#ttm');if(old)old.remove();const el=document.createElement('div');el.id='ttm';el.className='fz pwm';
@@ -760,7 +767,7 @@ $('#today').addEventListener('click',e=>{if(e.target.id==='fzBtn')openFortune();
 const RKE={cro:'🥐',salt:'🧂',bread:'🍞',cake:'🍰',sand:'🥪'};
 let RKR={},rkSub=false;
 function rkLocal(){try{return JSON.parse(localStorage.getItem('granks')||'{}')||{}}catch(e){return {}}}
-function rkInit(){if(rkSub||!DB)return;rkSub=true;try{DB.doc('shared/ranks').onSnapshot(sn=>{RKR=sn.exists?(sn.data()||{}):{};const o=$('#rk');if(o)drawRank()},()=>{})}catch(e){}}
+function rkInit(){if(rkSub||!DB)return;rkSub=true;try{DB.doc(FP('shared/ranks')).onSnapshot(sn=>{RKR=sn.exists?(sn.data()||{}):{};const o=$('#rk');if(o)drawRank()},()=>{})}catch(e){}}
 function rkAll(){const o=Object.assign({},rkLocal());for(const k in RKR){const r=RKR[k];if(r&&typeof r.s==='number'&&(!o[k]||o[k].s<r.s))o[k]=r}return o}
 async function rkSave(name,sc,c){
   if(!name||!(sc>0))return;
@@ -768,7 +775,7 @@ async function rkSave(name,sc,c){
   if(!DB)return;rkInit();
   const cur=RKR[name];if(cur&&cur.s>=sc)return;
   const rec={s:sc,c,t:Date.now()};RKR[name]=rec;
-  try{const d=DB.doc('shared/ranks');try{await d.update({[name]:rec})}catch(e){await d.set(Object.assign({},RKR,{[name]:rec}))}}catch(e){}
+  try{const d=DB.doc(FP('shared/ranks'));try{await d.update({[name]:rec})}catch(e){await d.set(Object.assign({},RKR,{[name]:rec}))}}catch(e){}
 }
 function rkList(){return Object.entries(rkAll()).map(([n,r])=>({n,s:r.s,c:r.c})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s)}
 function rkRank(name){const L=rkList();const m=L.find(x=>x.n===name);if(!m)return 0;return 1+L.filter(x=>x.s>m.s).length}
@@ -1039,7 +1046,7 @@ function report(){
   const A=R.filter(n=>S[n].any),g=n=>STAFF[n]||{e:'',k:'#888'};
   let h='';
   // 시상대
-  const cand=R.filter(n=>n!=='창민'&&stk(n)>0),vals=[...new Set(cand.map(n=>stk(n)))].sort((x,y)=>y-x);
+  const cand=R.filter(n=>n!==roster()[0]&&stk(n)>0),vals=[...new Set(cand.map(n=>stk(n)))].sort((x,y)=>y-x);
   const grp=vals.map(v=>({v,names:cand.filter(n=>stk(n)===v),rank:1+cand.filter(n=>stk(n)>v).length})).filter(x=>x.rank<=3);
   const ord=grp.length>=3?[grp[1],grp[0],grp[2]]:grp.length===2?[grp[1],grp[0]]:grp;
   h+='<h3>🏆 칭찬왕 시상대</h3>';
@@ -1099,7 +1106,7 @@ function norm(o){o=o||{};const r={};for(const c of CATS)if(o[c])r[c]=o[c];if(o.n
 function cj(o){const r=norm(o);if(r.n){const n={};Object.keys(r.n).sort().forEach(k=>n[k]=r.n[k]);r.n=n}return JSON.stringify(r)}
 function clone(o){return JSON.parse(JSON.stringify(o))}
 function keyFor(y,m,d){const dt=new Date(y,m-1,d);return 'sch:'+dt.getFullYear()+'-'+(dt.getMonth()+1)+'-'+(dt.getDate()<=15?1:2)}
-function dayPath(key,d){return 'sched/'+key.slice(4)+'/days/'+d}
+function dayPath(key,d){return FP('sched/'+key.slice(4)+'/days/'+d)}
 function editing(){return !!document.querySelector('#grid td.ed,#bub')}
 function maybeRefresh(){if(deferred&&!editing()){deferred=false;drawGrid()}}
 function setStatus(k){
@@ -1127,7 +1134,7 @@ function repairSettings(s){
   if(!UNL||!DB||!sref)return;
   const p={};
   for(const [f,L] of [['tags',TAGS],['stk',STK],['bday',BDAY],['icons',ICONS],['mbti',MBTI]]){const r=(s&&s[f])||{};for(const k in L)if(r[k]===undefined&&L[k]!==undefined&&L[k]!=='')p[f+'.'+k]=L[k]}
-  const DT={유림:'부점장',은주:'부점장 ',유진:'조장',지은:'조장',지윤:'막냉이',창민:'점장'};for(const k in DT){const r=(s&&s.tags)||{};if(r[k]===undefined&&p['tags.'+k]===undefined)p['tags.'+k]=DT[k]}
+  const DT=STORE?{}:{유림:'부점장',은주:'부점장 ',유진:'조장',지은:'조장',지윤:'막냉이',창민:'점장'};for(const k in DT){const r=(s&&s.tags)||{};if(r[k]===undefined&&p['tags.'+k]===undefined)p['tags.'+k]=DT[k]}
   if(Object.keys(p).length)sref.update(p).then(()=>toast('ok','✅ 생일·소개 문구를 서버에 다시 채웠어요')).catch(()=>{});
 }
 function pushSetting(patch){
@@ -1174,7 +1181,7 @@ function applySnap(key,snap){
 }
 function watch(key){
   if(!DB||subs[key])return;
-  subs[key]=DB.collection('sched/'+key.slice(4)+'/days').onSnapshot(s=>applySnap(key,s),onErr);
+  subs[key]=DB.collection(FP('sched/'+key.slice(4)+'/days')).onSnapshot(s=>applySnap(key,s),onErr);
 }
 function watchAround(){
   const p=P(),ks=[p.key,p.h==='1'?keyFor(p.y,p.m,0):keyFor(p.y,p.m,1),p.h==='1'?keyFor(p.y,p.m,16):keyFor(p.y,p.m+1,1)],t=new Date();
@@ -1219,7 +1226,7 @@ async function migrate(){
     if(Object.keys(patch).length){if(snap.exists)await sref.update(patch);else await sref.set(patch);settingsExists=true}
     for(const lk of Object.keys(localStorage).filter(k=>/^sch:\d{4}-\d{1,2}-[12]$/.test(k))){
       let loc={};try{loc=JSON.parse(localStorage.getItem(lk)||'{}')||{}}catch(e){continue}
-      const cs=await DB.collection('sched/'+lk.slice(4)+'/days').get(),rem={};
+      const cs=await DB.collection(FP('sched/'+lk.slice(4)+'/days')).get(),rem={};
       cs.docs.forEach(x=>rem[x.id]=x.data());
       for(const d of Object.keys(loc)){const j=cj(loc[d]);if(j==='{}'||j===cj(rem[d]))continue;await DB.doc(dayPath(lk,d)).set(clone(norm(loc[d])))}
     }
@@ -1230,15 +1237,17 @@ const SEED_DB={"settings": {"gens": {"sch:2026-12-1": "{\"names\":\"창민 유�
 const PAST_DB={"2026-10-2":{"16":{"off":"유진1 은지1","open":"창민 은주 지은","close":"유림 혜성 예지"},"17":{"off":"유진2","open":"은주 지은 혜성","mid":"창민9","close":"유림 은지 예지12"},"18":{"off":"유진3 혜성1","open":"창민 은주 지은","close":"유림9 은지 예지"},"19":{"off":"은주1 유진휴","open":"창민 지은 혜성","close":"유림 은지 예지"},"20":{"off":"유진휴 지은1","open":"창민 은주 혜성","close":"유림 은지 예지"},"21":{"off":"예지1 창민1","open":"은주 지은 혜성","close":"유림 유진 은지"},"22":{"off":"유림1 혜성2","open":"창민 은주 예지","close":"유진 지은 은지"},"23":{"off":"은지2","open":"은주 예지 혜성","mid":"창민9","close":"유림 유진 지은"},"24":{"open":"은주 예지 은지","mid":"유진9 창민9","close":"유림 혜성 지은"},"25":{"off":"예지2","open":"은주 유진 은지","mid":"창민9","close":"유림 혜성 지은12"},"26":{"off":"은주2 예지휴","open":"창민 유진 은지","close":"유림 혜성11 지은"},"27":{"off":"유진4 예지휴","open":"은주 은지 창민7-11","close":"유림11 혜성 지은13"},"28":{"off":"혜성3 예지휴","open":"창민 은주 유진","close":"유림 은지 지은"},"29":{"off":"지은2 예지휴","open":"창민 은주 유진","close":"유림 은지11 혜성"},"30":{"off":"예지3 은지3","open":"창민 은주 유진","close":"유림12 지은 혜성"},"31":{"off":"예지4","open":"은주18 유진18 은지","mid":"창민9-24","close":"유림9 지은 혜성"}},"2026-10-1":{"1":{"off":"은지4","open":"유림 유진 예지","mid":"창민9-13","close":"은주 혜성 지은"},"10":{"off":"유림4","open":"창민 지은 혜성","mid":"유진9","close":"은주 은지12 예지"},"11":{"open":"유림 지은 혜성","mid":"유진9 창민9","close":"은주 은지 예지"},"12":{"off":"은주5 혜성6","open":"창민 유진 지은","close":"유림 은지 예지"},"13":{"off":"유림2 예지5","open":"창민 은주 유진","close":"지은 혜성 은지"},"14":{"off":"지은5 예지6","open":"창민 은주 유진","close":"유림 혜성 은지"},"15":{"off":"유진6","open":"은주 지은 예지","mid":"창민8-12","close":"유림 혜성 은지"},"2":{"off":"유진4 은지5","open":"창민 유림 예지","close":"은주 혜성 지은"},"3":{"off":"지은4","open":"유림 은지 예지","mid":"창민9","close":"은주 유진12 혜성"},"4":{"open":"유림 지은 예지","mid":"은지9 창민10","close":"은주 유진 혜성"},"5":{"off":"예지4","open":"유림 은지 지은","mid":"창민9","close":"은주 유진 혜성12"},"6":{"off":"혜성5 지은경조1","open":"창민 유림 은지","close":"은주 유진 예지"},"7":{"off":"은주4 지은경조2","open":"창민 유림 혜성","close":"유진 예지 은지"},"8":{"off":"유진5 지은경조3","open":"창민 유림 혜성","close":"은주 예지 은지"},"9":{"off":"은지6","open":"유림 지은 혜성","mid":"창민9-13","close":"은주 유진 예지12"}},"2026-5-1":{"1":{"off":"지은1 은주1 예지(한남)","open":"혜진 선영 병기","mid":"창민10-19","close":"유림 유진 민경"},"10":{"off":"예지3 유림2","open":"선영 유진 민경","mid":"은주9-18 창민9(반)","close":"혜진 지은 병기"},"11":{"off":"유진3 예지4 창민2","open":"유림 은주 민경","close":"혜진 지은 병기"},"12":{"off":"혜진3 병기4","open":"은주 예지 민경","mid":"창민15-19","close":"유림 유진 지은"},"13":{"off":"지은3 은주3","open":"혜진 예지 병기","mid":"창민15-19","close":"유림 유진 민경"},"14":{"off":"유림3","open":"혜진 지은 병기","mid":"예지11-20 창민15-19","close":"은주 유진 민경"},"15":{"off":"민경3","open":"혜진 지은 병기","mid":"예지11-20 창민15-19","close":"유림 은주 유진"},"2":{"off":"선영1 병기1","open":"혜진 은주 지은","mid":"민경9-18 창민12(반)","close":"유림 예지 유진"},"3":{"off":"유진1 민경(한남)","open":"혜진 은주 지은","mid":"예지9-18 창민9","close":"선영 유림 병기"},"4":{"off":"혜진1 유림1 유진2","open":"은주 예지 지은","mid":"창민14-18","close":"선영 민경 병기"},"5":{"off":"혜진2 예지1","open":"유림 은주 지은","mid":"유진9-18 창민14-18","close":"선영 민경 병기"},"6":{"off":"지은2 선영2 예지2 창민1","open":"유림 은주 유진","close":"혜진 민경 병기"},"7":{"off":"은주2 병기2","open":"선영 유림 유진","mid":"예지11-20 창민14-18","close":"혜진 지은 민경"},"8":{"off":"민경1 병기3","open":"선영 유림 유진","mid":"예지11-20 창민14-18","close":"혜진 은주 지은"},"9":{"off":"민경2","open":"선영 유림 예지 유진 창민(한남07-16)","close":"혜진 은주 지은 병기"}},"2026-5-2":{"16":{"off":"유진1","open":"혜진 지은 병기","mid":"은주9-18 창민9(반)","close":"유림 예지 민경"},"17":{"off":"혜진1","open":"은주 지은 병기","mid":"유진9-18 창민15-19","close":"유림 예지 민경"},"18":{"off":"민경1 예지1","open":"은주 지은 병기","mid":"창민15-19","close":"혜진 유림 유진"},"19":{"off":"병기1 유림1","open":"은주 지은 민경","mid":"창민10 (오후반차)","close":"혜진 예지 유진"},"20":{"off":"은주1 지은1","open":"유림 민경 병기","mid":"창민10-19","close":"혜진 예지 유진"},"21":{"off":"예지2 혜진(교육)","open":"유림 민경 병기","mid":"창민15-19","close":"은주 유진 지은"},"22":{"off":"혜진2 유진2","open":"유림 민경 병기","mid":"창민15-19","close":"은주 예지 지은"},"23":{"off":"민경2 창민1","open":"혜진 유림 병기","mid":"예지9-18","close":"은주 유진 지은"},"24":{"off":"병기2","open":"혜진 유림 민경","mid":"예지9-18 창민15-19","close":"은주 유진 지은"},"25":{"off":"예지3 창민2","open":"혜진 유림 민경","mid":"병기9-18","close":"은주 유진 지은"},"26":{"off":"유림2 지은2","open":"혜진 병기 민경","mid":"창민15-19","close":"은주 예지 유진"},"27":{"off":"은주2 지은3","open":"혜진 병기 민경","mid":"창민15-19","close":"유림 예지 유진"},"28":{"off":"유진3 민경3","open":"혜진 지은 병기","mid":"창민10-19 *화상회의","close":"유림 예지 은주"},"29":{"off":"혜진3 병기3","open":"유진 지은 민경","mid":"창민15-19","close":"유림 예지 은주"},"30":{"off":"유림3","open":"혜진 유진 민경","mid":"예지9-18 창민(오후반차)","close":"은주 지은 병기"},"31":{"off":"은주3","open":"유림 유진 민경","mid":"예지9-18","close":"혜진 지은 병기 창민15-24"}},"2026-6-1":{"1":{"off":"예지1 민경1","open":"유림 은주 유진","mid":"민진10-19 창민14-15","close":"혜진 지은 병기"},"10":{"off":"지은2 유림2 창민3","open":"은주 예지 유진","close":"혜진 민경 민진 병기"},"11":{"off":"유림3 은주2","open":"유진 예지 지은","mid":"창민11-13 (14~ 회의)","close":"혜진 민경 민진 병기"},"12":{"off":"예지3 유진3","open":"유림 은주 지은","mid":"창민14-18","close":"혜진 민경 민진 병기"},"13":{"off":"혜진4","open":"유림 유진 예지 지은","mid":"창민14-19","close":"은주 민경 민진 병기"},"14":{"off":"병기3 민진4","open":"유림 유진 지은","mid":"예지9-18 창민15-18","close":"혜진 은주 민경"},"15":{"off":"지은3 은주3","open":"유림 유진 병기","mid":"예지12-21 창민09-18","close":"혜진 민진 민경"},"2":{"off":"유진1 병기1","open":"유림 예지 민경","mid":"민진10-19 창민15-21","close":"혜진 은주 지은"},"3":{"off":"지은1 민진1","open":"유림 유진 민경","mid":"예지9-18 창민10-19","close":"혜진 은주 병기"},"4":{"off":"유림1 혜진1 창민1","open":"유진 예지 민경","mid":"민진10-19","close":"은주 지은 병기"},"5":{"off":"은주1 민경2","open":"혜진 예지 유진","mid":"민진10-19 창민16-20","close":"유림 지은 병기"},"6":{"off":"예지2 혜진2","open":"은주 유진 민경","mid":"창민10-19","close":"유림 지은 민진 병기"},"7":{"off":"유진2","open":"혜진 은주 예지 민경","mid":"창민15-19","close":"유림 지은 민진 병기"},"8":{"off":"민경3 민진조퇴","open":"혜진 은주 예지 유진","mid":"창민10-19","close":"유림 지은 병기"},"9":{"off":"병기2 혜진3 민진2 창민2","open":"은주 예지 유진","close":"유림 지은 민경"}},"2026-6-2":{"16":{"off":"유림(휴가) 유진1 예지1","open":"창민 지은 병기","mid":"은주12-21","close":"혜진 민진 민경"},"17":{"off":"유림(휴가) 민경1 창민한남TO","open":"유진 예지 병기","mid":"은주13-22","close":"혜진 민진 지은"},"18":{"off":"유림(휴가) 혜진1","open":"유진 예지 병기","mid":"민경12-21 창민15-18","close":"은주 민진 지은"},"19":{"off":"유림(휴가) 병기1 민진1","open":"혜진 예지 유진","mid":"창민11-12.5","close":"은주 지은 민경"},"20":{"off":"유림1 창민1","open":"혜진 유진 예지 병기","close":"은주 지은 민경"},"21":{"off":"유림2 창민7~16한남TO 16~18 취합6개","open":"혜진 유진 병기","mid":"예지9-18","close":"은주 지은 민경"},"22":{"off":"은주1 예지2","open":"혜진 유진 병기","mid":"창민13-17 (이촌/한남 전표)","close":"유림 지은 민경"},"23":{"off":"지은1 유진2","open":"혜진 은주 병기","mid":"창민09-18 (이촌/한남 전표)","close":"유림 예지 민경"},"24":{"off":"민경2 혜진2 창민한남 *이촌/한남 주간손익 상무님 순회 / 4번 이동","open":"은주 지은 병기","close":"유림 예지 유진"},"25":{"off":"은주(교육) 민경3","open":"혜진 지은 병기","mid":"창민12-16","close":"유림 예지 유진"},"26":{"off":"유림3 병기2","open":"은주 지은 민경","mid":"창민09-18","close":"혜진 예지 유진"},"27":{"off":"지은3","open":"유림 은주 민경","mid":"예지9-18 창민14-18 이촌 취합3개","close":"혜진 유진 병기"},"28":{"off":"예지3 창민2","open":"유림 은주 민경","mid":"지은9-18","close":"혜진 유진 병기"},"29":{"off":"은주2 유진3 창민3","open":"유림 예지 민경","close":"혜진 지은 병기"},"30":{"off":"은주3 병기3","open":"유림 유진 민경","mid":"창민18~ * 이촌/한남 월마감","close":"혜진 예지 지은"}},"2026-7-1":{"1":{"off":"은주1 민경1","open":"유림 유진 병기","mid":"창민10-14(방충방서)","close":"혜진 예지 지은"},"10":{"off":"병기(휴가) 은주3 예지3","open":"창민TO 혜진 지은","close":"유림 유진 민경"},"11":{"off":"병기(휴가) 창민2","open":"혜진 예지 지은","mid":"은주9-18","close":"유림 유진 민경"},"12":{"off":"병기(휴가) 한남TO","open":"혜진 예지 지은","mid":"은주9-18","close":"유림 유진 민경"},"13":{"off":"병기2 민경3 유림4","open":"창민TO 혜진 지은","close":"은주 예지 유진"},"14":{"off":"병기3 유진3 지은3","open":"창민TO 혜진 민경","close":"유림 예지 은주"},"15":{"off":"병기4 혜진3","open":"유진 지은 민경","mid":"창민15-19","close":"유림 예지 은주"},"2":{"off":"혜진1 지은1 병기1","open":"유림 유진","mid":"창민TO","close":"은주 예지 민경"},"3":{"off":"유림1 예지1","open":"혜진 유진 병기","mid":"창민17-19","close":"은주 지은 민경"},"4":{"off":"유진1","open":"혜진 유림 병기","mid":"예지9-18 창민17-21","close":"은주 지은 민경"},"5":{"off":"은주2 창민1","open":"혜진 유진 병기","mid":"예지9-18 창민15-19","close":"유림 지은 민경"},"6":{"off":"민경2 유림2","open":"혜진 유진 병기","mid":"창민14-23","close":"은주 예지 지은"},"7":{"off":"지은2 유림3","open":"혜진 유진 병기","mid":"창민15-19","close":"은주 예지 민경"},"8":{"off":"혜진2 유진2","open":"유림 지은(교육) 병기","mid":"창민TO 12-16","close":"은주 예지 민경"},"9":{"off":"병기(휴가) 예지2","open":"혜진 유림 지은","mid":"창민15-19","close":"은주 유진 민경"}},"2026-7-2":{"16":{"off":"은주1 병기1 은지1","open":"혜진 민경 유진","mid":"창민9-18","close":"유림 지은 예지"},"17":{"off":"예지1","open":"혜진 은주 유진 민경","mid":"은지9-18 창민TO 9-18","close":"유림 지은 병기"},"18":{"off":"혜진1 은지한남TO 은주한남TO","open":"유진 예지 민경","mid":"창민TO 10-19","close":"유림 지은 병기"},"19":{"off":"혜진2 민경한남TO","open":"은주 예지 유진","mid":"은지9-18 창민9-18","close":"유림 지은 병기"},"20":{"off":"민경1 유림1 창민1","open":"은주 유진 겨운 예지","close":"혜진 병기 지은 은지"},"21":{"off":"유진1 지은1 은지2","open":"유림 은주 겨운 예지","mid":"창민11-20 (전표기간)","close":"혜진 병기 민경"},"22":{"off":"은주2 지은2","open":"유림 유진 겨운 예지","mid":"창민11-20 (전표기간)","close":"혜진 민경 병기 은지"},"23":{"off":"예지2 민경2 병기2","open":"유림 은주 겨운 유진","mid":"창민09-18 (주간손익)","close":"혜진 지은 은지"},"24":{"off":"유진2 혜진3 겨운1","open":"은주 민경 예지","mid":"은지10-19 창민09-18","close":"유림 지은 병기"},"25":{"off":"유진3 겨운2 은주한남TO","open":"혜진 민경 은지 예지","mid":"창민TO 10-19","close":"유림 지은 병기"},"26":{"off":"유진4 은주한남TO","open":"혜진 민경 예지 은지","mid":"창민TO 10-19","close":"유림 지은 겨운 병기"},"27":{"off":"유진(휴가) 유림2 은지3","open":"혜진 예지 민경","mid":"창민10-19","close":"은주 지은 겨운 병기"},"28":{"off":"유진(휴가) 유림3","open":"혜진 예지 은지 민경","mid":"창민10-19","close":"은주 지은 겨운 병기"},"29":{"off":"지은3 은주3 창민2","open":"혜진 예지 은지 민경","close":"유림 병기 겨운 유진"},"30":{"off":"예지3 병기3 겨운3","open":"혜진 민경 은지","mid":"유진10-19 창민15-16.5","close":"유림 은주 지은"},"31":{"off":"혜진4 민경3 은지4","open":"유진 예지 병기(막근)","mid":"은주10-19 창민10-24 (월마감)","close":"유림+1 겨운 지은"}},"2026-8-1":{"1":{"off":"민경1 혜성한남 창민1","open":"은주 유진 은지","mid":"지은9","close":"유림 겨운 예지"},"10":{"off":"은주4 유진3","open":"지은 겨운 은지","mid":"예지10 창민12-16.5","close":"유림 민경 혜성"},"11":{"off":"유림2 지은3 예지2","open":"유진 겨운 은지","mid":"창민11","close":"은주 민경 혜성"},"12":{"off":"민경3 은지2 겨운3","open":"유림 유진 예지","mid":"창민11","close":"은주 지은 혜성"},"13":{"off":"민경4 혜성4 겨운4","open":"유림 유진 예지","mid":"창민9","close":"은주 지은 은지"},"14":{"off":"유림3 지은4","open":"유진 민경 예지 창민","mid":"혜성10","close":"은주 겨운 은지"},"15":{"off":"예지3 은지3","open":"유림 유진 민경 창민","mid":"혜성9","close":"은주 겨운 지은"},"2":{"off":"지은1 창민한남TO 혜성1","open":"은주 유진 은지","mid":"민경9","close":"유림 겨운 예지"},"3":{"off":"유림1 겨운1 혜성2","open":"은주 지은 은지","mid":"창민11","close":"유진 민경 예지"},"4":{"off":"유진1 지은2 창민한남(인계) 혜성한남","open":"은주 겨운 은지","close":"유림 민경 예지"},"5":{"off":"은주(휴가) 유진2 혜성한남","open":"지은+1 겨운 은지 창민","close":"유림 예지 민경"},"6":{"off":"은주(휴가) 은지1 예지1","open":"유진 겨운 지은","mid":"창민9","close":"유림+0.5 혜성 민경"},"7":{"off":"은주1 겨운2 민경2","open":"유진 지은 은지","mid":"창민9","close":"유림 혜성 예지"},"8":{"off":"은주2 혜성3 창민2","open":"유진 지은 은지","mid":"겨운9","close":"유림 민경 예지"},"9":{"off":"은주3","open":"유진 지은 겨운 은지 창민","mid":"창민12-16.5","close":"유림 민경 예지 혜성"}},"2026-8-2":{"16":{"off":"겨운1 혜성1 창민1","open":"유림 유진 예지","mid":"은지9","close":"은주 지은 민경"},"17":{"off":"은주1 겨운2","open":"유진 예지 은지","mid":"혜성9 창민11","close":"유림 지은 민경"},"18":{"off":"유진1 지은1","open":"은주 은지 예지 혜성","mid":"창민11","close":"유림 겨운 민경"},"19":{"off":"민경1 은지1","open":"은주 지은 예지 혜성","mid":"창민11","close":"유림 겨운 유진"},"20":{"off":"유림1 예지1 은지2","open":"은주 지은 혜성","mid":"창민9(주간손익)","close":"유진 겨운 민경"},"21":{"off":"혜성2 겨운3 유림서초지원","open":"은주 지은 예지","mid":"창민9(전표)","close":"유진 민경 은지"},"22":{"off":"유진2","open":"은주 지은 겨운 예지","mid":"창민9(전표)","close":"유림 은지 민경 혜성"},"23":{"off":"유림2 창민2","open":"은주 지은 겨운 예지","close":"유진 은지 민경 혜성"},"24":{"off":"은주2 지은2 민경2 창민3","open":"유림 겨운 예지","close":"유진 은지 혜성"},"25":{"off":"지은3 민경3 은지3","open":"유림 겨운 예지","mid":"창민12-16","close":"은주 유진 혜성"},"26":{"off":"지은4 예지2 은지4","open":"유림 겨운 민경","mid":"창민11","close":"은주 유진 혜성"},"27":{"off":"유진3 혜성3 예지3","open":"유림 겨운 민경","mid":"창민10(주간손익)","close":"은주 은지 지은"},"28":{"off":"유림3 겨운4 유진4 지은서초지원","open":"창민 예지 민경","close":"은주 은지 혜성"},"29":{"off":"민경4","open":"유림 유진 겨운 예지","mid":"창민10","close":"은주 은지 지은 혜성"},"30":{"off":"예지4","open":"유림 유진 겨운 민경","mid":"창민9","close":"은주 은지 지은 혜성"},"31":{"off":"은주3 혜성4","open":"유진 민경 예지","mid":"겨운10","close":"유림 은지 지은 창민24(월마감)"}},"2026-9-1":{"1":{"off":"지은5 예지5 은지5 유진 서울역","open":"창민ㅠ 은주 민경","close":"유림 겨운 혜성"},"10":{"off":"은주6 예지7 혜성7 유진 서울역","open":"창민 겨운 민경","close":"유림 은지 지은"},"11":{"off":"유림5 민경7 유진 서울역","open":"창민 겨운 혜성","mid":"예지10","close":"은주 은지 지은"},"12":{"off":"겨운6 유진 서울역","open":"유림 예지 혜성","mid":"지은9 창민9","close":"은주 은지 민경"},"13":{"off":"유진6 겨운7","open":"유림 예지 혜성","mid":"지은9 창민9","close":"은주 은지 민경"},"14":{"off":"유림6 유진7 창민6","open":"지은 예지 혜성","mid":"겨운10","close":"은주 은지 민경"},"15":{"off":"은주7 은지7 유진 서울역","open":"지은 예지 혜성 창민","close":"유림 겨운 민경"},"2":{"off":"민경5 창민4 혜성5 유진 서울역","open":"은주 지은 예지","close":"유림 겨운 은지"},"3":{"off":"은주4 겨운5 유진5","open":"지은 민경 예지","mid":"창민9","close":"유림 은지 혜성"},"4":{"off":"유림4 유진 서울역","open":"지은 민경 예지","mid":"창민9 겨운11","close":"은주 은지 혜성"},"5":{"off":"-","open":"유림+1 겨운 민경 예지","mid":"창민9+5 유진10+0.5","close":"은주 지은 은지 혜성"},"6":{"off":"예지6 유진 서울역","open":"유림 겨운 민경","mid":"은지9 창민14-18","close":"은주 지은 혜성"},"7":{"off":"혜성6 은지6 창민5 유진 서울역","open":"유림 겨운 민경","mid":"창민9","close":"은주 지은 예지"},"8":{"off":"지은6 민경6 창민5 유진 서울역","open":"유림 겨운 혜성","close":"은주 은지 예지"},"9":{"off":"은주5 지은7 유진 서울역","open":"창민 겨운 혜성","mid":"민경10","close":"유림 은지 예지"}},"2026-9-2":{"16":{"off":"지은1 은지1","open":"은주 예지 혜성","mid":"유진10 창민9","close":"유림 겨운 민경"},"17":{"off":"예지1 유진1 겨운1","open":"은주 지은 혜성 창민","close":"유림 은지 민경"},"18":{"off":"민경1 혜성1","open":"은주 겨운 지은 창민","mid":"유진10","close":"유림 은지 예지"},"19":{"off":"민경2 혜성2 창민1","open":"은주 겨운 지은","mid":"유진9","close":"유림 은지 예지"},"20":{"off":"은주1 혜성3","open":"유진 겨운 지은 창민7~13","mid":"민경9","close":"유림 은지 예지"},"21":{"off":"유림1 지은2 혜성휴 창민2","open":"유진 겨운 민경","close":"은주 은지 예지"},"22":{"off":"유진2 혜성휴 은지2","open":"유림 겨운 민경","mid":"창민7 (점장회의)","close":"은주 지은 예지"},"23":{"off":"은주2 민경3 겨운2","open":"유진 은지 창민","mid":"예지10","close":"유림 지은 혜성"},"24":{"off":"예지2 겨운3","open":"은주 유진 민경 창민","mid":"은지9","close":"유림 지은 혜성"},"25":{"off":"지은3 겨운4","open":"은주 유진 민경 창민","close":"유림 혜성 예지 은지"},"26":{"off":"유진3 창민3","open":"은주 지은 겨운 민경","close":"유림 혜성 예지 은지"},"27":{"off":"은지3 겨운5","open":"은주 지은 민경 창민","mid":"유진9","close":"유림 혜성 예지"},"28":{"off":"은주3 민경4 혜성4","open":"유진 겨운 지은","mid":"창민9","close":"유림 은지 예지"},"29":{"off":"유림2 예지3","open":"유진 겨운 민경","mid":"창민9 지은10","close":"은주 혜성 은지"},"30":{"off":"유림3 겨운6","open":"유진 예지 민경","mid":"지은10","close":"은주 혜성 은지 창민"}}};
 let pastDone=false;
 async function importPastIfMissing(){
+  if(STORE)return;
   if(pastDone||!DB)return;pastDone=true;
   /* 날짜별로 비어 있는 날만 채워요 (이미 있는 날은 절대 덮어쓰지 않음) */
-  try{for(const per in PAST_DB){const q=await DB.collection('sched/'+per+'/days').get();const have=new Set(q.docs.map(x=>x.id));const ds=PAST_DB[per];for(const d in ds)if(!have.has(d))await DB.doc('sched/'+per+'/days/'+d).set(ds[d])}}catch(e){pastDone=false}
+  try{for(const per in PAST_DB){const q=await DB.collection(FP('sched/'+per+'/days')).get();const have=new Set(q.docs.map(x=>x.id));const ds=PAST_DB[per];for(const d in ds)if(!have.has(d))await DB.doc(FP('sched/'+per+'/days/'+d)).set(ds[d])}}catch(e){pastDone=false}
 }
 async function seedIfEmpty(){
   try{
     const sn=await sref.get();if(sn.exists)return;
+    if(STORE){await sref.set({roster:'',notice:'',title:STORE+' 스케쥴 시트'});settingsExists=true;return}
     await sref.set(SEED_DB.settings);settingsExists=true;
-    for(const per in SEED_DB.days){const ds=SEED_DB.days[per];for(const d in ds)await DB.doc('sched/'+per+'/days/'+d).set(ds[d])}
+    for(const per in SEED_DB.days){const ds=SEED_DB.days[per];for(const d in ds)await DB.doc(FP('sched/'+per+'/days/'+d)).set(ds[d])}
   }catch(e){}
 }
 async function initSync(){
@@ -1248,7 +1257,7 @@ async function initSync(){
   CANWRITE=true;applyRO();
   setStatus('connecting');
   setTimeout(()=>{if(!liveOnce)setStatus('slow')},10000);
-  sref=DB.doc('shared/settings');
+  sref=DB.doc(FP('shared/settings'));
   sref.onSnapshot(applySettings,onErr);
   AUTH.onAuthStateChanged(u=>{const a=!!u&&u.email===ADMIN_EMAIL;if(a!==UNL)setUnl(a);if(a){seedIfEmpty();importPastIfMissing()}});
   load();
@@ -1306,15 +1315,15 @@ function applyS(){const g=$('#grid');if(!g)return;const z=window.gzGet?gzGet():1
 })();
 /* ❤️ 이름 버튼 응원 하트 */
 let HEARTS={},hSub=false;try{HEARTS=JSON.parse(localStorage.getItem('hearts')||'{}')||{}}catch(e){}
-function hInit(){if(hSub||typeof DB==='undefined'||!DB)return;hSub=true;try{DB.doc('shared/hearts').onSnapshot(sn=>{const d=sn.exists?(sn.data()||{}):{};for(const k in d)if(typeof d[k]==='number'&&d[k]>(HEARTS[k]||0))HEARTS[k]=d[k];hDraw()},()=>{})}catch(e){}}
+function hInit(){if(hSub||typeof DB==='undefined'||!DB)return;hSub=true;try{DB.doc(FP('shared/hearts')).onSnapshot(sn=>{const d=sn.exists?(sn.data()||{}):{};for(const k in d)if(typeof d[k]==='number'&&d[k]>(HEARTS[k]||0))HEARTS[k]=d[k];hDraw()},()=>{})}catch(e){}}
 function hDraw(){hInit();document.querySelectorAll('#chips .hc').forEach(s=>{const v=HEARTS[s.dataset.h]||0;s.textContent=v?'❤️'+v:'🤍'})}
 function addHeart(n,bt){HEARTS[n]=(HEARTS[n]||0)+1;try{localStorage.setItem('hearts',JSON.stringify(HEARTS))}catch(e){}hDraw();
   if(bt){const r=bt.getBoundingClientRect(),h=document.createElement('span');h.className='hpop';h.textContent='❤️';h.style.left=(r.left+window.scrollX+r.width/2-10+(Math.random()*16-8))+'px';h.style.top=(r.top+window.scrollY-6)+'px';document.body.appendChild(h);setTimeout(()=>h.remove(),900);bt.classList.remove('hbump');void bt.offsetWidth;bt.classList.add('hbump')}
-  if(typeof DB!=='undefined'&&DB&&CANWRITE){try{const inc=(window.firebase&&firebase.firestore.FieldValue&&firebase.firestore.FieldValue.increment)?firebase.firestore.FieldValue.increment(1):HEARTS[n];const q=DB.doc('shared/hearts').set({[n]:inc},{merge:true});if(q&&q.catch)q.catch(()=>{})}catch(e){}}}
+  if(typeof DB!=='undefined'&&DB&&CANWRITE){try{const inc=(window.firebase&&firebase.firestore.FieldValue&&firebase.firestore.FieldValue.increment)?firebase.firestore.FieldValue.increment(1):HEARTS[n];const q=DB.doc(FP('shared/hearts')).set({[n]:inc},{merge:true});if(q&&q.catch)q.catch(()=>{})}catch(e){}}}
 /* 🎨 나만의 스케쥴표 만들어보기 (연습용 · 저장 안 됨 · 실제 생성기와 같은 로직) */
 function sbPer(y,m,h){const s=h==='1'?1:16,e=h==='1'?15:new Date(y,m,0).getDate();return{y,m,h,s,e,key:'sch:'+y+'-'+m+'-'+h}}
 function sbGen(p,f){
-  const sp=t=>String(t||'').split(/[\s,]+/).filter(Boolean),names=sp(f.names),lo=sp(f.lo),lc=sp(f.lc),boss='창민';
+  const sp=t=>String(t||'').split(/[\s,]+/).filter(Boolean),names=sp(f.names),lo=sp(f.lo),lc=sp(f.lc),boss=(roster()[0]||names[0]||'');
   if(!names.length||new Set(names).size!==names.length)return{err:'⚠️ 인원 이름을 확인해 주세요 (중복 없이 입력)'};
   if(!lo.some(n=>names.includes(n))||!lc.some(n=>names.includes(n)))return{err:'⚠️ 오픈/마감 조장 가능 인원이 인원 명단에 없어요'};
   const days=[],need=[];
