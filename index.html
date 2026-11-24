@@ -309,7 +309,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 19:30</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 19:40</p>
 </main>
 
 <script>
@@ -448,7 +448,7 @@ function sum(){
   const p=P(),R=roster(),n=p.e-p.s+1,rec={},unk=new Set();
   R.forEach(x=>rec[x]={});
   for(let d=p.s;d<=p.e;d++)for(const c of CATS)for(const t of ((data[d]||{})[c]||'').split(/[\s,]+/).filter(Boolean)){
-    const nm=who(t,R);if(nm){const sf=t.slice(nm.length);(rec[nm][d]=rec[nm][d]||[]).push(c==='off'&&/[^0-9\s-]/.test(sf)?'vac':c)}else unk.add(p.m+'/'+d+' '+t);
+    const nm=who(t,R);if(nm){const sf=t.slice(nm.length);(rec[nm][d]=rec[nm][d]||[]).push(sf==='교육'?'mid':c==='off'&&/[^0-9\s-]/.test(sf)?'vac':c)}else unk.add(p.m+'/'+d+' '+t);
   }
   let bad=0,html='';window._t=[];
   for(const nm of R){
@@ -1436,8 +1436,9 @@ function openSandbox(){
 $('#sbBtn').addEventListener('click',openSandbox);
 /* 📤 출근부(52시간 취합) 엑셀 만들기: 노란 칸(출근/퇴근 2행)만 원본과 같은 위치에 채움 */
 const ATT={open:[7,16],mid:[9,18],close:[14,23]};
-const OFFC={'휴':['휴','가'],'휴가':['휴','가'],'연차':['연','차'],'반차':['반','차'],'보건':['보','건'],'공가':['공','가'],'경조':['경','조'],'교육':['교','육']};
+const OFFC={'휴':['휴','가'],'휴가':['휴','가'],'연차':['연','차'],'반차':['반','차'],'보건':['보','건'],'공가':['공','가'],'경조':['경','조']};
 function attCell(cat,suf){
+  if(suf==='교육')return[9,18];/* 교육은 09~18 근무 */
   if(cat==='off'){if(!suf||/^\d+$/.test(suf))return['휴','무'];if(OFFC[suf])return OFFC[suf];return[suf.slice(0,1),suf.slice(1,2)||'']}
   const d=ATT[cat];let s=d[0],e=d[1];
   if(suf){
