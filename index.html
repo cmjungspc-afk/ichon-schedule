@@ -221,6 +221,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
 <main>
 <header class="hero"><h1>행복한 이촌점 스케쥴 시트</h1><p>⭐🐑🐶🐰🐱🐻🐧🦊🐣</p></header>
 <div class="sync" id="sync"></div><button type="button" class="lockb" id="lockb"></button>
+<button type="button" id="insBtn" hidden>📲 앱으로 설치하기</button>
 
 <section class="card notice">
   <h2>📢 공지사항</h2>
@@ -292,7 +293,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 11:40</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 11:50</p>
 </main>
 
 <script>
@@ -1410,28 +1411,31 @@ initSync();try{updateLock();chips()}catch(e){}
 
 </script>
 <div id="insBar" hidden><img src="icon-192.png" alt=""><div id="insTxt"><b>앱으로 설치하기</b><span id="insSub">홈 화면에 아이콘으로 추가해요</span></div><button type="button" id="insGo">설치</button><button type="button" id="insX" aria-label="닫기">✕</button></div>
-<style>#insBar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:9000;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #0b3b7a;border-radius:16px;padding:10px 12px;box-shadow:0 6px 20px rgba(11,59,122,.25);max-width:520px;margin:0 auto}#insBar[hidden]{display:none}#insBar img{width:40px;height:40px;border-radius:10px;flex:none}#insTxt{flex:1;min-width:0;display:flex;flex-direction:column;font-size:13px;line-height:1.35}#insTxt b{font-size:14px;color:#0b3b7a}#insSub{color:#555}#insGo{flex:none;background:#1c7ed6;color:#fff;border:0;border-radius:10px;padding:8px 14px;font-weight:700;font-size:14px}#insGo[hidden]{display:none}#insX{flex:none;background:none;border:0;font-size:18px;color:#888;padding:4px}</style>
+<style>#insBtn{display:block;margin:10px auto 6px;background:linear-gradient(180deg,#74c0fc,#1c7ed6);color:#fff;border:2px solid #0b3b7a;border-radius:999px;padding:9px 22px;font:700 15px/1.2 inherit;font-family:inherit;box-shadow:0 3px 0 #0b3b7a}#insBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #0b3b7a}#insBtn[hidden]{display:none}#insBar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:9000;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #0b3b7a;border-radius:16px;padding:10px 12px;box-shadow:0 6px 20px rgba(11,59,122,.25);max-width:520px;margin:0 auto}#insBar[hidden]{display:none}#insBar img{width:40px;height:40px;border-radius:10px;flex:none}#insTxt{flex:1;min-width:0;display:flex;flex-direction:column;font-size:13px;line-height:1.35}#insTxt b{font-size:14px;color:#0b3b7a}#insSub{color:#555}#insGo{flex:none;background:#1c7ed6;color:#fff;border:0;border-radius:10px;padding:8px 14px;font-weight:700;font-size:14px}#insGo[hidden]{display:none}#insX{flex:none;background:none;border:0;font-size:18px;color:#888;padding:4px}</style>
 <script>
 (function(){
   if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
   const sa=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
   if(sa)return;
+  const btn=document.getElementById('insBtn');btn.hidden=false;
   let off=false;try{off=localStorage.getItem('insOff')==='1'}catch(e){}
-  if(off)return;
   const ua=navigator.userAgent,ios=/iPhone|iPad|iPod/i.test(ua)||(/Macintosh/.test(ua)&&'ontouchend' in document),kakao=/KAKAOTALK/i.test(ua),inapp=kakao||/NAVER|Instagram|FBAN|FBAV|Line\//i.test(ua);
   const bar=document.getElementById('insBar'),sub=document.getElementById('insSub'),go=document.getElementById('insGo');
   let dp=null;
-  const show=(t,btn)=>{sub.innerHTML=t;go.hidden=!btn;bar.hidden=false};
+  const show=(t,b)=>{sub.innerHTML=t;go.hidden=!b;bar.hidden=false};
+  const guide=()=>{
+    if(dp)return show('버튼 한 번이면 홈 화면에 추가돼요',true);
+    if(kakao)return show('카톡 안에서는 설치가 안 돼요. 오른쪽 아래 <b>⋮</b> → <b>다른 브라우저로 열기</b> 후 설치해 주세요',false);
+    if(inapp)return show('이 앱 안에서는 설치가 안 돼요. <b>Chrome</b>이나 <b>Safari</b>로 열어 주세요',false);
+    if(ios)return show('아래 <b>공유 버튼(□↑)</b> → <b>홈 화면에 추가</b>를 눌러 주세요',false);
+    show('브라우저 메뉴 <b>⋮</b> → <b>홈 화면에 추가</b>(또는 앱 설치)를 눌러 주세요',false);
+  };
+  const install=async()=>{if(!dp)return guide();dp.prompt();try{await dp.userChoice}catch(e){}dp=null;bar.hidden=true};
+  btn.onclick=install;go.onclick=install;
   document.getElementById('insX').onclick=()=>{bar.hidden=true;try{localStorage.setItem('insOff','1')}catch(e){}};
-  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;show('버튼 한 번이면 홈 화면에 추가돼요',true)});
-  window.addEventListener('appinstalled',()=>{bar.hidden=true});
-  go.onclick=async()=>{if(!dp)return;dp.prompt();try{await dp.userChoice}catch(e){}dp=null;bar.hidden=true};
-  setTimeout(()=>{if(dp)return;
-    if(kakao)show('카톡 안에서는 설치가 안 돼요. 오른쪽 아래 <b>⋮</b> → <b>다른 브라우저로 열기</b> 후 설치해 주세요',false);
-    else if(inapp)show('이 앱 안에서는 설치가 안 돼요. <b>Chrome</b>이나 <b>Safari</b>로 열어 주세요',false);
-    else if(ios)show('아래 <b>공유 버튼(□↑)</b> → <b>홈 화면에 추가</b>를 눌러 주세요',false);
-    else show('브라우저 메뉴 <b>⋮</b> → <b>홈 화면에 추가</b>(또는 앱 설치)를 눌러 주세요',false);
-  },2500);
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;if(!off)guide()});
+  window.addEventListener('appinstalled',()=>{bar.hidden=true;btn.hidden=true});
+  if(!off)setTimeout(()=>{if(!dp)guide()},2500);
 })();
 </script>
 </body>
