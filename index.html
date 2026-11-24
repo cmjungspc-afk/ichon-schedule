@@ -245,7 +245,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attPick):not(
   <div id="attPick"><label class="ap y"><input type="checkbox" id="apY" checked><i></i>52시간 시트</label><label class="ap b"><input type="checkbox" id="apB"><i></i>SPC IN 2.0 복붙</label></div>
   <button type="button" class="sbgo attgo" id="attBtn">📤 출근부 복붙 엑셀 받기</button>
   <p class="hint" id="attHint"><b style="color:#b08900">🟨 52시간 시트</b> · 급여 기준(16일~다음 달 15일)으로, 16일이 있는 주의 월요일부터 위에서 고른 기간 끝날까지 누적해서 담겨요. 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 선택해 복사 → 출근부 <b>D10</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸 시간만 채워져요.</p>
-    <p class="hint" id="attHint2"><b style="color:#1c7ed6">🟦 SPC IN 2.0</b> · SPC IN 2.0에 바로 붙일 파일이에요. <b>16일부터</b> 고른 날까지 빈 열 없이 이어지고, 직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 3줄이에요 (휴무는 00:00, 스케쥴이 없는 날은 미정). 직원 이름 옆 <b>파란 3줄을 드래그해서 복사</b> → SPC IN 2.0의 <b>16일 칸</b>에 맞춰 붙여넣으세요.</p>
+    <p class="hint" id="attHint2"><b style="color:#1c7ed6">🟦 SPC IN 2.0</b> · 16일이 있는 주의 월요일부터 고른 날까지 빈 열 없이 이어져요. 직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 파란 3줄(휴무는 00:00, 스케쥴 없는 날은 미정) 아래에 <b>하루 근무시간</b>(휴게 제외), <b>주별 합계(52시간 검증)</b>, 오른쪽에 <b>총휴무 · 총근무</b>가 나와요. 파란 3줄을 <b>16일 칸부터</b> 드래그해서 SPC IN 2.0에 붙여넣으세요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
   <p class="hint" style="margin-top:0">위에서 만들 <b>연도·월·기간</b>을 먼저 고르세요. 지금 선택: <b id="genper"></b></p>
   <div class="gf"><label for="gnames">인원 <small id="gcnt"></small></label><input id="gnames" placeholder="이름을 공백으로 구분"></div>
@@ -295,7 +295,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attPick):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 13:20</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 13:40</p>
 </main>
 
 <script>
@@ -1351,7 +1351,7 @@ function attDay(dt,name,R){
   return null;
 }
 function loadXLSX(){return new Promise((ok,no)=>{if(window.XLSX)return ok();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';s.onload=()=>ok();s.onerror=()=>no(new Error('load'));document.head.appendChild(s)})}
-async function attExport(mode){const SPC=mode==='spc',ST=SPC?4:7,CS=9;
+async function attExport(mode){const SPC=mode==='spc',ST=SPC?6:7,CS=9;
   const p=P(),R=roster(),W=attWeeks(p),RG=attRange(p);
   if(DB){const ks=new Set();for(let d=new Date(RG.st);d<=RG.en;d.setDate(d.getDate()+1))ks.add(keyFor(d.getFullYear(),d.getMonth()+1,d.getDate()));ks.forEach(watch);for(let t=0;t<30&&[...ks].some(k=>!ready[k]);t++)await new Promise(r=>setTimeout(r,100))}
   try{await loadXLSX()}catch(e){toast('bad','⚠️ 엑셀 도구를 불러오지 못했어요\n인터넷 연결을 확인해 주세요\n(눌러서 닫기)');return}
@@ -1360,24 +1360,33 @@ async function attExport(mode){const SPC=mode==='spc',ST=SPC?4:7,CS=9;
   const put=(r,c,v,st)=>{const a=X.utils.encode_cell({r,c});const has=!(v===null||v===undefined||v==='');if(!has&&!st)return;ws[a]=!has?{t:'z',s:st}:typeof v==='number'?{t:'n',v:v/24,z:'hh:mm',s:st}:{t:'s',v:String(v),s:st};maxC=Math.max(maxC,c);maxR=Math.max(maxR,r)};
   const NAMEST={font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:'1F3864'}},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'FFFF00'}}};
   const hm=v=>typeof v==='number'?String(Math.floor(v)).padStart(2,'0')+':'+String(Math.round((v%1)*60)).padStart(2,'0'):v;
-  view.push(SPC?['이름','날짜','요일','구분','출근','퇴근']:['이름','날짜','요일','출근','퇴근']);
+  view.push(SPC?['이름','날짜','요일','구분','출근','퇴근','근무시간']:['이름','날짜','요일','출근','퇴근']);
   const HD={font:{name:'맑은 고딕',sz:11,bold:true},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'D9E1F2'}},border:YEL.border};
   const WKS={font:{name:'맑은 고딕',sz:12,bold:true,color:{rgb:'FFFFFF'}},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'38761D'}}};
-  ws['!merges']=[];if(!SPC)W.forEach((wk,w)=>{const c=3+CS*w;put(6,c,(w+1)+'주차',WKS);for(let k=1;k<7;k++)put(6,c+k,null,WKS);ws['!merges'].push({s:{r:6,c},e:{r:6,c:c+6}})});
-  const DS=[];for(let d=new Date(RG.st);d<=RG.en;d.setDate(d.getDate()+1))DS.push(new Date(d));
+  const DS=[];for(let d=new Date(W[0][0]);d<=RG.en;d.setDate(d.getDate()+1))DS.push(new Date(d));
+  ws['!merges']=[];if(SPC){for(let k0=0;k0<DS.length;k0+=7){const c=3+k0,c1=3+Math.min(k0+6,DS.length-1);put(6,c,(k0/7+1)+'주차',WKS);for(let c2=c+1;c2<=c1;c2++)put(6,c2,null,WKS);if(c1>c)ws['!merges'].push({s:{r:6,c},e:{r:6,c:c1}})}}else W.forEach((wk,w)=>{const c=3+CS*w;put(6,c,(w+1)+'주차',WKS);for(let k=1;k<7;k++)put(6,c+k,null,WKS);ws['!merges'].push({s:{r:6,c},e:{r:6,c:c+6}})});
   if(SPC)DS.forEach((dt,k)=>{const c=3+k,wd=(dt.getDay()+6)%7;put(7,c,(dt.getMonth()+1)+'/'+dt.getDate(),HD);put(8,c,'월화수목금토일'[wd],Object.assign({},HD,{font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:wd===5?'1C4FD6':wd===6?'D62828':'000000'}}}))});else
   W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+CS*w+k;put(7,c,(dt.getMonth()+1)+'/'+dt.getDate(),HD);put(8,c,'월화수목금토일'[k],Object.assign({},HD,{font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:k===5?'1C4FD6':k===6?'D62828':'000000'}}}))}));put(8,1,'이름',HD);
   const BLU={fill:{patternType:'solid',fgColor:{rgb:'DDEBF7'}},alignment:{horizontal:'center',vertical:'center'},font:{name:'맑은 고딕',sz:11},border:YEL.border},BOFF=Object.assign({},BLU,{font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:'1C4FD6'}}}),BNM=Object.assign({},NAMEST,{fill:BLU.fill});
+  const putN=(r,c,v,st,z)=>{const a=X.utils.encode_cell({r,c});if(v===null||v===undefined){ws[a]={t:'z',s:st};return}ws[a]={t:'n',v,z:z||'0.0',s:st};maxC=Math.max(maxC,c);maxR=Math.max(maxR,r)};
+  const sf=(rgb,col,b)=>({fill:{patternType:'solid',fgColor:{rgb}},alignment:{horizontal:'center',vertical:'center'},font:{name:'맑은 고딕',sz:11,bold:!!b,color:{rgb:col||'000000'}},border:YEL.border});
+  const HW=sf('FFFFFF'),HOFF=sf('2F75B5','FFFFFF',1),HSHORT=sf('70AD47','FFFFFF',1),HLONG=sf('F8CBAD','C00000'),WLOW=sf('C6E0B4','375623',1),WMID=sf('FFE699','7F6000',1),W52=sf('F4B6C2','9C0006',1),WOVER=sf('C00000','FFFFFF',1),TH=sf('D9E1F2','000000',1),TV=sf('FFFFFF','000000',1),LBL={font:{name:'맑은 고딕',sz:10,bold:true,color:{rgb:'595959'}},alignment:{horizontal:'center',vertical:'center'}};
   R.forEach((n,i)=>{const r0=9+ST*i;
-    if(SPC){put(r0+1,1,n,BNM);DS.forEach((dt,k)=>{const c=3+k,v=attDay(dt,n,R);
-      const [a,b,e]=!v?['미정','미정','미정']:typeof v[0]==='number'?['근무',v[0],v[1]]:['휴무',0,0];
-      put(r0,c,a,a==='근무'?BLU:BOFF);put(r0+1,c,b,BLU);put(r0+2,c,e,BLU);view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],a,hm(b),hm(e)])});return}
+    if(SPC){put(r0+1,1,n,BNM);put(r0+3,1,'근무시간',LBL);put(r0+4,1,'주 52시간 검증',LBL);let tOff=0,tH=0,wk=0,und=0,wkD=0;
+      DS.forEach((dt,k)=>{const c=3+k,v=attDay(dt,n,R);
+        const [a,b,e]=!v?['미정','미정','미정']:typeof v[0]==='number'?['근무',v[0],v[1]]:['휴무',0,0];
+        put(r0,c,a,a==='근무'?BLU:BOFF);put(r0+1,c,b,BLU);put(r0+2,c,e,BLU);
+        let h=null;if(a==='근무'){const d=e-b;h=d-(d>=9?1:d>=4.5?.5:0);tH+=h;wk+=h;wkD=1}else if(a==='휴무'){h=0;tOff++;wkD=1}else und++;
+        putN(r0+3,c,h,h===null?HW:h===0?HOFF:h<8?HSHORT:h>8?HLONG:HW);
+        view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],a,hm(b),hm(e),h===null?'':h]);
+        if(k%7===6||k===DS.length-1){const c0=3+k-(k%7);const st=!wkD?HW:wk>52?WOVER:wk>=52?W52:wk>=45?WMID:WLOW;putN(r0+4,c0,wkD?wk:null,st,'0.0'+(wk>52?'" ⚠초과"':''));for(let c2=c0+1;c2<=c;c2++)put(r0+4,c2,null,st);if(c>c0)ws['!merges'].push({s:{r:r0+4,c:c0},e:{r:r0+4,c}});wk=0;wkD=0}});
+      const cT=3+DS.length+1;put(r0,cT,'총휴무',TH);put(r0,cT+1,'총근무',TH);putN(r0+1,cT,tOff,TV,'0');putN(r0+1,cT+1,tH,TV,'0.0');if(und){put(r0+2,cT,'미정',TH);putN(r0+2,cT+1,und,TV,'0"일"')}return}
     put(r0,1,n,NAMEST);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+CS*w+k;put(r0,c,null,YEL);put(r0+1,c,null,YEL);const inP=dt>=W[0][0]&&dt<=RG.en,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0],YEL);put(r0+1,c,v[1],YEL)}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
   ws['!ref']=X.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(maxR,10),c:Math.max(maxC,10)}});
   ws['!cols']=Array.from({length:Math.max(maxC,10)+1},(_,i)=>({wch:i===1?8:7}));
   const wb=X.utils.book_new();X.utils.book_append_sheet(wb,ws,'붙여넣기용');
-  const v2=X.utils.aoa_to_sheet(view);v2['!cols']=[{wch:8},{wch:7},{wch:5},{wch:7},{wch:7},{wch:7}];X.utils.book_append_sheet(wb,v2,'확인용');
-  const f2=d=>(d.getMonth()+1)+'.'+d.getDate();const F0=SPC?RG.st:W[0][0];X.writeFile(wb,(SPC?'SPC IN 복붙_':'출근부_')+F0.getFullYear()+'_'+f2(F0)+'-'+f2(RG.en)+'.xlsx');
+  const v2=X.utils.aoa_to_sheet(view);v2['!cols']=[{wch:8},{wch:7},{wch:5},{wch:7},{wch:7},{wch:7},{wch:8}];X.utils.book_append_sheet(wb,v2,'확인용');
+  const f2=d=>(d.getMonth()+1)+'.'+d.getDate();const F0=W[0][0];X.writeFile(wb,(SPC?'SPC IN 복붙_':'출근부_')+F0.getFullYear()+'_'+f2(F0)+'-'+f2(RG.en)+'.xlsx');
   toast('ok','✅ '+(SPC?'SPC IN 2.0 복붙':'출근부')+' 파일을 받았어요\n('+(F0.getMonth()+1)+'/'+F0.getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+' 누적)');
 }
 (function(){const y=$('#apY'),b=$('#apB');try{const v=localStorage.getItem('attPick');if(v){y.checked=v.includes('y');b.checked=v.includes('b')}}catch(e){}
