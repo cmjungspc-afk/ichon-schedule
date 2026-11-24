@@ -295,7 +295,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 15:00</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 15:15</p>
 </main>
 
 <script>
@@ -1390,8 +1390,10 @@ async function attExport(mode){const SPC=mode==='spc',ST=SPC?6:7,CS=9;
   const f2=d=>(d.getMonth()+1)+'.'+d.getDate();const F0=W[0][0];X.writeFile(wb,(SPC?'SPC IN 복붙_':'출근부_')+F0.getFullYear()+'_'+f2(F0)+'-'+f2(RG.en)+'.xlsx');
   toast('ok','✅ '+(SPC?'SPC IN 2.0 복붙':'출근부')+' 파일을 받았어요\n('+(F0.getMonth()+1)+'/'+F0.getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+')');
 }
-$('#attBtn').addEventListener('click',()=>{if(confirm('🟨 52시간 시트\n다운로드 받으시겠습니까?'))attExport()});
-$('#attBtn2').addEventListener('click',()=>{if(confirm('🟦 SPC IN 2.0\n다운로드 받으시겠습니까?'))attExport('spc')});
+function attAsk(t){const p=P(),RG=attRange(p),W0=attWeeks(p)[0][0],f=d=>(d.getMonth()+1)+'/'+d.getDate()+'('+WD[d.getDay()]+')';
+  return confirm(t+'\n\n📅 '+f(RG.st)+' ~ '+f(RG.en)+' 기간으로\n엑셀을 받으시겠습니까?'+(W0<RG.st?'\n\n(16일이 주 중간이라 '+f(W0)+'부터 함께 담겨요)':''))}
+$('#attBtn').addEventListener('click',()=>{if(attAsk('🟨 52시간 시트 복붙'))attExport()});
+$('#attBtn2').addEventListener('click',()=>{if(attAsk('🟦 SPC IN 2.0 복붙'))attExport('spc')});
 /* 칸 폭 자동 맞춤: 가장 긴 칸에 맞춰 모든 칸을 같은 폭으로 */
 (function(){
   const g=$('#grid');if(!g)return;let raf=0;
