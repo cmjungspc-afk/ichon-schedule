@@ -309,7 +309,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 18:45</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 18:55</p>
 </main>
 
 <script>
@@ -748,8 +748,8 @@ $('#tut').addEventListener('click',e=>{const b=e.target.closest('.tgo');if(e.tar
   else{const g=$('#genBody');if(g&&g.hidden)$('#genBtn').click();tutFlash($('#genBtn'))}});
 setTimeout(tutDraw,1200);setInterval(tutDraw,2000);
 function heroIcons(){try{applyIcons();$('.hero p').innerHTML=roster().map(n=>(STAFF[n]||{e:'🙂'}).e).join(' ')}catch(e){}}heroIcons();
-if(STORE){try{const B=new URL('./',location.href).href;const m={name:STORE+' 스케쥴',short_name:STORE+' 스케쥴',start_url:B+'?store='+encodeURIComponent(STORE),scope:B,display:'standalone',orientation:'portrait',background_color:'#e6f0fb',theme_color:'#1c7ed6',lang:'ko',icons:[{src:B+'icon-192.png',sizes:'192x192',type:'image/png'},{src:B+'icon-512.png',sizes:'512x512',type:'image/png'}]};
-  $('#mfl').href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(m));const at=document.querySelector('meta[name=apple-mobile-web-app-title]');if(at)at.content=STORE+' 스케쥴'}catch(e){}}
+if(STORE){try{const B=new URL('./',location.href).href;const m={name:STORE+' 스케쥴',short_name:STORE+' 스케쥴',start_url:B+'?store='+encodeURIComponent(STORE),scope:B,display:'standalone',orientation:'portrait',background_color:'#e6f0fb',theme_color:'#1c7ed6',lang:'ko',icons:[{src:B+'store-icon-192.png',sizes:'192x192',type:'image/png'},{src:B+'store-icon-512.png',sizes:'512x512',type:'image/png'}]};
+  $('#mfl').href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(m));const at=document.querySelector('meta[name=apple-mobile-web-app-title]');if(at)at.content=STORE+' 스케쥴';const ti=document.querySelector('link[rel=apple-touch-icon]');if(ti)ti.href='store-apple-touch-icon.png';const fi=document.querySelector('link[rel=icon]');if(fi)fi.href='store-icon-192.png'}catch(e){}}
 const TITLE0=STORE?STORE+' 스케쥴 시트':'행복한 이촌점 스케쥴 시트';
 function setTitle(t){t=(t||'').trim()||TITLE0;$('.hero h1').textContent=t;document.title=t}
 try{setTitle(localStorage.getItem('title'))}catch(e){}
