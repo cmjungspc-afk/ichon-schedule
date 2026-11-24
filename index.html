@@ -243,7 +243,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 <section class="card" id="genc">
   <button type="button" class="sbgo" id="sbBtn">🎨 나만의 스케쥴표 만들어보기!</button>
   <button type="button" class="sbgo attgo attY" id="attBtn"><svg class="xli" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3.5" fill="#1f9d55" stroke="#fff" stroke-width="1.6"/><rect x="5" y="7" width="14" height="10" rx="1" fill="#fff"/><path d="M5 10.3h14M5 13.6h14M9.7 7v10M14.3 7v10" stroke="#1f9d55" stroke-width="1.2"/><rect x="5" y="7" width="14" height="3.3" fill="#c3f0d2"/></svg>52시간 시트 복붙 엑셀 받기<small class="attP"></small></button>
-  <p class="hint" id="attHint"><b style="color:#b08900">🟨 52시간 시트</b> · 급여 기준으로 항상 <b>16일 ~ 다음 달 15일 한 달 전체</b>가 담겨요 (16일이 주 중간이면 그 주 월요일부터). 받은 파일에서 직원 이름 옆 <b>노란 2줄(출근·퇴근)을 행째로 잡아 복사</b> → 출근부의 그 직원 <b>노란 2줄 행</b>에 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>로 붙여넣으세요 (서식 · 사번 칸이 안 지워져요). 받은 파일 왼쪽 위에도 방법이 적혀 있어요.</p>
+  <p class="hint" id="attHint"><b style="color:#b08900">🟨 52시간 시트</b> · 급여 기준으로 항상 <b>16일 ~ 다음 달 15일 한 달 전체</b>가 담겨요 (16일이 주 중간이면 그 주 월요일부터). 받은 파일에서 직원 이름 옆 <b>노란 2줄 행 2개를 잡고 Ctrl+C</b> → 출근부의 그 직원 <b>노란 2줄 행 2개를 잡고 Ctrl+V → 값 붙여넣기</b> 하세요. 받은 파일 왼쪽 위에도 방법이 적혀 있어요.</p>
     <button type="button" class="sbgo attgo" id="attBtn2"><svg class="xli" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="3.5" fill="#1f9d55" stroke="#fff" stroke-width="1.6"/><rect x="5" y="7" width="14" height="10" rx="1" fill="#fff"/><path d="M5 10.3h14M5 13.6h14M9.7 7v10M14.3 7v10" stroke="#1f9d55" stroke-width="1.2"/><rect x="5" y="7" width="14" height="3.3" fill="#c3f0d2"/></svg>SPC IN 2.0 복붙 엑셀 받기<small class="attP"></small></button>
   <p class="hint" id="attHint2"><b style="color:#1c7ed6">🟦 SPC IN 2.0</b> · 항상 <b>16일 ~ 다음 달 15일</b>(16일이 있는 주 월요일부터) 빈 열 없이 이어져요. 직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 파란 3줄(휴무는 00:00, 스케쥴 없는 날은 미정) 아래에 <b>하루 근무시간</b>(휴게 제외), <b>주별 합계(52시간 검증)</b>, 오른쪽에 <b>총휴무 · 총근무</b>가 나와요. 파란 3줄을 <b>16일 칸부터</b> 드래그해서 SPC IN 2.0에 붙여넣으세요. 받은 파일 왼쪽 위에도 방법이 적혀 있어요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
@@ -295,7 +295,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 15:50</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 16:00</p>
 </main>
 
 <script>
@@ -1385,7 +1385,7 @@ async function attExport(mode){const SPC=mode==='spc',ST=SPC?6:7,CS=9;
     put(r0,1,n,NAMEST);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+CS*w+k;put(r0,c,null,YEL);put(r0+1,c,null,YEL);const inP=dt>=W[0][0]&&dt<=RG.en,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0],YEL);put(r0+1,c,v[1],YEL)}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
   {const f=d=>(d.getMonth()+1)+'/'+d.getDate(),per='📅 급여기간 '+f(RG.st)+' ~ '+f(RG.en)+(W[0][0]<RG.st?' ('+f(W[0][0])+' 월요일부터 표시)':'');
    const L=SPC?['🟦 SPC IN 2.0 복붙 방법',per,'① 직원 이름 옆 파란 3줄(근무/휴무 · 출근 · 퇴근)을 '+f(RG.st)+' 칸부터 끝까지 드래그해서 복사 (Ctrl+C)','② SPC IN 2.0에서 그 직원의 '+f(RG.st)+' 칸을 누르고 붙여넣기 (Ctrl+V)','※ 아래 근무시간 · 주 52시간 검증 · 총휴무 · 총근무는 확인용이에요 (복사하지 마세요). 휴무는 00:00, 스케쥴 없는 날은 미정']
-     :['🟨 52시간 시트 복붙 방법',per,'① 직원 이름 옆 노란 2줄(출근 · 퇴근)을 행 번호 클릭으로 행째 잡아 복사 (Ctrl+C)','② 출근부에서 그 직원 노란 2줄의 행 번호를 똑같이 잡고 마우스 오른쪽 → 선택하여 붙여넣기 → \'값\' + \'내용 있는 셀만 붙여넣기\' 체크 → 확인','※ 이렇게 붙여야 출근부 서식이랑 사번 · 이름 칸이 안 지워져요. 직원 순서가 출근부와 같은지 꼭 확인!'];
+     :['🟨 52시간 시트 복붙 방법',per,'① 직원 이름 옆 노란 2줄(출근 · 퇴근) 행 2개를 잡고 Ctrl+C','② 출근부에서 그 직원 노란 2줄 행 2개를 잡고 Ctrl+V → 값 붙여넣기','※ 직원 순서가 출근부와 같은지 꼭 확인!'];
    const col=SPC?'1C7ED6':'B08900',bg=SPC?'E7F3FF':'FFF9DB',E=Math.max(maxC,20);
    L.forEach((t,r)=>{const st={font:{name:'맑은 고딕',sz:r===0?13:11,bold:r<2,color:{rgb:r===0?col:'333333'}},fill:{patternType:'solid',fgColor:{rgb:bg}},alignment:{horizontal:'left',vertical:'center'}};put(r,0,t,st);for(let c=1;c<=E;c++)put(r,c,null,st);ws['!merges'].push({s:{r,c:0},e:{r,c:E}})});
    ws['!rows']=[{hpt:22},{hpt:18},{hpt:18},{hpt:18},{hpt:18}]}
