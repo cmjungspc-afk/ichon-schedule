@@ -209,7 +209,7 @@ section.card.nextbd b{font-weight:900;color:#d6336c}
 #sbgrid sup{color:#e8590c;font-weight:700}#sbgrid .need{color:var(--bad);font-weight:700;font-size:11px}.sbbox .zbar{margin:8px 0 6px}
 .sbh{font-size:15px;margin:14px 0 6px}.sbbox .sum{font-size:13px}.sbbox .wl{max-height:none}
 .sbcnt{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px;margin-top:8px;font-size:12px}.sbcnt div{padding:4px 6px;border-radius:8px;border-left:4px solid var(--k);background:color-mix(in srgb,var(--k) 14%,var(--card))}
-body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(#attHint2){display:none!important}.spcgo{background:linear-gradient(180deg,#a5d8ff,#4dabf7)!important}#attHint2{margin:8px 2px 14px;font-size:12px}body:not(.unl) #attHint2{margin-bottom:0}#genc #attBtn{margin-top:10px}.attgo{background:linear-gradient(180deg,#74c0fc,#1c7ed6)!important;border-color:#0b3b7a!important;box-shadow:0 4px 0 #0b3b7a,inset 0 2px 0 rgba(255,255,255,.45)!important}#attHint{margin:8px 2px 14px;font-size:12px}body:not(.unl) #genc{padding:14px 12px!important}body:not(.unl) #genc #sbBtn{margin:0}body:not(.unl) #attHint{margin-bottom:14px}body:not(.unl) #xferc{display:none!important}
+body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attPick):not(#attHint2){display:none!important}#attHint[hidden],#attHint2[hidden]{display:none!important}#attPick{display:flex;gap:8px;justify-content:center;margin:12px 0 8px}#attPick .ap{flex:1;max-width:170px;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 8px;border-radius:14px;border:2px solid;font-weight:800;font-size:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}#attPick .ap.y{background:#fff9c4;border-color:#d4a800;color:#7a5b00}#attPick .ap.b{background:#dbeefe;border-color:#1c7ed6;color:#0b3b7a}#attPick input{position:absolute;opacity:0;pointer-events:none}#attPick i{width:20px;height:20px;border-radius:6px;border:2px solid currentColor;background:#fff;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:14px;line-height:1}#attPick .ap.y input:checked+i{background:#ffd400;border-color:#b08900}#attPick .ap.b input:checked+i{background:#1c7ed6;border-color:#0b3b7a;color:#fff}#attPick input:checked+i::after{content:'✓'}#attPick .ap:has(input:not(:checked)){opacity:.6}#attHint2{margin:8px 2px 14px;font-size:12px}body:not(.unl) #attHint2{margin-bottom:0}#genc #attBtn{margin-top:4px}.attgo{background:linear-gradient(180deg,#74c0fc,#1c7ed6)!important;border-color:#0b3b7a!important;box-shadow:0 4px 0 #0b3b7a,inset 0 2px 0 rgba(255,255,255,.45)!important}#attHint{margin:8px 2px 14px;font-size:12px}body:not(.unl) #genc{padding:14px 12px!important}body:not(.unl) #genc #sbBtn{margin:0}body:not(.unl) #attHint{margin-bottom:14px}body:not(.unl) #xferc{display:none!important}
 .admtag{display:inline-block;margin-top:6px;padding:3px 14px;border-radius:99px;background:#0b1f4d;color:#ffd43b;font-family:var(--jua);font-size:15px;letter-spacing:1px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
 #chips .hc{font-size:12px;margin-left:3px}.hpop{position:absolute;z-index:80;pointer-events:none;font-size:22px;animation:hpop .85s ease-out forwards}@keyframes hpop{to{transform:translateY(-48px) scale(1.5);opacity:0}}#chips button.hbump{animation:hbump .25s}@keyframes hbump{50%{transform:scale(1.1)}}body.rdo #chips{pointer-events:auto!important}
 .sndbar{position:fixed;right:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;gap:6px}.sndbar button{padding:6px 12px!important;font-size:13px!important;border-radius:99px!important}.sndbar button:not(.on){filter:grayscale(.75);opacity:.85}
@@ -242,10 +242,10 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 
 <section class="card" id="genc">
   <button type="button" class="sbgo" id="sbBtn">🎨 나만의 스케쥴표 만들어보기!</button>
-  <button type="button" class="sbgo attgo" id="attBtn">📤 출근부(52시간) 복붙 엑셀 받기</button>
-  <p class="hint" id="attHint">급여 기준(16일~다음 달 15일)으로, 16일이 있는 주의 월요일부터 위에서 고른 기간 끝날까지 누적해서 담겨요. 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 선택해 복사 → 출근부 <b>D10</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸 시간만 채워져요.</p>
-  <button type="button" class="sbgo attgo spcgo" id="attBtn2">📤 SPC IN 2.0 복붙 엑셀 받기</button>
-  <p class="hint" id="attHint2">SPC IN 2.0에 바로 붙일 파일이에요. <b>16일부터</b> 고른 날까지 빈 열 없이 이어지고, 직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 3줄이에요 (휴무는 00:00, 스케쥴이 없는 날은 미정). 직원 이름 옆 <b>파란 3줄을 드래그해서 복사</b> → SPC IN 2.0의 <b>16일 칸</b>에 맞춰 붙여넣으세요.</p>
+  <div id="attPick"><label class="ap y"><input type="checkbox" id="apY" checked><i></i>52시간 시트</label><label class="ap b"><input type="checkbox" id="apB"><i></i>SPC IN 2.0 복붙</label></div>
+  <button type="button" class="sbgo attgo" id="attBtn">📤 출근부 복붙 엑셀 받기</button>
+  <p class="hint" id="attHint"><b style="color:#b08900">🟨 52시간 시트</b> · 급여 기준(16일~다음 달 15일)으로, 16일이 있는 주의 월요일부터 위에서 고른 기간 끝날까지 누적해서 담겨요. 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 선택해 복사 → 출근부 <b>D10</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸 시간만 채워져요.</p>
+    <p class="hint" id="attHint2"><b style="color:#1c7ed6">🟦 SPC IN 2.0</b> · SPC IN 2.0에 바로 붙일 파일이에요. <b>16일부터</b> 고른 날까지 빈 열 없이 이어지고, 직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 3줄이에요 (휴무는 00:00, 스케쥴이 없는 날은 미정). 직원 이름 옆 <b>파란 3줄을 드래그해서 복사</b> → SPC IN 2.0의 <b>16일 칸</b>에 맞춰 붙여넣으세요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
   <p class="hint" style="margin-top:0">위에서 만들 <b>연도·월·기간</b>을 먼저 고르세요. 지금 선택: <b id="genper"></b></p>
   <div class="gf"><label for="gnames">인원 <small id="gcnt"></small></label><input id="gnames" placeholder="이름을 공백으로 구분"></div>
@@ -295,7 +295,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 13:05</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 13:20</p>
 </main>
 
 <script>
@@ -1380,8 +1380,11 @@ async function attExport(mode){const SPC=mode==='spc',ST=SPC?4:7,CS=9;
   const f2=d=>(d.getMonth()+1)+'.'+d.getDate();const F0=SPC?RG.st:W[0][0];X.writeFile(wb,(SPC?'SPC IN 복붙_':'출근부_')+F0.getFullYear()+'_'+f2(F0)+'-'+f2(RG.en)+'.xlsx');
   toast('ok','✅ '+(SPC?'SPC IN 2.0 복붙':'출근부')+' 파일을 받았어요\n('+(F0.getMonth()+1)+'/'+F0.getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+' 누적)');
 }
-$('#attBtn').addEventListener('click',()=>{if(confirm('다운로드 받으시겠습니까?'))attExport()});
-$('#attBtn2').addEventListener('click',()=>{if(confirm('다운로드 받으시겠습니까?'))attExport('spc')});
+(function(){const y=$('#apY'),b=$('#apB');try{const v=localStorage.getItem('attPick');if(v){y.checked=v.includes('y');b.checked=v.includes('b')}}catch(e){}
+  const sync=()=>{$('#attHint').hidden=!y.checked;$('#attHint2').hidden=!b.checked;try{localStorage.setItem('attPick',(y.checked?'y':'')+(b.checked?'b':''))}catch(e){}};y.onchange=b.onchange=sync;sync();
+  $('#attBtn').addEventListener('click',async()=>{if(!y.checked&&!b.checked){toast('bad','⚠️ 받을 시트를 하나 이상 체크해 주세요\n(눌러서 닫기)');return}
+    if(!confirm('다운로드 받으시겠습니까?\n'+[y.checked?'🟨 52시간 시트':'',b.checked?'🟦 SPC IN 2.0 복붙':''].filter(Boolean).join('\n')))return;
+    if(y.checked)await attExport();if(y.checked&&b.checked)await new Promise(r=>setTimeout(r,900));if(b.checked)await attExport('spc')})})();
 /* 칸 폭 자동 맞춤: 가장 긴 칸에 맞춰 모든 칸을 같은 폭으로 */
 (function(){
   const g=$('#grid');if(!g)return;let raf=0;
