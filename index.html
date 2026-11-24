@@ -244,8 +244,8 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attPick):not(
   <button type="button" class="sbgo" id="sbBtn">🎨 나만의 스케쥴표 만들어보기!</button>
   <div id="attPick"><label class="ap y"><input type="checkbox" id="apY" checked><i></i>52시간 시트</label><label class="ap b"><input type="checkbox" id="apB"><i></i>SPC IN 2.0 복붙</label></div>
   <button type="button" class="sbgo attgo" id="attBtn">📤 출근부 복붙 엑셀 받기</button>
-  <p class="hint" id="attHint"><b style="color:#b08900">🟨 52시간 시트</b> · 급여 기준(16일~다음 달 15일)으로, 16일이 있는 주의 월요일부터 위에서 고른 기간 끝날까지 누적해서 담겨요. 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 선택해 복사 → 출근부 <b>D10</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸 시간만 채워져요.</p>
-    <p class="hint" id="attHint2"><b style="color:#1c7ed6">🟦 SPC IN 2.0</b> · 16일이 있는 주의 월요일부터 고른 날까지 빈 열 없이 이어져요. 직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 파란 3줄(휴무는 00:00, 스케쥴 없는 날은 미정) 아래에 <b>하루 근무시간</b>(휴게 제외), <b>주별 합계(52시간 검증)</b>, 오른쪽에 <b>총휴무 · 총근무</b>가 나와요. 파란 3줄을 <b>16일 칸부터</b> 드래그해서 SPC IN 2.0에 붙여넣으세요.</p>
+  <p class="hint" id="attHint"><b style="color:#b08900">🟨 52시간 시트</b> · 급여 기준으로 항상 <b>16일 ~ 다음 달 15일 한 달 전체</b>가 담겨요 (16일이 주 중간이면 그 주 월요일부터). 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 선택해 복사 → 출근부 <b>D10</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸 시간만 채워져요.</p>
+    <p class="hint" id="attHint2"><b style="color:#1c7ed6">🟦 SPC IN 2.0</b> · 항상 <b>16일 ~ 다음 달 15일</b>(16일이 있는 주 월요일부터) 빈 열 없이 이어져요. 직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 파란 3줄(휴무는 00:00, 스케쥴 없는 날은 미정) 아래에 <b>하루 근무시간</b>(휴게 제외), <b>주별 합계(52시간 검증)</b>, 오른쪽에 <b>총휴무 · 총근무</b>가 나와요. 파란 3줄을 <b>16일 칸부터</b> 드래그해서 SPC IN 2.0에 붙여넣으세요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
   <p class="hint" style="margin-top:0">위에서 만들 <b>연도·월·기간</b>을 먼저 고르세요. 지금 선택: <b id="genper"></b></p>
   <div class="gf"><label for="gnames">인원 <small id="gcnt"></small></label><input id="gnames" placeholder="이름을 공백으로 구분"></div>
@@ -295,7 +295,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attPick):not(
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 14:10</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 14:20</p>
 </main>
 
 <script>
@@ -1344,7 +1344,7 @@ function attCell(cat,suf){
   }
   return[s,e];
 }
-function attRange(p){/* 급여 기준: 16일 ~ 다음 달 15일. 고른 기간까지 누적 */const st=p.h==='2'?new Date(p.y,p.m-1,16):new Date(p.y,p.m-2,16),en=new Date(p.y,p.m-1,p.e);return{st,en}}
+function attRange(p){/* 급여 기준: 항상 16일 ~ 다음 달 15일 한 달 전체 (16~말일을 골라도, 1~15를 골라도 같은 기간) */const st=p.h==='2'?new Date(p.y,p.m-1,16):new Date(p.y,p.m-2,16),en=new Date(st.getFullYear(),st.getMonth()+1,15);return{st,en}}
 function attWeeks(p){const{st,en}=attRange(p);const mon=new Date(st);mon.setDate(st.getDate()-((st.getDay()+6)%7));const w=[];for(let d=new Date(mon);d<=en;d.setDate(d.getDate()+7)){w.push([0,1,2,3,4,5,6].map(i=>{const t=new Date(d);t.setDate(t.getDate()+i);return t}))}return w}
 function attDay(dt,name,R){
   const y=dt.getFullYear(),m=dt.getMonth()+1,d=dt.getDate(),r=(getData('sch:'+y+'-'+m+'-'+(d<=15?1:2))[d])||{};
@@ -1388,7 +1388,7 @@ async function attExport(mode){const SPC=mode==='spc',ST=SPC?6:7,CS=9;
   const wb=X.utils.book_new();X.utils.book_append_sheet(wb,ws,'붙여넣기용');
   const v2=X.utils.aoa_to_sheet(view);v2['!cols']=[{wch:8},{wch:7},{wch:5},{wch:7},{wch:7},{wch:7},{wch:8}];X.utils.book_append_sheet(wb,v2,'확인용');
   const f2=d=>(d.getMonth()+1)+'.'+d.getDate();const F0=W[0][0];X.writeFile(wb,(SPC?'SPC IN 복붙_':'출근부_')+F0.getFullYear()+'_'+f2(F0)+'-'+f2(RG.en)+'.xlsx');
-  toast('ok','✅ '+(SPC?'SPC IN 2.0 복붙':'출근부')+' 파일을 받았어요\n('+(F0.getMonth()+1)+'/'+F0.getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+' 누적)');
+  toast('ok','✅ '+(SPC?'SPC IN 2.0 복붙':'출근부')+' 파일을 받았어요\n('+(F0.getMonth()+1)+'/'+F0.getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+')');
 }
 (function(){const y=$('#apY'),b=$('#apB');try{const v=localStorage.getItem('attPick');if(v){y.checked=v.includes('y');b.checked=v.includes('b')}}catch(e){}
   const sync=()=>{$('#attHint').hidden=!y.checked;$('#attHint2').hidden=!b.checked;try{localStorage.setItem('attPick',(y.checked?'y':'')+(b.checked?'b':''))}catch(e){}};y.onchange=b.onchange=sync;sync();
