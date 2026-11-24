@@ -209,7 +209,7 @@ section.card.nextbd b{font-weight:900;color:#d6336c}
 #sbgrid sup{color:#e8590c;font-weight:700}#sbgrid .need{color:var(--bad);font-weight:700;font-size:11px}.sbbox .zbar{margin:8px 0 6px}
 .sbh{font-size:15px;margin:14px 0 6px}.sbbox .sum{font-size:13px}.sbbox .wl{max-height:none}
 .sbcnt{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px;margin-top:8px;font-size:12px}.sbcnt div{padding:4px 6px;border-radius:8px;border-left:4px solid var(--k);background:color-mix(in srgb,var(--k) 14%,var(--card))}
-body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!important}#genc #attBtn{margin-top:10px}.attgo{background:linear-gradient(180deg,#74c0fc,#1c7ed6)!important;border-color:#0b3b7a!important;box-shadow:0 4px 0 #0b3b7a,inset 0 2px 0 rgba(255,255,255,.45)!important}#attHint{margin:8px 2px 14px;font-size:12px}body:not(.unl) #genc{padding:14px 12px!important}body:not(.unl) #genc #sbBtn{margin:0}body:not(.unl) #attHint{margin-bottom:0}body:not(.unl) #xferc{display:none!important}
+body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(#attHint2){display:none!important}.spcgo{background:linear-gradient(180deg,#a5d8ff,#4dabf7)!important}#attHint2{margin:8px 2px 14px;font-size:12px}body:not(.unl) #attHint2{margin-bottom:0}#genc #attBtn{margin-top:10px}.attgo{background:linear-gradient(180deg,#74c0fc,#1c7ed6)!important;border-color:#0b3b7a!important;box-shadow:0 4px 0 #0b3b7a,inset 0 2px 0 rgba(255,255,255,.45)!important}#attHint{margin:8px 2px 14px;font-size:12px}body:not(.unl) #genc{padding:14px 12px!important}body:not(.unl) #genc #sbBtn{margin:0}body:not(.unl) #attHint{margin-bottom:14px}body:not(.unl) #xferc{display:none!important}
 .admtag{display:inline-block;margin-top:6px;padding:3px 14px;border-radius:99px;background:#0b1f4d;color:#ffd43b;font-family:var(--jua);font-size:15px;letter-spacing:1px;box-shadow:0 3px 0 rgba(0,0,0,.25)}
 #chips .hc{font-size:12px;margin-left:3px}.hpop{position:absolute;z-index:80;pointer-events:none;font-size:22px;animation:hpop .85s ease-out forwards}@keyframes hpop{to{transform:translateY(-48px) scale(1.5);opacity:0}}#chips button.hbump{animation:hbump .25s}@keyframes hbump{50%{transform:scale(1.1)}}body.rdo #chips{pointer-events:auto!important}
 .sndbar{position:fixed;right:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;gap:6px}.sndbar button{padding:6px 12px!important;font-size:13px!important;border-radius:99px!important}.sndbar button:not(.on){filter:grayscale(.75);opacity:.85}
@@ -244,6 +244,8 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
   <button type="button" class="sbgo" id="sbBtn">🎨 나만의 스케쥴표 만들어보기!</button>
   <button type="button" class="sbgo attgo" id="attBtn">📤 출근부(52시간) 복붙 엑셀 받기</button>
   <p class="hint" id="attHint">급여 기준(16일~다음 달 15일)으로, 16일이 있는 주의 월요일부터 위에서 고른 기간 끝날까지 누적해서 담겨요. 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 선택해 복사 → 출근부 <b>D10</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 노란 칸 시간만 채워져요.</p>
+  <button type="button" class="sbgo attgo spcgo" id="attBtn2">📤 SPC IN 2.0 복붙 엑셀 받기</button>
+  <p class="hint" id="attHint2">직원마다 <b>근무/휴무 · 출근 · 퇴근</b> 3줄(휴무는 00:00)로 담겨요. 기간은 위 출근부와 같아요. 받은 파일에서 <b>D10 칸 클릭 → Ctrl+Shift+End</b>로 복사 → SPC 시트 첫 직원 <b>'근무' 줄 D칸</b>에서 <b>선택하여 붙여넣기 → '값' + '내용 있는 셀만 붙여넣기'</b>를 체크하면 파란 칸만 채워져요.</p>
   <h2>🗓️ 스케줄 자동 생성</h2>
   <p class="hint" style="margin-top:0">위에서 만들 <b>연도·월·기간</b>을 먼저 고르세요. 지금 선택: <b id="genper"></b></p>
   <div class="gf"><label for="gnames">인원 <small id="gcnt"></small></label><input id="gnames" placeholder="이름을 공백으로 구분"></div>
@@ -293,7 +295,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint){display:none!impor
   <div class="bar"><button class="sec" id="doImp">불러오기</button><button class="sec" id="reset">이 기간 지우기</button></div>
   <p class="hint" id="storeHint"></p>
 </section>
-<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 12:25</p>
+<p style="text-align:center;font-size:11px;color:#c9dcff;margin:8px 0 0">버전 11/24 12:40</p>
 </main>
 
 <script>
@@ -1349,7 +1351,7 @@ function attDay(dt,name,R){
   return null;
 }
 function loadXLSX(){return new Promise((ok,no)=>{if(window.XLSX)return ok();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';s.onload=()=>ok();s.onerror=()=>no(new Error('load'));document.head.appendChild(s)})}
-async function attExport(){
+async function attExport(mode){const SPC=mode==='spc',ST=SPC?9:7;
   const p=P(),R=roster(),W=attWeeks(p),RG=attRange(p);
   if(DB){const ks=new Set();for(let d=new Date(RG.st);d<=RG.en;d.setDate(d.getDate()+1))ks.add(keyFor(d.getFullYear(),d.getMonth()+1,d.getDate()));ks.forEach(watch);for(let t=0;t<30&&[...ks].some(k=>!ready[k]);t++)await new Promise(r=>setTimeout(r,100))}
   try{await loadXLSX()}catch(e){toast('bad','⚠️ 엑셀 도구를 불러오지 못했어요\n인터넷 연결을 확인해 주세요\n(눌러서 닫기)');return}
@@ -1358,20 +1360,25 @@ async function attExport(){
   const put=(r,c,v,st)=>{const a=X.utils.encode_cell({r,c});const has=!(v===null||v===undefined||v==='');if(!has&&!st)return;ws[a]=!has?{t:'z',s:st}:typeof v==='number'?{t:'n',v:v/24,z:'hh:mm',s:st}:{t:'s',v:String(v),s:st};maxC=Math.max(maxC,c);maxR=Math.max(maxR,r)};
   const NAMEST={font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:'1F3864'}},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'FFFF00'}}};
   const hm=v=>typeof v==='number'?String(Math.floor(v)).padStart(2,'0')+':'+String(Math.round((v%1)*60)).padStart(2,'0'):v;
-  view.push(['이름','날짜','요일','출근','퇴근']);
+  view.push(SPC?['이름','날짜','요일','구분','출근','퇴근']:['이름','날짜','요일','출근','퇴근']);
   const HD={font:{name:'맑은 고딕',sz:11,bold:true},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'D9E1F2'}},border:YEL.border};
   const WKS={font:{name:'맑은 고딕',sz:12,bold:true,color:{rgb:'FFFFFF'}},alignment:{horizontal:'center',vertical:'center'},fill:{patternType:'solid',fgColor:{rgb:'38761D'}}};
   ws['!merges']=[];W.forEach((wk,w)=>{const c=3+9*w;put(6,c,(w+1)+'주차',WKS);for(let k=1;k<7;k++)put(6,c+k,null,WKS);ws['!merges'].push({s:{r:6,c},e:{r:6,c:c+6}})});
   W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;put(7,c,(dt.getMonth()+1)+'/'+dt.getDate(),HD);put(8,c,'월화수목금토일'[k],Object.assign({},HD,{font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:k===5?'1C4FD6':k===6?'D62828':'000000'}}}))}));put(8,1,'이름',HD);
-  R.forEach((n,i)=>{const r0=9+7*i;put(r0,1,n,NAMEST);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;put(r0,c,null,YEL);put(r0+1,c,null,YEL);const inP=dt>=W[0][0]&&dt<=RG.en,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0],YEL);put(r0+1,c,v[1],YEL)}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
+  const BLU={fill:{patternType:'solid',fgColor:{rgb:'DDEBF7'}},alignment:{horizontal:'center',vertical:'center'},font:{name:'맑은 고딕',sz:11},border:YEL.border},BOFF=Object.assign({},BLU,{font:{name:'맑은 고딕',sz:11,bold:true,color:{rgb:'1C4FD6'}}}),BNM=Object.assign({},NAMEST,{fill:BLU.fill});
+  R.forEach((n,i)=>{const r0=9+ST*i;
+    if(SPC){put(r0+1,1,n,BNM);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;[0,1,2].forEach(j=>put(r0+j,c,null,BLU));const inP=dt>=W[0][0]&&dt<=RG.en,v=inP?attDay(dt,n,R):null;if(!v)return;const on=typeof v[0]==='number';
+      put(r0,c,on?'근무':'휴무',on?BLU:BOFF);put(r0+1,c,on?v[0]:0,BLU);put(r0+2,c,on?v[1]:0,BLU);view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],on?'근무':'휴무',on?hm(v[0]):'00:00',on?hm(v[1]):'00:00'])}));return}
+    put(r0,1,n,NAMEST);W.forEach((wk,w)=>wk.forEach((dt,k)=>{const c=3+9*w+k;put(r0,c,null,YEL);put(r0+1,c,null,YEL);const inP=dt>=W[0][0]&&dt<=RG.en,v=inP?attDay(dt,n,R):null;if(v){put(r0,c,v[0],YEL);put(r0+1,c,v[1],YEL)}if(inP)view.push([n,(dt.getMonth()+1)+'/'+dt.getDate(),WD[dt.getDay()],v?hm(v[0]):'',v?hm(v[1]):''])}))});
   ws['!ref']=X.utils.encode_range({s:{r:0,c:0},e:{r:Math.max(maxR,10),c:Math.max(maxC,10)}});
   ws['!cols']=Array.from({length:Math.max(maxC,10)+1},(_,i)=>({wch:i===1?8:7}));
   const wb=X.utils.book_new();X.utils.book_append_sheet(wb,ws,'붙여넣기용');
-  const v2=X.utils.aoa_to_sheet(view);v2['!cols']=[{wch:8},{wch:7},{wch:5},{wch:7},{wch:7}];X.utils.book_append_sheet(wb,v2,'확인용');
-  const f2=d=>(d.getMonth()+1)+'.'+d.getDate();X.writeFile(wb,'출근부_'+W[0][0].getFullYear()+'_'+f2(W[0][0])+'-'+f2(RG.en)+'.xlsx');
-  toast('ok','✅ 출근부 파일을 받았어요\n('+(W[0][0].getMonth()+1)+'/'+W[0][0].getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+' 누적)');
+  const v2=X.utils.aoa_to_sheet(view);v2['!cols']=[{wch:8},{wch:7},{wch:5},{wch:7},{wch:7},{wch:7}];X.utils.book_append_sheet(wb,v2,'확인용');
+  const f2=d=>(d.getMonth()+1)+'.'+d.getDate();X.writeFile(wb,(SPC?'SPC IN 복붙_':'출근부_')+W[0][0].getFullYear()+'_'+f2(W[0][0])+'-'+f2(RG.en)+'.xlsx');
+  toast('ok','✅ '+(SPC?'SPC IN 2.0 복붙':'출근부')+' 파일을 받았어요\n('+(W[0][0].getMonth()+1)+'/'+W[0][0].getDate()+' ~ '+(RG.en.getMonth()+1)+'/'+RG.en.getDate()+' 누적)');
 }
 $('#attBtn').addEventListener('click',()=>{if(confirm('다운로드 받으시겠습니까?'))attExport()});
+$('#attBtn2').addEventListener('click',()=>{if(confirm('다운로드 받으시겠습니까?'))attExport('spc')});
 /* 칸 폭 자동 맞춤: 가장 긴 칸에 맞춰 모든 칸을 같은 폭으로 */
 (function(){
   const g=$('#grid');if(!g)return;let raf=0;
