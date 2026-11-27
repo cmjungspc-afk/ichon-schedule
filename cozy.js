@@ -171,9 +171,9 @@
 
   // 숲 배경 그림 (대기실·제목·팝업 뒤)
   var pn = 0;
-  function pine(x, y, s, c) { c = c || '#6f9650'; pn++; var d = (pn % 5) * .4, a = 1.6 + (pn % 3) * .6; return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><g><animateTransform attributeName="transform" type="rotate" values="0 0 40;' + a + ' 0 40;0 0 40;' + (-a) + ' 0 40;0 0 40" dur="' + (4 + pn % 3) + 's" begin="' + d + 's" repeatCount="indefinite"/><path d="M0 -60 L22 -28 H12 L30 0 H17 L38 30 H-38 L-17 0 H-30 L-12 -28 H-22 Z" fill="' + c + '" stroke="#4d6b3a" stroke-width="2.4" stroke-linejoin="round"/></g><rect x="-5" y="30" width="10" height="12" fill="#8a6a4a" stroke="#4d6b3a" stroke-width="2"/></g>'; }
+  function pine(x, y, s, c) { c = c || '#6f9650'; pn++; var d = (pn % 5) * .4, a = 1.6 + (pn % 3) * .6; return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><g><path d="M0 -60 L22 -28 H12 L30 0 H17 L38 30 H-38 L-17 0 H-30 L-12 -28 H-22 Z" fill="' + c + '" stroke="#4d6b3a" stroke-width="2.4" stroke-linejoin="round"/></g><rect x="-5" y="30" width="10" height="12" fill="#8a6a4a" stroke="#4d6b3a" stroke-width="2"/></g>'; }
   function tuft(x, y) { return '<path d="M' + x + ' ' + y + ' l3 -7 l2 7 l3 -9 l2 9 l3 -6 l1 6" fill="none" stroke="#6f9650" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'; }
-  function flower(x, y, c) { return '<g transform="translate(' + x + ' ' + y + ')"><animateTransform attributeName="transform" type="translate" values="' + x + ' ' + y + ';' + x + ' ' + (y - 2.5) + ';' + x + ' ' + y + '" dur="' + (2 + (x % 3) * .5) + 's" repeatCount="indefinite"/><circle r="3.2" cx="-3" fill="' + c + '"/><circle r="3.2" cx="3" fill="' + c + '"/><circle r="3.2" cy="-3" fill="' + c + '"/><circle r="3.2" cy="3" fill="' + c + '"/><circle r="2.2" fill="#ffe27a"/></g>'; }
+  function flower(x, y, c) { return '<g transform="translate(' + x + ' ' + y + ')"><circle r="3.2" cx="-3" fill="' + c + '"/><circle r="3.2" cx="3" fill="' + c + '"/><circle r="3.2" cy="-3" fill="' + c + '"/><circle r="3.2" cy="3" fill="' + c + '"/><circle r="2.2" fill="#ffe27a"/></g>'; }
   var scene = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 860" preserveAspectRatio="xMidYMid slice">' +
     '<rect width="400" height="860" fill="#5f8443"/>' +
     '<path d="M-20 120 C60 60 140 90 200 70 C270 50 330 80 420 60 V0 H-20 Z" fill="#4d6f37"/>' +
