@@ -484,7 +484,7 @@ async function copy(t){try{await navigator.clipboard.writeText(t);say('복사했
 $('#grid').addEventListener('input',e=>{const i=e.target;if(!i.dataset.d)return;i.style.height='auto';i.style.height=i.scrollHeight+'px'});
 function endEdit(td,apply){
   if(apply){const ta=td.querySelector('textarea');if(ta){const d=ta.dataset.d,c=ta.dataset.c,nv=ta.value.replace(/\s+/g,' ').trim(),miss=reqMissing(d,c,((data[d]||{})[c])||'',nv);
-    if(miss.length){askYN('⚠️ 신청 휴무·근무가 누락됐어요?\n'+miss.join('\n')+'\n\n그래도 빼시겠어요? (취소하면 계속 고칠 수 있어요)',()=>finEdit(td,true));return}}}
+    if(miss.length){askYN('신청한 근무표와 달라져요\n'+miss.join('\n')+'\n\n이대로 수정할까요?',()=>finEdit(td,true));return}}}
   finEdit(td,apply)
 }
 function finEdit(td,apply){
@@ -567,7 +567,7 @@ function genRead(){return{names:$('#gnames').value,wo:+$('#gwo').value||0,wm:+$(
 function g52Set(v){const b=$('#g52');b.classList.toggle('on',v);b.textContent='⏱️ 주 52시간 준수 '+(v?'ON':'OFF')}
 $('#g52').addEventListener('click',()=>{g52Set(!$('#g52').classList.contains('on'));genSaveForm()});
 function genHead(){if(GK&&P().key!==GK){genLoad();return}genPrev();const p=P();$('#genper').textContent=p.y+'년 '+p.m+'월 '+p.s+'일 ~ '+p.e+'일';$('#gcnt').textContent='(총 '+$('#gnames').value.split(/[\s,]+/).filter(Boolean).length+'명)'}
-document.querySelector('#genc').addEventListener('input',()=>{genSaveForm();genHead();clearTimeout(window._rqT);window._rqT=setTimeout(()=>{try{drawGrid()}catch(e){}},500)});
+document.querySelector('#genc').addEventListener('input',()=>{genSaveForm();genHead();clearTimeout(window._rqT);window._rqT=setTimeout(()=>{try{drawGrid();sum()}catch(e){}},500)});
 ['#year','#month','#half'].forEach(i=>$(i).addEventListener('change',genHead));$('#year').addEventListener('input',genHead);
 function genPrevInit(p,names,hr){
   let y=p.y,m=p.m,h=p.h;if(h==='2')h='1';else{h='2';m--;if(m<1){m=12;y--}}
@@ -1132,8 +1132,12 @@ function check(){
   {const s0=D(p.m,p.s),mon=new Date(s0);mon.setDate(mon.getDate()-((s0.getDay()+6)%7));
   for(const n of R)for(let w=new Date(mon);w<=hi;w.setDate(w.getDate()+7)){let k=0;const ds=[0,1,2,3,4,5,6].map(i=>{const t=new Date(w);t.setDate(t.getDate()+i);return t});ds.forEach(t=>{if((dayCats(t)[n]||[]).some(c=>c!=='off'))k++});
     if(k===7){items.push([w.getTime(),'🔥',esc(n)+' '+f(ds[0])+'(월)~'+f(ds[6])+'(일) 한 주 7일 모두 근무']);ds.forEach(t=>{if(inPd(t))bad.add(t.getDate())})}}}
+  {const v=reqs();if(v)for(const n of R){const sd=[...(v.off[n]||[])].map(d=>[d,'휴무']).concat([...(v.work[n]||new Map())].map(([d,r])=>[d,r]));
+    for(const [d,r] of sd){if(d<p.s||d>p.e)continue;const dt=D(p.m,d),cs=dayCats(dt)[n]||[];if(!Object.keys(dayCats(dt)).length)continue;
+      const ok=r==='휴무'?cs.includes('off'):(r?cs.includes(({o:'open',m:'mid',c:'close'})[r]):cs.some(c=>c!=='off'));
+      if(!ok){items.push([dt.getTime(),'🔴',esc(n)+' '+f(dt)+'('+W(dt)+') 신청 '+(r==='휴무'?'휴무':'근무')+' 미반영']);bad.add(d)}}}}
   items.sort((a,b)=>a[0]-b[0]);
-  $('#chkb').innerHTML=items.length?'<div class="banner bad">'+items.length+'건 확인이 필요해요</div><ul class="wl">'+items.map(i=>'<li>'+i[1]+' '+i[2]+'</li>').join('')+'</ul>':'<div class="banner ok">규칙 위반이 없어요 🎉 (클로픈 · 주 7일 근무 · 인원 부족 모두 통과)</div>';
+  $('#chkb').innerHTML=items.length?'<div class="banner bad">'+items.length+'건 확인이 필요해요</div><ul class="wl">'+items.map(i=>'<li>'+i[1]+' '+i[2]+'</li>').join('')+'</ul>':'<div class="banner ok">규칙 위반이 없어요 🎉 (클로픈 · 주 7일 근무 · 인원 부족 · 신청 휴무·근무 모두 통과)</div>';
 }
 
 /* ===== 실시간 연동 (db) ===== */
