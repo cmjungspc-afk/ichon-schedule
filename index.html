@@ -870,7 +870,7 @@ function openGame(){
     S.t+=dt;S.sp=Math.min(6.2,2.4+S.dist/1500);S.dist+=S.sp*dt;
     if(!S.boss&&score()>=S.bs){S.boss={w:75,y:-50,done:0};S.bs+=500}
     const B=S.boss;
-    if(B){if(B.w>0)B.w-=dt;else{B.y+=5*dt;if(!B.done&&B.y>=S.y-14){B.done=1;S.shake=22;S.flash=24;burst(S.x,S.y,26,['#ff6b6b','#ffd43b','#fff'],5);S.inv=Math.max(S.inv,30);S.lives--;S.pops.push({x:S.x,y:S.y-30,t:0,s:'😡 ❤️-1',big:1});if(S.lives<=0){finish();return}}if(B.y>H+60)S.boss=null}}
+    if(B){if(B.w>0)B.w-=dt;else{B.y+=3.4*dt;if(!B.done&&B.y>=S.y-14){B.done=1;S.shake=22;S.flash=24;burst(S.x,S.y,26,['#ff6b6b','#ffd43b','#fff'],5);S.inv=Math.max(S.inv,30);S.lives--;S.pops.push({x:S.x,y:S.y-30,t:0,s:'😡 ❤️-1',big:1});if(S.lives<=0){finish();return}}if(B.y>H+60)S.boss=null}}
     else{S.spawn-=dt;if(S.spawn<=0){spawnRow();S.spawn=Math.max(26,70-S.dist/55)}}
     const mv=4.2*dt*S.mv;
     if(keys.ArrowLeft||keys.a)S.tx-=mv*1.6;if(keys.ArrowRight||keys.d)S.tx+=mv*1.6;if(keys.ArrowUp||keys.w)S.ty-=mv*1.6;if(keys.ArrowDown||keys.s)S.ty+=mv*1.6;
