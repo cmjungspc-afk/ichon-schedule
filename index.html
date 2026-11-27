@@ -228,7 +228,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 </head>
 <body>
 <main>
-<header class="hero"><button type="button" id="telBtn" aria-label="비상연락망">📞 비상<br>연락망</button><h1>행복한 이촌점 스케쥴 시트</h1><p>⭐🐑🐶🐰🐱🐻🐧🦊🐣</p></header>
+<header class="hero"><h1>행복한 이촌점 스케쥴 시트</h1><p>⭐🐑🐶🐰🐱🐻🐧🦊🐣</p></header>
 <div class="sync" id="sync"></div><button type="button" class="lockb" id="lockb"></button>
 <section class="card tut" id="tut" hidden><div class="tuth"><b>👋 처음 오셨나요? 3단계면 준비 끝!</b><button type="button" class="tutx" id="tutX">나중에</button></div><ol class="tutl"><li data-s="1"><span class="tutn">1</span><div><b>제목을 설정해 주세요</b><small>맨 위 제목을 눌러 점포 이름으로 바꿔요</small></div><button type="button" class="tgo">하기</button></li><li data-s="2"><span class="tutn">2</span><div><b>직원 정보를 입력해 주세요</b><small>직원 명단에 이름을 넣고 (맨 앞이 점장), 네임카드에 아이콘·생일 등을 채워요</small></div><button type="button" class="tgo">하기</button></li><li data-s="3"><span class="tutn">3</span><div><b>스케쥴을 입력해 주세요</b><small>스케쥴 만들기로 자동 생성하거나, 표의 칸을 눌러 직접 넣어요</small></div><button type="button" class="tgo">하기</button></li></ol><p class="hint" style="margin:6px 0 0">🔒 각 단계는 관리자 비밀번호가 필요해요. 처음 입력한 번호가 비밀번호가 돼요.</p></section>
 <button type="button" id="insBtn" hidden><img src="icon-192.png" alt=""><span class="it"><b>앱으로 설치하기</b></span><span class="ia">›</span></button>
@@ -1113,7 +1113,7 @@ function renderNextBd(){
 }
 function renderToday(){
   const t0=new Date(),R=roster(),LB=[['off','휴무','f'],['open','오전조','o'],['mid','중간조','m'],['close','마감조','c']],LBL=['오늘','내일','모레'];
-  let h='<h2>📅 오늘의 근무자 <small class="dsm">앞으로 3일</small></h2><div class="tdays">';
+  let h='<h2>📅 오늘의 근무자 <small class="dsm">앞으로 3일</small><button type="button" id="telBtn" aria-label="비상연락망">📞 비상연락망</button></h2><div class="tdays">';
   for(let i=0;i<3;i++){
     const dt=new Date(t0.getFullYear(),t0.getMonth(),t0.getDate()+i),m=dt.getMonth()+1,d=dt.getDate(),out=dayCats(dt);
     h+='<div class="tday'+(i===0?' td0':'')+'"><div class="tdh"><b>'+LBL[i]+'</b> '+m+'/'+d+' ('+WD[dt.getDay()]+')</div>';
@@ -1674,7 +1674,7 @@ td.wkc{color:#7048e8;font-weight:800}td.wkc .z{color:var(--off);font-weight:400}
 #dkB.on{background:#ffe066!important;color:#0b1f4d!important;border-color:#0b1f4d!important;box-shadow:0 3px 0 #6b3b00,0 0 0 2px #ffe066!important}
 html.lk,html.lk body{overflow:hidden!important;overscroll-behavior:none}body.lkb{position:fixed!important;left:0;right:0;width:100%}.fz{overscroll-behavior:contain}.gmwrap canvas{touch-action:none}
 .gmwrap{border:3px solid #0b1f4d!important;box-shadow:0 0 0 2px #ffd43b,0 6px 18px rgba(10,30,90,.45)}
-#telBtn{position:absolute;bottom:8px;right:10px;top:auto;z-index:5;width:auto!important;margin:0!important;padding:5px 9px!important;font-size:11px!important;line-height:1.25;font-weight:800;border-radius:12px!important;background:linear-gradient(180deg,#ff8787,#e03131)!important;color:#fff!important;border:2px solid #7a1212!important;box-shadow:0 3px 0 #7a1212!important;text-shadow:0 1px 0 rgba(0,0,0,.35)}#telBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #7a1212!important}
+#telBtn{margin:0 0 0 auto!important;width:auto!important;padding:5px 10px!important;font-size:12px!important;line-height:1.2;font-weight:800;border-radius:12px!important;background:linear-gradient(180deg,#ff8787,#e03131)!important;color:#fff!important;border:2px solid #7a1212!important;box-shadow:0 3px 0 #7a1212!important;text-shadow:0 1px 0 rgba(0,0,0,.35);white-space:nowrap}#telBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #7a1212!important}
 </style>
 <script>
 (function(){
@@ -1718,7 +1718,7 @@ function openTel(edit){
     else if(e.target.closest('.tcn'))openTel(false);
     else if(e.target.closest('.tsv')){TEL=$('#telT').value.replace(/[ \t]+$/gm,'').trim();try{localStorage.setItem('tel',TEL)}catch(x){}pushSetting({tel:TEL});openTel(false)}});
 }
-$('#telBtn').addEventListener('click',()=>openTel(false));
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#telBtn'))openTel(false)});
 /* 🔒 팝업·게임이 떠 있는 동안 뒤 페이지는 스크롤되지 않게 고정 */
 (function(){let y=0,on=false;function sync(){const has=!!document.querySelector('.fz');
   if(has&&!on){on=true;y=window.scrollY||0;document.body.style.top=(-y)+'px';document.documentElement.classList.add('lk');document.body.classList.add('lkb')}
