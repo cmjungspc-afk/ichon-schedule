@@ -278,3 +278,6 @@ img.czi{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.22em}
 #rk .rkempty{justify-content:center;padding:14px!important}
 #rk .rkpb img.czi{width:30px!important;height:30px!important}#rk .p1 .rkpb img.czi{width:40px!important;height:40px!important}
 #rk .rkl li .rki img.czi{width:20px;height:20px}
+/* 세트 효과 잘 보이게 */
+#gm .setfx{display:inline-block;margin:2px auto 4px;padding:5px 12px!important;border-radius:14px;background:#e3f4d6!important;border:2px solid #5b4636!important;color:#3f5a2c!important;font-size:13px!important;line-height:1.5;text-shadow:none!important;box-shadow:0 2px 0 rgba(58,40,28,.25)}
+#gm .setfx img.czi{width:1.15em;height:1.15em}
