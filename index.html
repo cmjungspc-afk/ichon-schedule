@@ -1050,7 +1050,7 @@ function openGame(){
     let prev=0;const dr=DROPW.map(x=>{const r=x[0]>=1e9?prev+'점 이상':(prev?prev:0)+'~'+(x[0]-1)+'점';prev=x[0];return R(r,x[1].map((p,g)=>p?GRADES[g].n+' '+p+'%':'').filter(Boolean).join(' · '))}).join('');
     const dn=DROPN.slice().reverse(),nn=dn.map((x,i)=>R(i<dn.length-1?x[0]+'~'+(dn[i+1][0]-1)+'점':x[0]+'점 이상','최대 '+x[1]+'개')).join('');
     const en=ELP.map((p,i)=>R('★'+i+'→'+(i+1),p+'% · 🪙'+100*(i+1))).join('');
-    msg('<b>📊 확률·보상 정보</b><div class="lbh">🎁 파츠 드랍 (게임이 끝났을 때)</div><div class="elt">'+nn+R('칸마다 얻을 확률',DROPC.map((c,i)=>(i+1)+'칸 '+Math.round(c*100)+'%').join(' · '))+'</div><div class="lbh">드랍 등급 (점수별)</div><div class="elt">'+dr+R('초월 · 레전더리','조합으로만 얻어요')+'</div><div class="lbh">⭐ 이모지 강화 (실패하면 다음 확률 +2%p, 최대 +20%p)</div><div class="elt">'+en+'</div><div class="lbh">🔥 5000점 이상 (강적)</div><div class="elt">'+R('🧟 단단한 손님','미사일·빗자루·사랑의 매를 2번 맞아야 사라져요')+R('🥷 닌자','빠르고 지그재그로 와요')+R('🧛🤡👹🧙','일반 손님 대신 나오고 자기장에 덜 밀려나요')+R('등장 빈도','더 자주, 더 많이 나와요')+'</div><div class="lbh">💗 기타</div><div class="elt">'+R('능력 선택카드에 하트가 나올 확률','20%')+R('하트 최대',''+MAXL+'개')+R('파츠 판매가 (원가의 80%)',GRADES.map((G,g)=>G.n+' '+SELLP[g]).join(' · '))+'</div><button type="button" class="fzgo '+(ret==='pick'?'gmbackpick':'gmback')+'">돌아가기</button>','ttl lobby')}
+    msg('<b>📊 확률·보상 정보</b><div class="lbh">🎁 파츠 드랍 (게임이 끝났을 때)</div><div class="elt">'+nn+R('칸마다 얻을 확률',DROPC.map((c,i)=>(i+1)+'칸 '+Math.round(c*100)+'%').join(' · '))+'</div><div class="lbh">드랍 등급 (점수별)</div><div class="elt">'+dr+R('초월 · 레전더리','조합으로만 얻어요')+'</div><div class="lbh">⭐ 이모지 강화 (실패하면 다음 확률 +2%p, 최대 +20%p)</div><div class="elt">'+en+'</div><div class="lbh">🔥 5000점 이상 (강적)</div><div class="elt">'+R('🧟 단단한 손님','미사일·빗자루·사랑의 매를 2번 맞아야 사라져요')+R('🥷 닌자','빠르고 지그재그로 와요')+R('🧛🤡👹🧙','일반 손님 대신 나오고 자기장에 덜 밀려나요')+R('등장 빈도','더 자주, 더 많이 나와요')+'</div><div class="lbh">🔥 10000점 이상 (지옥)</div><div class="elt">'+R('🧟 단단한 손님','3번 맞아야 사라져요')+R('🥷 닌자','더 빨라져요')+R('손님·보스','더 많이, 더 자주 나와요 (보스 400점마다)')+R('그 이후','점수가 오를수록 속도와 등장 빈도가 끝없이 조금씩 더 올라가요')+'</div><div class="lbh">💗 기타</div><div class="elt">'+R('능력 선택카드에 하트가 나올 확률','20%')+R('하트 최대',''+MAXL+'개')+R('파츠 판매가 (원가의 80%)',GRADES.map((G,g)=>G.n+' '+SELLP[g]).join(' · '))+'</div><button type="button" class="fzgo '+(ret==='pick'?'gmbackpick':'gmback')+'">돌아가기</button>','ttl lobby')}
   function ncPrev(pr,lab,ov){ov=ov||{};const n=gname,l=ov.el!=null?ov.el:(pr.el|0),sk=(SK.find(k=>k.k===(ov.se!=null?ov.se:pr.se))||{}).e,e=(STAFF[n]||{}).e||'🙂',kc=(STAFF[n]||{}).k||'#888',c=l>0?ELCOL[l]:'';
     const ist=l>=10||!l?'':'border-color:'+c+';--elc:'+c+';box-shadow:0 0 0 2px #fff,0 0 '+(6+l*2)+'px '+c+',0 0 '+(12+l*3)+'px '+c;
     const cst=l>=10||!l?'':'--elc:'+c+';box-shadow:0 0 0 3px '+c+',0 0 18px '+c+',0 0 32px '+c;
@@ -1105,10 +1105,10 @@ function openGame(){
   function emoji(ch,x,y,size){ctx.font=size+'px '+EM;ctx.fillStyle='#fff';ctx.fillText(ch,x,y)}
   function spawnRow(){
     const free=new Set();while(free.size<2)free.add(Math.floor(Math.random()*5));
-    const lanes=[0,1,2,3,4].filter(i=>!free.has(i)&&Math.random()<(score()>=5000?.88:.75));
+    const lanes=[0,1,2,3,4].filter(i=>!free.has(i)&&Math.random()<(score()>=10000?.93:score()>=5000?.88:.75));
     const sp=S.sp;
     const sc0=score();lanes.forEach(i=>{const rr=Math.random(),fast=sc0>=300&&rr<Math.min(.22,(sc0-300)/4000+.05),zig=!fast&&sc0>=600&&rr<.3;const ob={k:'c',x:LANES[i]+(Math.random()*16-8),y:-30,vy:sp*(.9+Math.random()*.7)*(fast?1.45:1),ph:Math.random()*6,vt:fast?'f':zig?'z':'',e:fast?'🏃':zig?'🕺':PEOPLE[Math.floor(Math.random()*PEOPLE.length)]};
-      if(sc0>=5000){const r2=Math.random();if(r2<.3){ob.e='🧟';ob.hp=2;ob.mh=2;ob.pf=.3;ob.vy*=.9;ob.vt=''}else if(r2<.55){ob.e='🥷';ob.vy*=1.5;ob.vt='z';ob.pf=.6}else{ob.e=HARDE[Math.floor(Math.random()*HARDE.length)];ob.pf=.75}}
+      if(sc0>=5000){const r2=Math.random();if(r2<.3){ob.e='🧟';ob.hp=sc0>=10000?3:2;ob.mh=2;ob.pf=.3;ob.vy*=.9;ob.vt=''}else if(r2<.55){ob.e='🥷';ob.vy*=(sc0>=10000?1.75:1.5);ob.vt='z';ob.pf=.6}else{ob.e=HARDE[Math.floor(Math.random()*HARDE.length)];ob.pf=.75}}
       S.objs.push(ob)});
     if(Math.random()<.4){const f=[...free][Math.floor(Math.random()*free.size)];S.objs.push({k:'g',x:LANES[f],y:-30,vy:sp,ph:0,e:'🎁'})}
     if(Math.random()<.1){const f=[...free][Math.floor(Math.random()*free.size)];S.objs.push({k:'r',x:LANES[f]+(Math.random()*20-10),y:-70,vy:sp,ph:0})}
@@ -1118,12 +1118,13 @@ function openGame(){
   function step(dt){
     if(S.pause)return;
     if(S.ms.length&&score()>=S.ms[0]){const m=S.ms.shift();S.lm=m;if(!S.ms.length){S.gap+=100;S.ms.push(m+S.gap)}offer(m);return}
-    S.t+=dt;S.sp=Math.min(6.2,2.4+S.dist/1500)+Math.max(0,Math.min(2.6,(S.dist-5700)/12000));S.dist+=S.sp*dt;
+    S.t+=dt;S.sp=Math.min(6.2,2.4+S.dist/1500)+Math.max(0,Math.min(2.6,(S.dist-5700)/12000))+(score()>=10000?.5+.6*Math.log(1+(score()-10000)/3000):0);S.dist+=S.sp*dt;
+    if(!S.hellMsg&&score()>=10000){S.hellMsg=1;S.flash=20;S.pops.push({x:W/2,y:H/2-60,t:0,s:'🔥 10000점! 지옥 시작!',big:1})}
     if(!S.hardMsg&&score()>=5000){S.hardMsg=1;S.flash=14;S.pops.push({x:W/2,y:H/2-60,t:0,s:'⚠️ 5000점! 강적 출현!',big:1})}
-    if(!S.boss&&score()>=S.bs){S.boss={w:75,y:-50,done:0};S.bs+=500}
+    if(!S.boss&&score()>=S.bs){S.boss={w:75,y:-50,done:0};S.bs+=score()>=10000?400:500}
     const B=S.boss;
     if(B){if(B.w>0)B.w-=dt;else{B.y+=3.4*dt;if(!B.done&&B.y>=S.y-14){B.done=1;if(S.inv>0){S.pops.push({x:S.x,y:S.y-30,t:0,s:'✨ 무적!',big:1})}else if(!blocked()){S.shake=22;S.flash=24;burst(S.x,S.y,26,['#ff6b6b','#ffd43b','#fff'],5);S.inv=Math.max(S.inv,30);S.lives--;SND('hit');S.pops.push({x:S.x,y:S.y-30,t:0,s:'😡 -1',h:1,big:1});if(S.lives<=0){finish();return}}}if(B.y>H+60){S.boss=null;S.bossN++}}}
-    else if(!(S.fz&&S.fz.act>0)){S.spawn-=dt;if(S.spawn<=0){spawnRow();S.spawn=Math.max(26,70-S.dist/55)*(score()>=5000?.75:1)}}
+    else if(!(S.fz&&S.fz.act>0)){S.spawn-=dt;if(S.spawn<=0){spawnRow();S.spawn=Math.max(9,Math.max(26,70-S.dist/55)*(score()>=10000?.62/(1+.12*Math.log(1+(score()-10000)/3000)):score()>=5000?.75:1))}}
     if(S.sh&&S.sh.t>0)S.sh.t-=dt;
     if(S.hl&&score()>=S.hl.next){S.hl.next+=S.hl.per;if(S.lives<5){S.lives++;S.pops.push({x:S.x,y:S.y-30,t:0,s:'💊 +1',h:1,big:1});burst(S.x,S.y,10,['#ff8fb1','#fff'],3)}}
     if(S.ml){S.ml.t-=dt;if(S.ml.t<=0){S.ml.t=S.ml.per;const ts=S.objs.filter(o=>o.k==='c'&&!o.dead&&!o.tg&&o.y<S.y+30&&o.y>0).sort((a,b)=>Math.hypot(a.x-S.x,a.y-S.y)-Math.hypot(b.x-S.x,b.y-S.y)).slice(0,S.ml.n);if(ts.length)SND('zap');ts.forEach((o,i)=>{o.tg=1;S.mis.push({x:S.x+(i%2?14:-14),y:S.y-16,o})})}}
