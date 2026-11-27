@@ -1348,14 +1348,13 @@ function applyS(){const g=$('#grid');if(!g)return;const z=window.gzGet?gzGet():1
   function block(){if(!sfxOn||!ensure())return;if(ac.state!=='running'){const p=ac.resume();if(p&&p.then)p.then(()=>{if(ac.state==='running')blk()}).catch(()=>{});return}blk()}
   function blk(){const t=ac.currentTime,o=ac.createOscillator(),f=ac.createBiquadFilter(),g=ac.createGain();o.type='square';o.frequency.setValueAtTime(1100,t);o.frequency.exponentialRampToValueAtTime(380,t+.05);f.type='lowpass';f.frequency.value=2500;g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.08);o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+.09);
     const b=ac.createBuffer(1,Math.floor(ac.sampleRate*.02),ac.sampleRate),dd=b.getChannelData(0);for(let i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*Math.pow(1-i/dd.length,4);const s=ac.createBufferSource(),g2=ac.createGain();g2.gain.value=.16;s.buffer=b;s.connect(g2);g2.connect(master);s.start(t)}
-  const w=document.createElement('div');w.className='sndbar';w.innerHTML='<button type="button" id="bgmB" aria-label="캐롤 음악 켜기/끄기"></button><button type="button" id="sfxB" aria-label="버튼 효과음 켜기/끄기"></button><button type="button" id="dkB" aria-label="다크 모드 켜기/끄기"></button>';document.body.appendChild(w);
+  const w=document.createElement('div');w.className='sndbar';w.innerHTML='<button type="button" id="bgmB" aria-label="소리(캐롤·효과음) 켜기/끄기"></button><button type="button" id="dkB" aria-label="다크 모드 켜기/끄기"></button>';document.body.appendChild(w);
   const mq=window.matchMedia?matchMedia('(prefers-color-scheme:dark)'):null;let th='';try{th=localStorage.getItem('theme')||''}catch(e){}
   const isDk=()=>th?th==='dark':!!(mq&&mq.matches);
   function dkApply(){const d=isDk();document.documentElement.setAttribute('data-theme',d?'dark':'light');const b=$('#dkB');if(b){b.textContent=d?'🌙 다크 ON':'☀️ 다크 OFF';b.classList.toggle('on',d)}}dkApply();
   $('#dkB').addEventListener('click',()=>{th=isDk()?'light':'dark';try{localStorage.setItem('theme',th)}catch(e){}dkApply()});
-  function lab(){const a=$('#bgmB'),b=$('#sfxB');a.textContent=musicOn?'🎵 캐롤 ON':'🎵 캐롤 OFF';a.classList.toggle('on',musicOn);b.textContent=sfxOn?'🔊 효과음 ON':'🔇 효과음 OFF';b.classList.toggle('on',sfxOn)}lab();
-  $('#bgmB').addEventListener('click',()=>{musicOn=!musicOn;try{localStorage.setItem('bgm',musicOn?'1':'0')}catch(e){}musicOn?startM():stopM();lab()});
-  $('#sfxB').addEventListener('click',()=>{sfxOn=!sfxOn;try{localStorage.setItem('sfx',sfxOn?'1':'0')}catch(e){}lab()});
+  function lab(){const a=$('#bgmB'),on=musicOn||sfxOn;a.textContent=on?'🎵 소리 ON':'🔇 소리 OFF';a.classList.toggle('on',on)}lab();
+  $('#bgmB').addEventListener('click',()=>{const on=!(musicOn||sfxOn);musicOn=on;sfxOn=on;try{localStorage.setItem('bgm',on?'1':'0');localStorage.setItem('sfx',on?'1':'0')}catch(e){}on?startM():stopM();lab()});
   document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('button');if(b&&!b.disabled)block();if(musicOn&&!timer&&!document.hidden)startM()},true);
   ['touchend','pointerup','keydown'].forEach(t=>document.addEventListener(t,()=>{ensure();if(musicOn&&!timer&&!document.hidden)startM()},true));
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stopM();else if(musicOn&&ac)startM()});
