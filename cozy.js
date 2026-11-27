@@ -433,7 +433,7 @@
   // 꾸미기를 캐릭터가 착용: 자리(머리·머리핀·눈·손·옆에 둥실)
   ICON.w_halo = '<ellipse cx="12" cy="12" rx="9" ry="3.4" fill="none" stroke="#f9d25a" stroke-width="3.4"/><ellipse cx="12" cy="12" rx="9" ry="3.4" fill="none" stroke-width="1"/>';
   // 자리: 캐릭터 그림 안에서의 위치(가운데 x·y, 너비·높이, 기울기)
-  var SLOT = { head: [.5, .12, .62, .62, -6], halo: [.5, .03, .58, .3, 0], pin: [.72, .14, .36, .36, 18], face: [.5, .44, .52, .3, 0], ears: [.5, .38, .8, .72, 0],
+  var SLOT = { head: [.5, .12, .62, .62, -6], halo: [.5, .03, .58, .3, 0], pin: [.72, .14, .36, .36, 18], face: [.5, .436, .44, .44, 0], ears: [.5, .285, .87, .87, 0],
     hand: [.98, .74, .36, .36, -8], body: [.5, .785, .5, .41, 0], side: [1.0, .72, .4, .4, 0], float: [1.06, .0, .38, .38, 0] };
   function slotCSS(sl, r) { var a = SLOT[sl], W = a[2] * r, H = a[3] * r, X = (1 - r) / 2 + a[0] * r, Y = (1 - r) / 2 + a[1] * r; function pc(v) { return (v * 100).toFixed(1) + '%!important;'; }
     return 'left:' + pc(X - W / 2) + 'top:' + pc(Y - H / 2) + 'width:' + pc(W) + 'height:' + pc(H) + 'transform:rotate(' + a[4] + 'deg)!important;' + (sl === 'float' ? 'animation:czfloat 2.6s ease-in-out infinite!important;' : 'animation:none!important;'); }
@@ -456,7 +456,7 @@
     var parts = v.split(' ').filter(Boolean);
     if (parts.some(function (e) { return slotOf(e) === 'frame'; })) el.setAttribute('data-fr', '1'); else el.removeAttribute('data-fr');
     if (parts.length < 2) { if (el.hasAttribute('data-skm')) { el.removeAttribute('data-skm'); el.style.removeProperty('--skbg'); } return; }
-    var r = el.closest && el.closest('#crew') ? .85 : .72;
+    var r = el.closest && el.closest('#crew') ? .85 : .84;
     parts.sort(function (a, b) { return LAYER[slotOf(a)] - LAYER[slotOf(b)]; });
     var bg = parts.map(function (e) {
       var n = OVR[norm(e)]; if (!n) return null; var sl = slotOf(e), L, T, W, H;
@@ -480,7 +480,7 @@
       var css = '@keyframes czfloat{0%,100%{translate:0 0}50%{translate:0 -3px}}[data-skm]::before{content:""!important;position:absolute!important;left:-50%!important;top:-50%!important;width:200%!important;height:200%!important;transform:none!important;animation:none!important;background:var(--skbg)!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;font-size:0}';
       SKG.forEach(function (k) { var e = norm(k.e), n = OVR[e]; if (!n || n.indexOf('f:') === 0) return; var slot = WEAR[e] || 'float'; if (slot === 'pet') return; if (e === '😇') n = 'w_halo';
         var bg = 'content:""!important;position:absolute!important;font-size:inherit;background:url("' + keyURL(n) + '") center/contain no-repeat!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;';
-        css += '[data-sk="' + k.e + '"]::before{' + bg + slotCSS(slot, .72) + '}';
+        css += '[data-sk="' + k.e + '"]::before{' + bg + slotCSS(slot, .84) + '}';
         css += '#crew .ico[data-sk="' + k.e + '"]::before{' + slotCSS(slot, .85) + '}'; });
       var st = document.createElement('style'); st.id = 'czstk'; st.textContent = css; document.head.appendChild(st);
     } catch (e) {}
