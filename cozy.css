@@ -281,3 +281,9 @@ img.czi{display:inline-block;width:1.2em;height:1.2em;vertical-align:-.22em}
 /* 세트 효과 잘 보이게 */
 #gm .setfx{display:inline-block;margin:2px auto 4px;padding:5px 12px!important;border-radius:14px;background:#e3f4d6!important;border:2px solid #5b4636!important;color:#3f5a2c!important;font-size:13px!important;line-height:1.5;text-shadow:none!important;box-shadow:0 2px 0 rgba(58,40,28,.25)}
 #gm .setfx img.czi{width:1.15em;height:1.15em}
+/* 아이콘 고르기: 캐릭터 크게 */
+#icm .icg{display:grid!important;grid-template-columns:repeat(5,1fr)!important;gap:6px!important}
+#icm .icp{display:flex;align-items:center;justify-content:center;aspect-ratio:1;background:#fffaf1!important;border:2px solid #e6d8c2!important;border-radius:14px!important}
+#icm .icp img.czi{width:44px!important;height:44px!important}
+#icm .pwbox{background:#fffaf1!important;border:2.5px solid #5b4636;font-family:"Jua",sans-serif}
+#icm .pwt{font-weight:400;color:#5b4636}

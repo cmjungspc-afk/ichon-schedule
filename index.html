@@ -225,7 +225,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 @media(max-width:640px){.crew{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:8px}.crew>div{padding:4px 5px 5px;font-size:11px;border-left-width:3px;border-radius:5px}.crew b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.crew input{font-size:11px;padding:1px 2px;margin-top:1px;box-shadow:none}.crew .bdl{gap:2px}.crew .bdl>.ck svg{width:15px;height:15px}.crew .stk{gap:2px;margin-top:3px}.crew .sl{font-size:10px;line-height:1.2}.crew .sk{width:15px;height:15px;font-size:8px;border-width:1px}}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) section.card.nextbd{background:linear-gradient(135deg,#5a2a40,#5a4a1a)!important;color:#fff!important;border-color:#ffd43b!important}:root:not([data-theme="light"]) section.card.nextbd b{color:#ffd43b}}
 </style>
-<link rel="stylesheet" href="cozy.css?v=12">
+<link rel="stylesheet" href="cozy.css?v=13">
 </head>
 <body>
 <main>
@@ -707,7 +707,7 @@ genLoad();
 
 /* 🔒 기입 잠금: 비밀번호를 풀기 전에는 모든 입력칸이 읽기 전용 */
 
-const ICON_SET='🌷 🌸 🌼 🌻 🌹 🍀 🌿 🌵 🍓 🍒 🍑 🍋 🍊 🍇 🥐 🍞 🧁 🍰 🍩 🍪 ⭐ 🌟 ✨ 🌙 ☀️ 🌈 ❄️ ⛄ 🎄 🎀 💎 🎈 🐶 🐱 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐸 🐵 🐧 🐣 🐥 🦊 🦄 🐹 🐭 🐳 🐬 🦋 🐝 🐞 🦔 🦦 🐿️ 🦥'.split(' ');
+const ICON_SET='🐱 🐶 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐸 🐵 🐧 🐥 🦊 🐹 🐭 🐑 🦄 🦔'.split(' ');
 function openIcon(n){const old=$('#icm');if(old)old.remove();const el=document.createElement('div');el.id='icm';el.className='fz pwm';
   el.innerHTML='<div class="pwbox icbox" role="dialog" aria-label="아이콘 고르기"><div class="pwt">'+esc(n)+' 아이콘 고르기</div><div class="icg">'+ICON_SET.map(x=>'<button type="button" class="icp" data-v="'+x+'">'+x+'</button>').join('')+'</div><div class="icrow"><input id="ici" maxlength="4" placeholder="직접 입력"><button type="button" class="pok" id="icok">적용</button></div><div class="pwb"><button type="button" class="pcn" id="icdef">기본으로</button><button type="button" class="pcn" id="icx">닫기</button></div></div>';
   document.body.appendChild(el);
@@ -2384,6 +2384,6 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#te
   else if(!has&&on){on=false;document.documentElement.classList.remove('lk');document.body.classList.remove('lkb');document.body.style.top='';window.scrollTo(0,y)}}
   new MutationObserver(sync).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});sync()})();
 </script>
-<script src="cozy.js?v=13"></script>
+<script src="cozy.js?v=14"></script>
 </body>
 </html>
