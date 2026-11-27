@@ -320,7 +320,7 @@
     hanbok: cloth('#f7b6c8', '<path d="M12 2 L8.6 8.4 M12 2 L15.4 8.4" stroke-width="1"/><path d="M8.6 8.4 C10 9.6 14 9.6 15.4 8.4" fill="none" stroke-width="1"/><path d="M12 8.8 L10.6 13.6 M12 8.8 L13.8 13" stroke="#e94b5a" stroke-width="1.6"/><path d="M5 12.6 H19 C19 16 16 18 12 18 C8 18 5 16 5 12.6 Z" fill="#7aa7d8" stroke-width="1"/>', '#fff4f0'),
     scarf: cloth('#c9d8ee', '<path d="M5 3.6 C8 5.8 16 5.8 19 3.6 L19.4 6.6 C16 8.6 8 8.6 4.6 6.6 Z" fill="#e94b5a" stroke-width="1"/><path d="M15 6.8 L16.6 13.6 L19 12.8 L17.6 6.2 Z" fill="#e94b5a" stroke-width="1"/><path d="M6.6 4.8 v2 M9.4 5.6 v2 M12.6 5.8 v2 M15.6 5.4 v2" stroke="#fff" stroke-width=".9"/>', '#c9d8ee')
   };
-  ICON.s_round = '<circle cx="6.8" cy="12" r="4.6" fill="none" stroke="#3b2a20" stroke-width="1.9"/><circle cx="17.2" cy="12" r="4.6" fill="none" stroke="#3b2a20" stroke-width="1.9"/><path d="M11.4 11.2 Q12 10.4 12.6 11.2" fill="none" stroke="#3b2a20" stroke-width="1.6"/><path d="M2.2 11 L.6 10 M21.8 11 L23.4 10" stroke="#3b2a20" stroke-width="1.4"/>';
+  ICON.s_round = '<circle cx="6.85" cy="12" r="4.5" fill="none" stroke="#3b2a20" stroke-width="1.9"/><circle cx="17.15" cy="12" r="4.5" fill="none" stroke="#3b2a20" stroke-width="1.9"/><path d="M11.3 11.6 Q12 10.8 12.7 11.6" fill="none" stroke="#3b2a20" stroke-width="1.6"/><path d="M2.4 11 L.8 10 M21.6 11 L23.2 10" stroke="#3b2a20" stroke-width="1.4"/>';
   ICON.s_icecream = '<path d="M7.4 11 L12 22 L16.6 11 Z" fill="#e2a868"/><path d="M9 13 l4 4 M11 12 l4 4 M15 13 l-5 5" stroke="#c98a45" stroke-width=".8"/><circle cx="12" cy="8" r="5.2" fill="#f7b6c8"/><path d="M7 9.6 C8 11.4 16 11.4 17 9.6 L16.8 11.4 C15 12.6 9 12.6 7.2 11.4 Z" fill="#fff6e6" stroke-width=".9"/><circle cx="12" cy="2.6" r="1.6" fill="#e94b5a" stroke-width=".8"/><circle cx="10.4" cy="7.6" r=".7" fill="#3b2a20" stroke="none"/><circle cx="13.6" cy="7.6" r=".7" fill="#3b2a20" stroke="none"/>';
   Object.keys(OUTFIT).forEach(function (k) { ICON['o_' + k] = OUTFIT[k]; });
 
@@ -437,7 +437,7 @@
   // 꾸미기를 캐릭터가 착용: 자리(머리·머리핀·눈·손·옆에 둥실)
   ICON.w_halo = '<ellipse cx="12" cy="12" rx="9" ry="3.4" fill="none" stroke="#f9d25a" stroke-width="3.4"/><ellipse cx="12" cy="12" rx="9" ry="3.4" fill="none" stroke-width="1"/>';
   // 자리: 캐릭터 그림 안에서의 위치(가운데 x·y, 너비·높이, 기울기)
-  var SLOT = { head: [.5, .12, .62, .62, -6], halo: [.5, .03, .58, .3, 0], pin: [.72, .14, .36, .36, 18], face: [.5, .436, .44, .44, 0], ears: [.5, .285, .87, .87, 0],
+  var SLOT = { head: [.5, .12, .62, .62, -6], halo: [.5, .03, .58, .3, 0], pin: [.72, .14, .36, .36, 18], face: [.5, .425, .44, .44, 0], ears: [.5, .285, .87, .87, 0],
     hand: [.8, .72, .34, .34, -8], body: [.5, .785, .5, .41, 0], side: [1.0, .72, .4, .4, 0], float: [1.06, .0, .38, .38, 0] };
   function slotCSS(sl) { var a = SLOT[sl]; function f(v) { return v.toFixed(3); }
     var L = 'calc(100% * (var(--ix,.08) + var(--iw,.84) * ' + f(a[0] - a[2] / 2) + '))!important;', T = 'calc(100% * (var(--iy,.08) + var(--ih,.84) * ' + f(a[1] - a[3] / 2) + '))!important;';
