@@ -250,6 +250,18 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div id="grid"></div>
 </section>
 
+<section class="card">
+  <h2>인원별 합계</h2>
+  <div id="banner" class="banner"></div>
+  <div class="scroll"><table class="sum">
+    <thead><tr><th>이름</th><th>오픈</th><th>중간</th><th>마감</th><th>휴무</th><th class="vh">휴가</th><th>합계</th><th style="text-align:left">검증</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+  <p class="hint" id="warn"></p>
+</section>
+
+<section class="card" id="chkc"><h2>⚠️ 규칙 점검</h2><div id="chkb"></div></section>
+
 <section class="card" id="genc">
   <button type="button" class="sbgo genbtn" id="genBtn" aria-expanded="false">🗓️ 스케쥴 만들기 (관리자용)</button>
   <div id="genBody" hidden>
@@ -286,18 +298,8 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 
 
 
-<section class="card">
-  <h2>인원별 합계</h2>
-  <div id="banner" class="banner"></div>
-  <div class="scroll"><table class="sum">
-    <thead><tr><th>이름</th><th>오픈</th><th>중간</th><th>마감</th><th>휴무</th><th class="vh">휴가</th><th>합계</th><th style="text-align:left">검증</th></tr></thead>
-    <tbody id="rows"></tbody>
-  </table></div>
-  <p class="hint" id="warn"></p>
-</section>
 
 <section class="card nextbd" id="nextbd"></section>
-<section class="card" id="chkc"><h2>⚠️ 규칙 점검</h2><div id="chkb"></div></section>
 
 <section class="card rep"><h2>🎉 이번 기간 리포트</h2><div id="rpt"></div></section>
 
