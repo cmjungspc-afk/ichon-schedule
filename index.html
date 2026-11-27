@@ -1232,7 +1232,7 @@ function openGame(){
   }
   let cmb=null;
   let dexSel=null,selU=null,shopSel=null,decoSel=null,elPrev=null,sellArm=null;
-  const SELLP=[96,176,320,640,1280];
+  const SELLP=[96,288,864,2592,7776];
   function dexView(){
     const pr=pgGet(gname),have=new Set(pr.dex.concat(pr.parts.map(p=>p.id+':'+p.g)));let got=0;
     const tiles=PARTS.map(P=>{const n=GRADES.filter((G,g)=>have.has(P.id+':'+g)).length;got+=n;const hi=GRADES.map((G,g)=>have.has(P.id+':'+g)).lastIndexOf(true);return '<button type="button" class="pt dxp g'+(hi<0?0:hi)+(n?'':' dis')+(dexSel===P.id?' sel':'')+'" data-k="'+P.id+'">'+pic(P.id,60)+'<i class="pk dx">'+n+'/5</i></button>'}).join('');
