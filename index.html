@@ -855,7 +855,7 @@ function openGame(){
   function reset(){const cs=curSt();S={abil:Object.assign({magnet:0,slow:0,gift:0,tiny:0,whip:0},cs.a||{}),mv:cs.mv||1,gb:cs.gb||0,ms:[100,200,400,700,1100],gap:400,pause:0,wt:0,sw:0,bs:500,boss:null,x:160,y:400,tx:160,ty:400,objs:[],dist:0,bonus:0,lives:cs.l||3,inv:0,sp:2.4,spawn:30,pops:[],parts:[],lm:0,flash:0,t:0,shake:0}}
   reset();
   function score(){return Math.floor(S.dist/12)+S.bonus}
-  function emoji(ch,x,y,size){ctx.font=size+'px '+EM;ctx.fillText(ch,x,y)}
+  function emoji(ch,x,y,size){ctx.font=size+'px '+EM;ctx.fillStyle='#fff';ctx.fillText(ch,x,y)}
   function spawnRow(){
     const free=new Set();while(free.size<2)free.add(Math.floor(Math.random()*5));
     const lanes=[0,1,2,3,4].filter(i=>!free.has(i)&&Math.random()<.75);
