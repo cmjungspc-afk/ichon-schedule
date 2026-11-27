@@ -1610,6 +1610,7 @@ td.wkc{color:#7048e8;font-weight:800}td.wkc .z{color:var(--off);font-weight:400}
 :root[data-theme="dark"] .grid td.x,:root[data-theme="dark"] .grid td.dc{color:var(--ink)}
 #dkB{position:fixed!important;left:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;filter:none!important;opacity:1!important;background:#0b1f4d!important;color:#ffe066!important;border:3px solid #ffe066!important;box-shadow:0 3px 0 #02061a,0 0 0 2px #0b1f4d!important;font-weight:800;text-shadow:none!important}
 #dkB.on{background:#ffe066!important;color:#0b1f4d!important;border-color:#0b1f4d!important;box-shadow:0 3px 0 #6b3b00,0 0 0 2px #ffe066!important}
+html.lk,html.lk body{overflow:hidden!important;overscroll-behavior:none}body.lkb{position:fixed!important;left:0;right:0;width:100%}.fz{overscroll-behavior:contain}.gmwrap canvas{touch-action:none}
 </style>
 <script>
 (function(){
@@ -1636,6 +1637,12 @@ td.wkc{color:#7048e8;font-weight:800}td.wkc .z{color:var(--off);font-weight:400}
   window.addEventListener('appinstalled',()=>{bar.hidden=true;btn.hidden=true});
   if(!off)setTimeout(()=>{if(!dp)guide()},2500);
 })();
+
+/* 🔒 팝업·게임이 떠 있는 동안 뒤 페이지는 스크롤되지 않게 고정 */
+(function(){let y=0,on=false;function sync(){const has=!!document.querySelector('.fz');
+  if(has&&!on){on=true;y=window.scrollY||0;document.body.style.top=(-y)+'px';document.documentElement.classList.add('lk');document.body.classList.add('lkb')}
+  else if(!has&&on){on=false;document.documentElement.classList.remove('lk');document.body.classList.remove('lkb');document.body.style.top='';window.scrollTo(0,y)}}
+  new MutationObserver(sync).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});sync()})();
 </script>
 </body>
 </html>
