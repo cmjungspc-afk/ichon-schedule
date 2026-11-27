@@ -1008,7 +1008,7 @@ function openGame(){
     let prev=0;const dr=DROPW.map(x=>{const r=x[0]>=1e9?prev+'점 이상':(prev?prev:0)+'~'+(x[0]-1)+'점';prev=x[0];return R(r,x[1].map((p,g)=>p?GRADES[g].n+' '+p+'%':'').filter(Boolean).join(' · '))}).join('');
     const nn=[[100,799,'최대 1개'],[800,1499,'최대 2개'],[1500,'','최대 3개']].map(x=>R(x[1]?x[0]+'~'+x[1]+'점':x[0]+'점 이상',x[2])).join('');
     const en=ELP.map((p,i)=>R('★'+i+'→'+(i+1),p+'% · 🪙'+100*(i+1))).join('');
-    msg('<b>📊 확률·보상 정보</b><div class="lbh">🎁 파츠 드랍 (게임이 끝났을 때)</div><div class="elt">'+nn+R('칸마다 얻을 확률','첫 칸 '+DROPC[0]*100+'% · 둘째·셋째 칸 '+DROPC[1]*100+'%')+'</div><div class="lbh">드랍 등급 (점수별)</div><div class="elt">'+dr+R('초월','조합으로만 얻어요')+'</div><div class="lbh">⭐ 이모지 강화 (실패하면 다음 확률 +2%p, 최대 +20%p)</div><div class="elt">'+en+'</div><div class="lbh">🔥 5000점 이상 (강적)</div><div class="elt">'+R('🧟 단단한 손님','미사일·빗자루·사랑의 매를 2번 맞아야 사라져요')+R('🥷 닌자','빠르고 지그재그로 와요')+R('🧛🤡👹🧙','일반 손님 대신 나오고 자기장에 덜 밀려나요')+R('등장 빈도','더 자주, 더 많이 나와요')+'</div><div class="lbh">💗 기타</div><div class="elt">'+R('능력 선택카드에 하트가 나올 확률','20%')+R('하트 최대',''+MAXL+'개')+R('파츠 판매가','일반 15 · 레어 45 · 에픽 135 · 전설 400 · 초월 1200')+'</div><button type="button" class="fzgo gmback">돌아가기</button>','ttl lobby')}
+    msg('<b>📊 확률·보상 정보</b><div class="lbh">🎁 파츠 드랍 (게임이 끝났을 때)</div><div class="elt">'+nn+R('칸마다 얻을 확률','첫 칸 '+DROPC[0]*100+'% · 둘째·셋째 칸 '+DROPC[1]*100+'%')+'</div><div class="lbh">드랍 등급 (점수별)</div><div class="elt">'+dr+R('초월','조합으로만 얻어요')+'</div><div class="lbh">⭐ 이모지 강화 (실패하면 다음 확률 +2%p, 최대 +20%p)</div><div class="elt">'+en+'</div><div class="lbh">🔥 5000점 이상 (강적)</div><div class="elt">'+R('🧟 단단한 손님','미사일·빗자루·사랑의 매를 2번 맞아야 사라져요')+R('🥷 닌자','빠르고 지그재그로 와요')+R('🧛🤡👹🧙','일반 손님 대신 나오고 자기장에 덜 밀려나요')+R('등장 빈도','더 자주, 더 많이 나와요')+'</div><div class="lbh">💗 기타</div><div class="elt">'+R('능력 선택카드에 하트가 나올 확률','20%')+R('하트 최대',''+MAXL+'개')+R('파츠 판매가 (원가의 80%)',GRADES.map((G,g)=>G.n+' '+SELLP[g]).join(' · '))+'</div><button type="button" class="fzgo gmback">돌아가기</button>','ttl lobby')}
   function ncPrev(pr,lab,ov){ov=ov||{};const n=gname,l=ov.el!=null?ov.el:(pr.el|0),sk=(SK.find(k=>k.k===(ov.se!=null?ov.se:pr.se))||{}).e,e=(STAFF[n]||{}).e||'🙂',kc=(STAFF[n]||{}).k||'#888',c=l>0?ELCOL[l]:'';
     const ist=l>=10||!l?'':'border-color:'+c+';--elc:'+c+';box-shadow:0 0 0 2px #fff,0 0 '+(6+l*2)+'px '+c+',0 0 '+(12+l*3)+'px '+c;
     const cst=l>=10||!l?'':'--elc:'+c+';box-shadow:0 0 0 3px '+c+',0 0 18px '+c+',0 0 32px '+c;
@@ -1232,7 +1232,7 @@ function openGame(){
   }
   let cmb=null;
   let dexSel=null,selU=null,shopSel=null,decoSel=null,elPrev=null,sellArm=null;
-  const SELLP=[15,45,135,400,1200];
+  const SELLP=[96,176,320,640,1280];
   function dexView(){
     const pr=pgGet(gname),have=new Set(pr.dex.concat(pr.parts.map(p=>p.id+':'+p.g)));let got=0;
     const tiles=PARTS.map(P=>{const n=GRADES.filter((G,g)=>have.has(P.id+':'+g)).length;got+=n;const hi=GRADES.map((G,g)=>have.has(P.id+':'+g)).lastIndexOf(true);return '<button type="button" class="pt dxp g'+(hi<0?0:hi)+(n?'':' dis')+(dexSel===P.id?' sel':'')+'" data-k="'+P.id+'">'+pic(P.id,60)+'<i class="pk dx">'+n+'/5</i></button>'}).join('');
