@@ -894,13 +894,13 @@ function openGame(){
   {k:'ham',n:'함박스테이크',e:'🍖',t:'육즙 가득',d:'❤️ 목숨 +1 · 🤏 몸집이 작아요',st:{l:4,a:{tiny:2}},p:1500,g:2},
   {k:'cream',n:'생크림 케이크',e:'🎂',t:'달콤 폭신',d:'🧲 🎁 끌어당김 · 🎁 +10 · ⚡ 10%',st:{a:{magnet:1},gb:10,mv:1.1},p:2500,g:3},
   {k:'steak',n:'스테이크',e:'🥩',t:'최고급 한 점',d:'❤️ 목숨 +2 · 🤏 작음 · 🐌 손님 느려짐',st:{l:5,a:{tiny:2,slow:1}},p:4000,g:3},
-  {k:'gold',n:'골든 홀케이크',e:'👑',t:'점장의 자랑',d:'❤️ +2 · 🧲 · 🎁 +15 · ⚡ 15% · 🤏 · 🐌',st:{l:5,gb:15,mv:1.15,a:{magnet:1,tiny:2,slow:1}},p:8000,g:4}];
+  {k:'gold',n:'딸기 레어치즈 타르트',e:'🍓',t:'점장의 자랑',d:'❤️ +2 · 🧲 · 🎁 +15 · ⚡ 15% · 🤏 · 🐌',st:{l:5,gb:15,mv:1.15,a:{magnet:1,tiny:2,slow:1}},p:8000,g:4,svg:"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M8 36L12 54Q32 60 52 54L56 36Z' fill='#e9b26a' stroke='#b6762b' stroke-width='2.5' stroke-linejoin='round'/><path d='M17 38V54M24 39V56M32 40V57M40 39V56M47 38V54' stroke='#c98a3d' stroke-width='2' stroke-linecap='round'/><ellipse cx='32' cy='36' rx='24' ry='9' fill='#ffd6e2' stroke='#e58aa6' stroke-width='2.5'/><ellipse cx='32' cy='34' rx='19' ry='6.5' fill='#fff0f5'/><g><path d='M32 14C23 14 20 22 24 29Q32 35 40 29C44 22 41 14 32 14Z' fill='#f0384f' stroke='#a8142a' stroke-width='2'/><path d='M26 14Q32 6 38 14Q32 11 26 14Z' fill='#48b848' stroke='#2a7d2a' stroke-width='1.5'/><g fill='#ffe08a'><ellipse cx='28' cy='20' rx='1' ry='1.6'/><ellipse cx='35' cy='19' rx='1' ry='1.6'/><ellipse cx='32' cy='25' rx='1' ry='1.6'/><ellipse cx='27' cy='26' rx='1' ry='1.6'/><ellipse cx='37' cy='25' rx='1' ry='1.6'/></g></g><circle cx='14' cy='35' r='4' fill='#f0384f' stroke='#a8142a' stroke-width='1.5'/><circle cx='50' cy='35' r='4' fill='#f0384f' stroke='#a8142a' stroke-width='1.5'/></svg>"}];
   const owned=(c,pr)=>!c.p||(pr||pgGet(gname)).ch.includes(c.k);
   const RBIMG=new Image();RBIMG.src='data:image/svg+xml,'+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='#ff4d4d'/><stop offset='.2' stop-color='#ff9f43'/><stop offset='.4' stop-color='#ffd43b'/><stop offset='.6' stop-color='#51cf66'/><stop offset='.8' stop-color='#4dabf7'/><stop offset='1' stop-color='#9775fa'/></linearGradient></defs><rect x='11' y='28' width='42' height='28' rx='3' fill='url(#g)' stroke='#fff' stroke-width='2'/><rect x='7' y='19' width='50' height='12' rx='3' fill='url(#g)' stroke='#fff' stroke-width='2'/><rect x='28.5' y='19' width='7' height='37' fill='#fff' opacity='.9'/><path d='M32 19C22 6 12 12 22 19ZM32 19C42 6 52 12 42 19Z' fill='#fff' stroke='#d0d0d0' stroke-width='1'/><circle cx='32' cy='19' r='3' fill='#fff' stroke='#d0d0d0'/></svg>");
-  const SALTIMG=new Image();SALTIMG.src='data:image/svg+xml,'+encodeURIComponent(CH[1].svg);
+  const CIMG={};CH.forEach(c=>{if(c.svg){const m=new Image();m.src='data:image/svg+xml,'+encodeURIComponent(c.svg);CIMG[c.k]=m}});
   let sel='cro';try{const g=localStorage.getItem('gchar');if(CH.some(c=>c.k===g))sel=g}catch(e){}
   const ico=(c,z)=>c.svg?'<img src="data:image/svg+xml,'+encodeURIComponent(c.svg)+'" width="'+(z||34)+'" height="'+(z||34)+'" alt="">':'<span style="font-size:'+((z||34)-4)+'px;line-height:1">'+c.e+'</span>';
-  function drawChar(x,y){const c=CH.find(c=>c.k===sel)||CH[0];if(c.svg){if(SALTIMG.complete)ctx.drawImage(SALTIMG,x-19,y-19,38,38)}else emoji(c.e,x,y,c.k==='cro'?28:34)}
+  function drawChar(x,y){const c=CH.find(c=>c.k===sel)||CH[0];if(c.svg){const m=CIMG[c.k];if(m&&m.complete)ctx.drawImage(m,x-19,y-19,38,38)}else emoji(c.e,x,y,c.k==='cro'?28:34)}
   function showTitle(){const c=CH.find(c=>c.k===sel)||CH[0];msg('<div class="tbg"><i></i></div><div class="ttlbox"><div class="ttls">🥐 파리크라상</div><div class="ttlr">RUSH!</div><div class="ttld">진상 손님을 피해서 달려라!</div><div class="ttlh">'+ico(c,64)+'</div><button type="button" class="ttlgo gmlobby">▶ 게임 시작</button><button type="button" class="ttlrk gmrank">🏆 랭킹</button><div class="ttlb">내 최고 기록 '+best+'점</div></div>','ttl');
 }
   function showLogin(){const NR=roster();if(gname&&!NR.includes(gname)&&NR.length)gname='';
@@ -1994,6 +1994,7 @@ html.lk,html.lk body{overflow:hidden!important;overscroll-behavior:none}body.lkb
 .shch{display:flex;align-items:center;justify-content:center;height:100%;filter:drop-shadow(0 2px 0 rgba(0,0,0,.35))}
 .gmchars .gmch{flex:0 0 calc(20% - 4px)}
 .gmchars .gmch small{white-space:nowrap;font-size:10px;letter-spacing:-.5px}
+.gmchars .gmch small{letter-spacing:-.8px}
 </style>
 <script>
 (function(){
