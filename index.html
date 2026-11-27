@@ -225,7 +225,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 @media(max-width:640px){.crew{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:8px}.crew>div{padding:4px 5px 5px;font-size:11px;border-left-width:3px;border-radius:5px}.crew b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.crew input{font-size:11px;padding:1px 2px;margin-top:1px;box-shadow:none}.crew .bdl{gap:2px}.crew .bdl>.ck svg{width:15px;height:15px}.crew .stk{gap:2px;margin-top:3px}.crew .sl{font-size:10px;line-height:1.2}.crew .sk{width:15px;height:15px;font-size:8px;border-width:1px}}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) section.card.nextbd{background:linear-gradient(135deg,#5a2a40,#5a4a1a)!important;color:#fff!important;border-color:#ffd43b!important}:root:not([data-theme="light"]) section.card.nextbd b{color:#ffd43b}}
 </style>
-<link rel="stylesheet" href="cozy.css?v=25">
+<link rel="stylesheet" href="cozy.css?v=26">
 </head>
 <body>
 <main>
@@ -768,7 +768,12 @@ $('#tut').addEventListener('click',e=>{const b=e.target.closest('.tgo');if(e.tar
   else{const g=$('#genBody');if(g&&g.hidden)$('#genBtn').click();tutFlash($('#genBtn'))}});
 setTimeout(tutDraw,1200);setInterval(tutDraw,2000);
 function czStaffDeco(e){try{if(!window.PX)return '';const ns=roster().filter(n=>(STAFF[n]||{}).e===e);if(ns.length!==1)return '';const se=seList(pgGet(ns[0]).se).filter(k=>{const it=SKG.find(x=>x.k===k);return it&&['fx','hat'].includes(skGrp(skSlot(it)))}).join(',');return se?seEmo(se):''}catch(_){return ''}}
-function heroIcons(){try{applyIcons();const R=roster();$('.hero p').style.gridTemplateColumns='repeat('+Math.max(1,Math.ceil(R.length/2))+',auto)';$('.hero p').innerHTML=roster().map(n=>{const e=(STAFF[n]||{e:'🙂'}).e;let se='';try{se=window.PX?seList(pgGet(n).se).filter(k=>{const it=SKG.find(x=>x.k===k);return it&&['fx','hat'].includes(skGrp(skSlot(it)))}).join(','):''}catch(_){}return se?'<span class="hico" data-sk="'+seEmo(se)+'">'+e+'</span>':e}).join(' ')}catch(e){}}heroIcons();
+function heroIcons(){try{applyIcons();const R=roster(),P=$('.hero p');P.style.gridTemplateColumns='';P.classList.add('play');
+const L=[['thl',6,6],['hit',33,6],['bld',47,30],['thr',92,6],['dge',71,6],['rol',12,34],['chr',84,34],['sld',46,2],['cat',60,6],['spn',27,34]];
+const ch=n=>{const e=(STAFF[n]||{e:'🙂'}).e;let se='';try{se=window.PX?seList(pgGet(n).se).filter(k=>{const it=SKG.find(x=>x.k===k);return it&&['fx','hat'].includes(skGrp(skSlot(it)))}).join(','):''}catch(_){}return '<span class="hico"'+(se?' data-sk="'+seEmo(se)+'"':'')+'>'+e+'</span>'};
+let h='<i class="smn" style="left:55%;bottom:30%"><b></b><b></b><b></b></i><i class="sbl sbl1"></i><i class="sbl sbl2"></i><i class="spl spl1"></i>';
+R.forEach((n,i)=>{const r=L[i%L.length],k=Math.floor(i/L.length);h+='<span class="act a-'+r[0]+'" style="left:'+Math.min(96,r[1]+k*5)+'%;bottom:'+(r[2]+k*8)+'%">'+(r[0]==='rol'?'<i class="rball"></i>':'')+ch(n)+'</span>'});
+P.innerHTML=h}catch(e){}}heroIcons();
 if(STORE){try{const B=new URL('./',location.href).href;const m={name:STORE+' 스케쥴',short_name:STORE+' 스케쥴',start_url:B+'?store='+encodeURIComponent(STORE),scope:B,display:'standalone',orientation:'portrait',background_color:'#e6f0fb',theme_color:'#1c7ed6',lang:'ko',icons:[{src:B+'store-icon-192.png',sizes:'192x192',type:'image/png'},{src:B+'store-icon-512.png',sizes:'512x512',type:'image/png'}]};
   $('#mfl').href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(m));const MF='manifest-'+SID+'.webmanifest';fetch(MF,{cache:'no-store'}).then(r=>{if(r.ok)$('#mfl').href=MF}).catch(()=>{});const at=document.querySelector('meta[name=apple-mobile-web-app-title]');if(at)at.content=STORE+' 스케쥴';const ti=document.querySelector('link[rel=apple-touch-icon]');if(ti)ti.href='store-apple-touch-icon.png';const fi=document.querySelector('link[rel=icon]');if(fi)fi.href='store-icon-192.png'}catch(e){}}
 const TITLE0=STORE?STORE+' 스케쥴 시트':'행복한 이촌점 스케쥴 시트';
