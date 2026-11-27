@@ -167,3 +167,6 @@ html .fgem.fgok[style*="--elbg"]{animation:fgok .6s ease-out,elmetal2 2.4s ease-
 #gm.gmm .gmbox{background:#7da35a!important}
 #gm .gpause{background:var(--cz-cream)!important;border:2.5px solid var(--cz-ink)!important;color:var(--cz-ink)!important;box-shadow:0 3px 0 rgba(58,40,28,.4)!important}
 html body #gm.gmm,html body #gm .gmwrap,html body #gm.gmm .gmbox{background:#7da35a!important}
+/* 게임 창이 열려 있는 동안 뒤의 스케줄표는 그리지 않음(버벅임 방지) */
+body:has(> #gm) > :not(.fz):not(#gm):not(script):not(style){visibility:hidden!important}
+body:has(> #gm) > :not(.fz):not(#gm) *{animation-play-state:paused!important}
