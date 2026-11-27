@@ -888,7 +888,9 @@ function openGame(){
   let sel='cro';try{const g=localStorage.getItem('gchar');if(CH.some(c=>c.k===g))sel=g}catch(e){}
   const ico=(c,z)=>c.svg?'<img src="data:image/svg+xml,'+encodeURIComponent(c.svg)+'" width="'+(z||34)+'" height="'+(z||34)+'" alt="">':'<span style="font-size:'+((z||34)-4)+'px;line-height:1">'+c.e+'</span>';
   function drawChar(x,y){const c=CH.find(c=>c.k===sel)||CH[0];if(c.svg){if(SALTIMG.complete)ctx.drawImage(SALTIMG,x-19,y-19,38,38)}else emoji(c.e,x,y,c.k==='cro'?28:34)}
-  function showTitle(){const c=CH.find(c=>c.k===sel)||CH[0];msg('<div class="tbg"><i></i></div><div class="ttlbox"><div class="ttls">🥐 파리크라상</div><div class="ttlr">RUSH!</div><div class="ttld">진상 손님을 피해서 달려라!</div><div class="ttlh">'+ico(c,64)+'</div><button type="button" class="ttlgo gmlobby">▶ 게임 시작</button><div class="ttlb">🏆 최고 기록 '+best+'점</div></div>','ttl')}
+  function topHtml(){const L=rkList().filter(x=>x.s>0);if(!L.length)return '<div class="ttlb">🏆 아직 기록이 없어요 · 첫 1등이 되어보세요!</div>';const t=L[0];return '<div class="ttltop"><span class="ttlcrown">👑</span><div><small>현재 1등</small><b>'+((STAFF[t.n]||{}).e||'')+' '+esc(t.n)+'</b></div><em>'+t.s+'점</em></div>'}
+  function showTitle(){const c=CH.find(c=>c.k===sel)||CH[0];msg('<div class="tbg"><i></i></div><div class="ttlbox"><div class="ttls">🥐 파리크라상</div><div class="ttlr">RUSH!</div><div class="ttld">진상 손님을 피해서 달려라!</div><div class="ttlh">'+ico(c,64)+'</div><button type="button" class="ttlgo gmlobby">▶ 게임 시작</button><div id="ttltop">'+topHtml()+'</div><div class="ttlb">내 최고 기록 '+best+'점</div></div>','ttl');
+    [900,2200].forEach(d=>setTimeout(()=>{const o=$('#ttltop');if(o)o.innerHTML=topHtml()},d))}
   function showLogin(){const NR=roster();if(gname&&!NR.includes(gname)&&NR.length)gname='';
     msg('<div class="lbt">🔑 로그인</div><div class="lbs2">내 이름을 눌러 입장해요</div><div class="lgg">'+NR.map(n=>'<button type="button" class="gmnm lgn'+(n===gname?' on':'')+'" data-n="'+esc(n)+'"><span>'+((STAFF[n]||{}).e||'🙂')+'</span><b>'+esc(n)+'</b><small class="lgl">Lv '+levelOf(pgGet(n).xp)+'</small></button>').join('')+'</div><div class="lbh">이름을 누르면 바로 입장해요</div>','ttl lobby')}
   function lvView(){
@@ -1903,6 +1905,8 @@ html.lk,html.lk body{overflow:hidden!important;overscroll-behavior:none}body.lkb
 .lvl{display:flex;flex-direction:column;gap:5px;width:92%;margin:4px 0}.lvr{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:12px;background:linear-gradient(180deg,#2a4690,#142a63);border:3px solid #0a1640;box-shadow:inset 0 3px 0 rgba(255,255,255,.2),0 3px 0 rgba(0,0,0,.4);color:#8fa3cc;text-align:left;font-size:13px}.lvr b{flex:0 0 46px;color:#b6c8ea}.lvr span{flex:1}.lvr i{font-style:normal}.lvr.ok{color:#fff}.lvr.ok b{color:#69db7c}.lvr.nx{border-color:#ffd43b;color:#ffe9a0}.lvr.nx b{color:#ffd43b}
 .lgl{font-size:12px;font-weight:900;color:#d9480f;background:#fff0d6;border-radius:99px;padding:0 8px;line-height:18px;border:1.5px solid #f0a45d}
 .ttl .lgn b,.ttl .lgn{-webkit-text-stroke:0!important;text-shadow:none!important}
+
+.ttltop{display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:16px;border:3px solid #0a1640;background:linear-gradient(180deg,#5c3d9e,#32206b);box-shadow:inset 0 3px 0 rgba(255,255,255,.25),0 4px 0 rgba(0,0,0,.4);text-align:left;margin-top:6px}.ttlcrown{font-size:34px;animation:hbob 1.4s ease-in-out infinite}.ttltop small{display:block;color:#ffd8a8;font-size:11px;font-weight:800}.ttltop b{font-size:20px;color:#fff;-webkit-text-stroke:3px #0a1640;paint-order:stroke fill}.ttltop em{font-style:normal;font-size:20px;font-weight:900;color:#ffe066;margin-left:6px;-webkit-text-stroke:3px #0a1640;paint-order:stroke fill}
 </style>
 <script>
 (function(){
