@@ -294,7 +294,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 <section class="card">
   <div id="rosterw" style="margin-top:10px"><label for="roster">직원 명단 (공백으로 구분)</label><p class="hint" style="margin:0 0 6px">👉 <b>직급 · 연차 순서</b>로 입력해 주세요. <b>맨 앞 사람이 점장</b>이에요.</p><input id="roster"></div>
   <div class="crew" id="crew"></div><div class="chips" id="chips"></div>
-  <p class="hint">이름 버튼을 누르면 응원 하트가 하나씩 올라가요 ❤️</p><button type="button" class="sbgo mbgo" id="mbBtn"><span class="mbs">✦</span>⭐ MBTI 궁합보기 ⭐<span class="mbs r">✧</span></button><p class="hint" id="crewhint" hidden>이름 버튼을 누르면 응원 하트가 하나씩 올라가요 ❤️    예: 혜성11, </p>
+  <p class="hint">이름 버튼을 누르면 응원 하트가 하나씩 올라가요 ❤️</p><button type="button" class="sbgo" id="telBtn" style="margin:12px 0 0">📞 비상연락망</button><button type="button" class="sbgo mbgo" id="mbBtn"><span class="mbs">✦</span>⭐ MBTI 궁합보기 ⭐<span class="mbs r">✧</span></button><p class="hint" id="crewhint" hidden>이름 버튼을 누르면 응원 하트가 하나씩 올라가요 ❤️    예: 혜성11, </p>
 </section>
 
 
@@ -1161,7 +1161,8 @@ function applyRO(){try{updateLock()}catch(e){}document.body.classList.toggle('rd
 function markLive(snap){if(!snap.metadata.fromCache&&!liveOnce){liveOnce=true;setStatus(CANWRITE?'live':'ro')}}
 function onErr(e){setStatus(e&&e.code==='revoked'?'err':'slow')}
 function deb(id,fn,ms){debPend.add(id);clearTimeout(debT[id]);debT[id]=setTimeout(()=>{debPend.delete(id);fn()},ms||500)}
-function allSettings(){return clone({roster:$('#roster').value,notice:$('#notice').value,tags:TAGS,stk:STK,bday:BDAY,gens:GENS})}
+let TEL='';try{TEL=localStorage.getItem('tel')||''}catch(e){}
+function allSettings(){return clone({roster:$('#roster').value,notice:$('#notice').value,tel:TEL,tags:TAGS,stk:STK,bday:BDAY,gens:GENS})}
 function mergeAll(p){const all=allSettings();for(const k in p)all[k]=(p[k]&&typeof p[k]==='object')?Object.assign(all[k]||{},p[k]):p[k];return all}
 function flatP(p){const o={};for(const k in p){const v=p[k];if(v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).length){for(const j in v)o[k+'.'+j]=v[j]}else o[k]=v}return o}
 let repaired=false;
@@ -1197,6 +1198,7 @@ function applySettings(snap){
   if(typeof s.roster==='string'&&!debPend.has('roster')&&$('#roster').value!==s.roster&&document.activeElement!==$('#roster')){$('#roster').value=s.roster;try{localStorage.setItem('roster',s.roster)}catch(e){}ui=true}
   if(typeof s.title==='string'&&!$('#ttm')){setTitle(s.title);try{localStorage.setItem('title',s.title)}catch(e){}}
   if(typeof s.notice==='string'&&!debPend.has('notice')&&$('#notice').value!==s.notice&&document.activeElement!==$('#notice')){$('#notice').value=s.notice;try{localStorage.setItem('notice',s.notice)}catch(e){}}
+  if(typeof s.tel==='string'&&s.tel!==TEL&&!$('#telT')){TEL=s.tel;try{localStorage.setItem('tel',TEL)}catch(e){}}
   for(const [f,L] of [['tags',TAGS],['stk',STK],['bday',BDAY],['icons',ICONS],['mbti',MBTI]]){const r=s[f]||{};for(const k in r)if(!debPend.has(f+'.'+k)&&L[k]!==r[k]){L[k]=r[k];ui=true}persistLocal(f,L)}
   {const r=s.gens||{};let ch=false;for(const k in r)if(!debPend.has('gens')&&GENS[k]!==r[k]){GENS[k]=r[k];ch=true}if(ch){persistLocal('genf',GENS);const a=document.activeElement;if(!(a&&a.closest&&a.closest('#genc')))try{genLoad()}catch(e){}}}
   if(ui){const a=document.activeElement;if(!(a&&a.closest&&a.closest('#crew')))chips();refreshPn();sum()}
@@ -1638,6 +1640,23 @@ html.lk,html.lk body{overflow:hidden!important;overscroll-behavior:none}body.lkb
   if(!off)setTimeout(()=>{if(!dp)guide()},2500);
 })();
 
+
+/* 📞 비상연락망 (번호는 사이트 코드가 아니라 설정 데이터에 저장돼요) */
+function telRows(t){return t.split(/\n/).map(x=>x.trim()).filter(Boolean).map(l=>{const m=l.match(/^(.*?)[\s:]*((?:\+?82[-\s]?)?0?1[0-9][-\s.]?\d{3,4}[-\s.]?\d{4})\s*$/);return m?{n:m[1].trim(),p:m[2].trim()}:{n:l,p:''}})}
+function openTel(edit){
+  const old=$('#tel');if(old)old.remove();
+  const el=document.createElement('div');el.id='tel';el.className='fz gmm';
+  const rows=telRows(TEL);
+  el.innerHTML='<div class="rkbox" role="dialog" aria-label="비상연락망"><button type="button" class="fzx gx" aria-label="닫기">✕</button><h3>📞 비상연락망</h3>'+
+   (edit?'<textarea id="telT" rows="12" style="width:100%;font-size:15px" placeholder="점장 홍길동 010-0000-0000&#10;SM 부점장 이름 010-0000-0000&#10;(한 줄에 한 명씩)">'+esc(TEL)+'</textarea><div class="bar" style="justify-content:center;margin-top:10px"><button type="button" class="sec tcn">취소</button><button type="button" class="pok tsv">저장</button></div>'
+   :(rows.length?'<ul class="rkl">'+rows.map(r=>'<li><span class="rkw" style="text-align:left">'+esc(r.n)+'</span>'+(r.p?'<a class="rks" style="text-decoration:none" href="tel:'+esc(r.p.replace(/[^0-9+]/g,''))+'">'+esc(r.p)+'</a>':'')+'</li>').join('')+'</ul><div class="rkm">번호를 누르면 전화가 걸려요</div>':'<p class="rkm">아직 등록된 연락처가 없어요. 아래 수정을 눌러 붙여넣어 주세요.</p>')+'<div class="bar" style="justify-content:center;margin-top:12px"><button type="button" class="sec ted">✏️ 수정</button></div>')+'</div>';
+  document.body.appendChild(el);
+  el.addEventListener('click',e=>{if(e.target===el||e.target.closest('.gx'))el.remove();
+    else if(e.target.closest('.ted'))gate(()=>openTel(true));
+    else if(e.target.closest('.tcn'))openTel(false);
+    else if(e.target.closest('.tsv')){TEL=$('#telT').value.replace(/[ \t]+$/gm,'').trim();try{localStorage.setItem('tel',TEL)}catch(x){}pushSetting({tel:TEL});openTel(false)}});
+}
+$('#telBtn').addEventListener('click',()=>openTel(false));
 /* 🔒 팝업·게임이 떠 있는 동안 뒤 페이지는 스크롤되지 않게 고정 */
 (function(){let y=0,on=false;function sync(){const has=!!document.querySelector('.fz');
   if(has&&!on){on=true;y=window.scrollY||0;document.body.style.top=(-y)+'px';document.documentElement.classList.add('lk');document.body.classList.add('lkb')}
