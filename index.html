@@ -968,7 +968,7 @@ function openGame(){
   const GEMO=['🙂','😀','😎','🥳','😺','🐶','🐰','🦊','🐻','🐼','🐯','🐸','🐧','🦄','🐥','🍞','🥐','🧁','🍩','🍓','⭐','🌈','🔥','🎈'];
   function guestSet(e){try{localStorage.setItem('gemoji',e)}catch(_){}STAFF['게스트']={e:esc(e),k:'#868e96',t:'게스트'};gname='게스트';try{localStorage.setItem('gname',gname)}catch(_){}}
   function guestView(){msg('<div class="lbt">👤 게스트</div><div class="lbs2">내 이모지를 골라요 (네임카드에 표시돼요)</div><div class="gemg">'+GEMO.map(e=>'<button type="button" class="gmgemo" data-e="'+e+'">'+e+'</button>').join('')+'</div><button type="button" class="fzgo gmlobby">← 로그인으로</button>','ttl lobby')}
-  const BOXP=150,PARTP=120;
+  const BOXP=300,PARTP=120;
   function shopView(note,got){
     const pr=pgGet(gname),ss=shopSel&&shopSel.startsWith('s:')?SK.find(k=>k.k===shopSel.slice(2)):null,cc=shopSel&&shopSel.startsWith('c:')?CH.find(c=>c.k===shopSel.slice(2)&&c.p):null,sp=ss?{n:ss.e+' '+ss.n,d:'능력은 없고 꾸미기용이에요 · 네임카드 이모지에 써요 (실제 스케줄표에 반영!)',pr:ss.p,k:shopSel,have:pr.sk.includes(ss.k),act:pr.sk.includes(ss.k)?(pr.se===ss.k?'벗기':'착용하기'):''}:cc?{n:cc.n+' · '+cc.t,d:cc.d,pr:cc.p,k:shopSel,have:pr.ch.includes(cc.k)}:shopSel==='box'?{n:'랜덤 파츠 상자',d:'일반 60% · 레어 30% · 에픽 9% · 전설 1%',pr:BOXP,k:'box'}:(shopSel&&partById(shopSel)?{n:partById(shopSel).n+' (일반)',d:partById(shopSel).t(partById(shopSel).v[0],0),pr:PARTP,k:shopSel}:null);
     const tiles='<button type="button" class="pt shp g3'+(shopSel==='box'?' sel':'')+'" data-k="box">'+pic('box',60)+'<i class="pk pr">🪙'+BOXP+'</i></button>'+PARTS.map(P=>'<button type="button" class="pt shp g0'+(shopSel===P.id?' sel':'')+'" data-k="'+P.id+'">'+pic(P.id,60)+'<i class="pk pr">🪙'+PARTP+'</i></button>').join('');
