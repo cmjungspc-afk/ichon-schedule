@@ -412,7 +412,7 @@
     });
   }
   var obs = new MutationObserver(function (ms) {
-    for (var i = 0; i < ms.length; i++) { var m = ms[i]; if (m.type === 'characterData') convert(m.target.parentNode); else for (var j = 0; j < m.addedNodes.length; j++) { var a = m.addedNodes[j]; convert(a.nodeType === 3 ? a.parentNode : a); } }
+    for (var i = 0; i < ms.length; i++) { var m = ms[i]; if (m.type === 'characterData') convert(m.target.parentNode); else if (m.type === 'attributes') applyMulti(m.target); else for (var j = 0; j < m.addedNodes.length; j++) { var a = m.addedNodes[j]; convert(a.nodeType === 3 ? a.parentNode : a); if (a.nodeType === 1) scanMulti(a); } }
   });
   var watched = null;
   function setVars(el) { el.style.setProperty('--cz-scene', 'url("' + sceneURL + '")'); el.style.setProperty('--cz-petal', 'url("' + petals + '")'); el.style.setProperty('--cz-cro', 'url("' + charURL('cro') + '")'); el.style.setProperty('--cz-winter', 'url("' + winterURL + '")'); Object.keys(FRAME).forEach(function (k) { el.style.setProperty('--fr-' + k, 'url("' + frameURL(k) + '")'); }); }
@@ -427,12 +427,33 @@
   var WEAR = { '🧢': 'head', '👒': 'head', '🎩': 'head', '🎅': 'head', '👑': 'head', '🍄': 'head', '😇': 'halo', '🎀': 'pin', '🌸': 'pin', '🌻': 'pin', '🌹': 'pin', '🍀': 'pin', '🌱': 'pin', '🦋': 'pin', '🕶': 'face', '👓': 'face', '🎧': 'ears',
     '🍪': 'hand', '🥛': 'hand', '🍓': 'hand', '🍬': 'hand', '☕': 'hand', '🎂': 'hand', '🥐': 'hand', '🍞': 'hand', '🍳': 'hand', '🎁': 'hand', '🔔': 'hand', '💎': 'hand', '🏆': 'hand', '💗': 'hand',
     '🥼': 'body', '👖': 'body', '👕': 'body', '🧥': 'body', '🥻': 'body', '👗': 'body', '👘': 'body', '🧣': 'body', '⛄': 'side', '🎄': 'side', '🦌': 'side', '🦄': 'side', '🕊': 'float', '🌈': 'float', '☁': 'float', '🌙': 'float', '🌟': 'float', '⭐': 'float', '❄': 'float', '🔥': 'float', '🌌': 'float' };
+
+  // 여러 꾸미기 동시 착용: data-sk 에 이모지가 여러 개면 한 장의 겹친 그림으로
+  function slotOf(e) { var n = OVR[norm(e)]; if (n && n.indexOf('f:') === 0) return 'frame'; return WEAR[norm(e)] || 'float'; }
+  var LAYER = { float: 0, pin: 1, head: 2, halo: 2, ears: 3, face: 4, hand: 5, side: 6, body: 7, frame: 8 };
+  function applyMulti(el) {
+    var v = el.getAttribute('data-sk') || '', parts = v.split(' ').filter(Boolean);
+    if (parts.length < 2) { if (el.hasAttribute('data-skm')) { el.removeAttribute('data-skm'); el.style.removeProperty('--skbg'); } return; }
+    var r = el.closest && el.closest('#crew') ? .85 : .72;
+    parts.sort(function (a, b) { return LAYER[slotOf(a)] - LAYER[slotOf(b)]; });
+    var bg = parts.map(function (e) {
+      var n = OVR[norm(e)]; if (!n) return null; var sl = slotOf(e), L, T, W, H;
+      if (norm(e) === '😇') n = 'w_halo';
+      if (sl === 'frame') { L = -.42; T = -.42; W = 1.84; H = 1.84; }
+      else { var a = SLOT[sl]; W = a[2] * r; H = a[3] * r; L = (1 - r) / 2 + a[0] * r - W / 2; T = (1 - r) / 2 + a[1] * r - H / 2; }
+      var bw = W / 2, bh = H / 2, bx = (L + .5) / 2, by = (T + .5) / 2;
+      var px = bw < 1 ? bx / (1 - bw) * 100 : 50, py = bh < 1 ? by / (1 - bh) * 100 : 50;
+      return 'url("' + keyURL(n) + '") ' + px.toFixed(1) + '% ' + py.toFixed(1) + '% / ' + (bw * 100).toFixed(1) + '% ' + (bh * 100).toFixed(1) + '% no-repeat';
+    }).filter(Boolean).join(',');
+    el.setAttribute('data-skm', '1'); el.style.setProperty('--skbg', bg);
+  }
+  function scanMulti(root) { if (!root || !root.querySelectorAll) return; if (root.hasAttribute && root.hasAttribute('data-sk')) applyMulti(root); Array.prototype.forEach.call(root.querySelectorAll('[data-sk],[data-skm]'), applyMulti); }
   function stickerCSS() {
     try {
       if (typeof SKG === 'undefined') return;
       SKG.forEach(function (k) { if (k.fr) return; var sl = WEAR[norm(k.e)] || 'float';
         if (sl === 'body') { k.g = 3; } else if (sl === 'head' || sl === 'pin' || sl === 'face' || sl === 'ears' || sl === 'halo') { k.g = 1; k.p = Math.min(2400, Math.max(1000, k.p)); } else { k.g = 0; k.p = Math.min(800, k.p); } });
-      var css = '@keyframes czfloat{0%,100%{translate:0 0}50%{translate:0 -3px}}';
+      var css = '@keyframes czfloat{0%,100%{translate:0 0}50%{translate:0 -3px}}[data-skm]::before{content:""!important;position:absolute!important;left:-50%!important;top:-50%!important;width:200%!important;height:200%!important;transform:none!important;animation:none!important;background:var(--skbg)!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;font-size:0}';
       SKG.forEach(function (k) { var e = norm(k.e), n = OVR[e]; if (!n || n.indexOf('f:') === 0) return; var slot = WEAR[e] || 'float'; if (e === '😇') n = 'w_halo';
         var bg = 'content:""!important;position:absolute!important;font-size:inherit;background:url("' + keyURL(n) + '") center/contain no-repeat!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;';
         css += '[data-sk="' + k.e + '"]::before{' + bg + slotCSS(slot, .72) + '}';
@@ -440,7 +461,7 @@
       var st = document.createElement('style'); st.id = 'czstk'; st.textContent = css; document.head.appendChild(st);
     } catch (e) {}
   }
-  function start() { stickerCSS(); convert(document.body); obs.observe(document.body, { childList: true, subtree: true, characterData: true }); }
+  function start() { stickerCSS(); convert(document.body); obs.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['data-sk'] }); scanMulti(document.body); }
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 
 
@@ -466,5 +487,5 @@
   if (typeof window.closeGame === 'function') { var _cg = window.closeGame; window.closeGame = function () { if (!opening) fsOff(); return _cg.apply(this, arguments); }; }
   document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.getElementById('gm')) { /* 사용자가 전체화면을 나가도 게임은 그대로 */ } });
 
-  window.PX = { boss: boss, char: char, charURL: charURL, icon: icon, emoji: icon, draw: draw, convert: convert, FONT: 'Jua,sans-serif' };
+  window.PX = { slotOf: slotOf, boss: boss, char: char, charURL: charURL, icon: icon, emoji: icon, draw: draw, convert: convert, FONT: 'Jua,sans-serif' };
 })();
