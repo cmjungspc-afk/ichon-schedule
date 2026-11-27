@@ -435,8 +435,19 @@
   // 자리: 캐릭터 그림 안에서의 위치(가운데 x·y, 너비·높이, 기울기)
   var SLOT = { head: [.5, .12, .62, .62, -6], halo: [.5, .03, .58, .3, 0], pin: [.72, .14, .36, .36, 18], face: [.5, .436, .44, .44, 0], ears: [.5, .285, .87, .87, 0],
     hand: [.8, .72, .34, .34, -8], body: [.5, .785, .5, .41, 0], side: [1.0, .72, .4, .4, 0], float: [1.06, .0, .38, .38, 0] };
-  function slotCSS(sl, r) { var a = SLOT[sl], W = a[2] * r, H = a[3] * r, X = (1 - r) / 2 + a[0] * r, Y = (1 - r) / 2 + a[1] * r; function pc(v) { return (v * 100).toFixed(1) + '%!important;'; }
-    return 'left:' + pc(X - W / 2) + 'top:' + pc(Y - H / 2) + 'width:' + pc(W) + 'height:' + pc(H) + 'transform:rotate(' + a[4] + 'deg)!important;' + (sl === 'float' ? 'animation:czfloat 2.6s ease-in-out infinite!important;' : 'animation:none!important;'); }
+  function slotCSS(sl) { var a = SLOT[sl]; function f(v) { return v.toFixed(3); }
+    var L = 'calc(100% * (var(--ix,.08) + var(--iw,.84) * ' + f(a[0] - a[2] / 2) + '))!important;', T = 'calc(100% * (var(--iy,.08) + var(--ih,.84) * ' + f(a[1] - a[3] / 2) + '))!important;';
+    return 'left:' + L + 'top:' + T + 'width:calc(100% * var(--iw,.84) * ' + f(a[2]) + ')!important;height:calc(100% * var(--ih,.84) * ' + f(a[3]) + ')!important;transform:rotate(' + a[4] + 'deg)!important;' + (sl === 'float' ? 'animation:czfloat 2.6s ease-in-out infinite!important;' : 'animation:none!important;'); }
+  // 캐릭터 그림이 칸 안 어디에 있는지 재서 꾸미기 위치를 정확히 맞춤
+  function measure(el) {
+    var im = el.querySelector && el.querySelector('img'); if (!im) return null;
+    if (!im.complete) { if (!im._czw) { im._czw = 1; im.addEventListener('load', function () { applyMulti(el); }, { once: true }); } }
+    var cw = el.clientWidth, ch = el.clientHeight; if (!cw || !ch) return null;
+    var r = el.getBoundingClientRect(), q = im.getBoundingClientRect(); if (!q.width) return null;
+    var g = { x: (q.left - r.left - el.clientLeft) / cw, y: (q.top - r.top - el.clientTop) / ch, w: q.width / cw, h: q.height / ch };
+    el.style.setProperty('--ix', g.x.toFixed(3)); el.style.setProperty('--iy', g.y.toFixed(3)); el.style.setProperty('--iw', g.w.toFixed(3)); el.style.setProperty('--ih', g.h.toFixed(3));
+    return g;
+  }
   var WEAR = { '🧢': 'head', '👒': 'head', '🎩': 'head', '🎅': 'head', '👑': 'head', '🍄': 'head', '😇': 'halo', '🎀': 'pin', '🌸': 'pin', '🌻': 'pin', '🌹': 'pin', '🍀': 'pin', '🌱': 'pin', '🦋': 'pin', '🕶': 'face', '👓': 'face', '🎧': 'ears',
     '🍦': 'hand', '🍩': 'hand', '🍮': 'hand', '🧁': 'hand', '🍪': 'hand', '🥛': 'hand', '🍓': 'hand', '🍬': 'hand', '☕': 'hand', '🎂': 'hand', '🥐': 'hand', '🍞': 'hand', '🍳': 'hand', '🎁': 'hand', '🔔': 'hand', '💎': 'hand', '🏆': 'hand', '💗': 'hand',
     '🐾': 'pet', '🪺': 'pet', '🧚': 'pet', '🎠': 'pet', '🧊': 'pet', '🐉': 'pet', '🥼': 'body', '👖': 'body', '👕': 'body', '🧥': 'body', '🥻': 'body', '👗': 'body', '👘': 'body', '🧣': 'body', '⛄': 'side', '🎄': 'side', '🦌': 'side', '🦄': 'side', '🕊': 'float', '🌈': 'float', '☁': 'float', '🌙': 'float', '🌟': 'float', '⭐': 'float', '❄': 'float', '🔥': 'float', '🌌': 'float' };
@@ -455,14 +466,14 @@
     }
     var parts = v.split(' ').filter(Boolean);
     if (parts.some(function (e) { return slotOf(e) === 'frame'; })) el.setAttribute('data-fr', '1'); else el.removeAttribute('data-fr');
+    var G = measure(el) || { x: .08, y: .08, w: .84, h: .84 };
     if (parts.length < 2) { if (el.hasAttribute('data-skm')) { el.removeAttribute('data-skm'); el.style.removeProperty('--skbg'); } return; }
-    var r = el.closest && el.closest('#crew') ? .85 : .84;
     parts.sort(function (a, b) { return LAYER[slotOf(a)] - LAYER[slotOf(b)]; });
     var bg = parts.map(function (e) {
       var n = OVR[norm(e)]; if (!n) return null; var sl = slotOf(e), L, T, W, H;
       if (norm(e) === '😇') n = 'w_halo';
       if (sl === 'frame') { L = -.42; T = -.42; W = 1.84; H = 1.84; }
-      else { var a = SLOT[sl]; W = a[2] * r; H = a[3] * r; L = (1 - r) / 2 + a[0] * r - W / 2; T = (1 - r) / 2 + a[1] * r - H / 2; }
+      else { var a = SLOT[sl]; W = a[2] * G.w; H = a[3] * G.h; L = G.x + a[0] * G.w - W / 2; T = G.y + a[1] * G.h - H / 2; }
       var bw = W / 2, bh = H / 2, bx = (L + .5) / 2, by = (T + .5) / 2;
       var px = bw < 1 ? bx / (1 - bw) * 100 : 50, py = bh < 1 ? by / (1 - bh) * 100 : 50;
       return 'url("' + stickURL(e) + '") ' + px.toFixed(1) + '% ' + py.toFixed(1) + '% / ' + (bw * 100).toFixed(1) + '% ' + (bh * 100).toFixed(1) + '% no-repeat';
@@ -488,11 +499,11 @@
       var css = '@keyframes czfloat{0%,100%{translate:0 0}50%{translate:0 -3px}}[data-skm]::before{content:""!important;position:absolute!important;left:-50%!important;top:-50%!important;width:200%!important;height:200%!important;transform:none!important;animation:none!important;background:var(--skbg)!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;font-size:0}';
       SKG.forEach(function (k) { var e = norm(k.e), n = OVR[e]; if (!n || n.indexOf('f:') === 0) return; var slot = WEAR[e] || 'float'; if (slot === 'pet') return; if (e === '😇') n = 'w_halo';
         var bg = 'content:""!important;position:absolute!important;font-size:inherit;background:url("' + stickURL(k.e) + '") center/contain no-repeat!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;';
-        css += '[data-sk="' + k.e + '"]::before{' + bg + slotCSS(slot, .84) + '}';
-        css += '#crew .ico[data-sk="' + k.e + '"]::before{' + slotCSS(slot, .85) + '}'; });
+        css += '[data-sk="' + k.e + '"]::before{' + bg + slotCSS(slot) + '}'; });
       var st = document.createElement('style'); st.id = 'czstk'; st.textContent = css; document.head.appendChild(st);
     } catch (e) {}
   }
+  var rzT = 0; window.addEventListener('resize', function () { clearTimeout(rzT); rzT = setTimeout(function () { scanMulti(document.body); }, 200); });
   function start() { stickerCSS(); convert(document.body); obs.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['data-sk'] }); scanMulti(document.body); }
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 
