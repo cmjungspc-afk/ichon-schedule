@@ -1212,7 +1212,7 @@ function renderToday(){
   }
   h+='</div>';
   const doy=Math.floor((t0-new Date(t0.getFullYear(),0,0))/864e5);
-  h+='<div class="cheer fzline"><span>🔮 오늘의 사주, 궁금하지 않아요?</span><button type="button" class="fzgo" id="fzBtn">오늘의 사주보기 ✨</button></div><div class="cheer fzline gmline"><span>🥐 빵이 손님들을 피해야 해요!</span><button type="button" class="fzgo gmgo" id="gmBtn">게임 🎮</button><button type="button" class="fzgo rkgo" id="rkBtn">📒 기록</button></div>';
+  h+='<div class="cheer fzline"><span>🔮 오늘의 사주, 궁금하지 않아요?</span><button type="button" class="fzgo" id="fzBtn">오늘의 사주보기 ✨</button></div><div class="cheer fzline gmline"><span>🥐 빵이 손님들을 피해야 해요!<small class="v2">🆕 2.0ver 업데이트 됐어요!</small></span><button type="button" class="fzgo gmgo" id="gmBtn">게임 🎮</button><button type="button" class="fzgo rkgo" id="rkBtn">📒 기록</button></div>';
   $('#today').innerHTML=h;renderNextBd();
 }
 
@@ -1767,6 +1767,7 @@ html.lk,html.lk body{overflow:hidden!important;overscroll-behavior:none}body.lkb
 .gminv{display:flex;flex-direction:column;gap:5px;width:92%;max-height:150px;overflow:auto;padding:1px}.gmeq{all:unset;cursor:pointer;display:block;position:relative;border:2px solid #868e96;border-radius:10px;background:#fff;color:#1f2d44}.gmeq .gpt{border:0;border-radius:8px}.gmeq.on{background:#e7f5ff}.gmon{position:absolute;right:6px;top:4px;font-style:normal;font-size:10px;font-weight:800;color:#fff;background:#1971c2;border-radius:99px;padding:0 6px}
 .gmlt{width:92%;max-height:96px;overflow:auto;font-size:11px;text-align:left;color:#7a8aa5}.gmlt .ok{color:#2f9e44;font-weight:700}.gmgrow{all:unset;cursor:pointer;padding:6px 14px;border-radius:99px;border:2px solid #1971c2;background:#e7f5ff;color:#1971c2;font-weight:800;font-size:13px}
 .gmov{background:rgba(236,244,253,.97)!important}.gmov .gpt b,.gmov .gmeq b{font-size:14px}.gmov .gmslot small{font-size:10px}.gmov .gmlvl{font-size:18px}
+.gmline .v2{display:block;margin-top:2px;font-size:12px;font-weight:800;color:#e03131;animation:v2b 1.6s ease-in-out infinite}@keyframes v2b{50%{opacity:.55}}:root[data-theme="dark"] .gmline .v2{color:#ff8787}
 </style>
 <script>
 (function(){
