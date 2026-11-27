@@ -405,7 +405,11 @@
       while ((m = RE.exec(s))) {
         var key = OVR[norm(m[0])]; if (!key) continue;
         if (m.index > last) f.appendChild(document.createTextNode(s.slice(last, m.index)));
-        var im = document.createElement('img'); im.className = 'czi'; im.alt = m[0]; im.draggable = false; im.src = (WEAR[norm(m[0])] === 'hand' && p.closest && p.closest('.dcp,.shp,.skslot')) ? handURL(key) : keyURL(key); f.appendChild(im); last = m.index + m[0].length;
+        var im = document.createElement('img'); im.className = 'czi'; im.alt = m[0]; im.draggable = false; im.src = (WEAR[norm(m[0])] === 'hand' && p.closest && p.closest('.dcp,.shp,.skslot')) ? handURL(key) : keyURL(key);
+        var dk = '';
+        if (typeof czStaffDeco === 'function' && p.closest && !p.closest('#gm,.hero,[data-sk],[data-pet],.ico,.lobav,.pvico,.elbig,#icm,.icg')) dk = czStaffDeco(m[0]);
+        if (dk) { var w = document.createElement('span'); w.className = 'hico'; w.setAttribute('data-sk', dk); w.appendChild(im); f.appendChild(w); } else f.appendChild(im);
+        last = m.index + m[0].length;
       }
       if (last < s.length) f.appendChild(document.createTextNode(s.slice(last)));
       p.replaceChild(f, t);

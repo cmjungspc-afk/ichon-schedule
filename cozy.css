@@ -314,3 +314,20 @@ html body .lobav[data-pet]{margin-left:14px!important}
 html body .pvcard b{gap:10px!important}
 html body main .hero p .hico{position:relative;display:inline-block;line-height:1}
 html body main .hero p .hico img.czi{display:block}
+/* 제목 아래 직원 줄: 2줄 균등, 둥둥 효과 없애서 꾸미기 잘 보이게 */
+html body main .hero p{display:grid!important;justify-content:center;justify-items:center;gap:6px 10px!important;padding:8px 16px!important;border-radius:26px!important}
+html body main .hero p .czi,html body main .hero p .hico{animation:none!important}
+html body main .hero p img.czi{width:30px!important;height:30px!important}
+/* 칩 속 꾸민 캐릭터 */
+.hico{position:relative;display:inline-block;vertical-align:-.22em;line-height:0}
+.hico>img.czi{vertical-align:0;margin:0}
+/* 잘 안 보이던 글자 */
+html body main .sync.live{color:#2f6b2f!important;background:#e3f4d6!important}
+html body main .sync{color:#5b4636!important}
+html body main .lockb{color:#5b4636!important}
+/* 대비 보정 */
+#gm .skgh{background:color-mix(in srgb,var(--gc) 72%,#2a1608 28%)!important;text-shadow:0 1px 1px rgba(0,0,0,.35)!important}
+#gm .skslot small{background:color-mix(in srgb,var(--gc) 72%,#2a1608 28%)!important}
+#gm .lobnm em{background:#5f8f3e!important}
+html body main .vh{color:#b3410c!important}
+html body main .mbt{color:#5f6670!important}
