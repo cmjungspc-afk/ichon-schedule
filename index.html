@@ -935,7 +935,6 @@ function openGame(){
       const k=1-B.w/75,f=Math.floor(S.t/5)%2===0;
       ctx.fillStyle=f?'rgba(255,40,40,.2)':'rgba(255,40,40,.06)';ctx.fillRect(0,0,W,H);
       const vg=ctx.createRadialGradient(W/2,H/2,H*.22,W/2,H/2,H*.72);vg.addColorStop(0,'rgba(255,0,0,0)');vg.addColorStop(1,'rgba(255,0,0,.5)');ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
-      drawBossFig(W/2,-30+k*96,T,0);
       const by=H*.5-34;ctx.save();ctx.beginPath();ctx.rect(0,by,W,68);ctx.clip();ctx.fillStyle='#ffd43b';ctx.fillRect(0,by,W,68);ctx.fillStyle='#212529';
       for(let x=-80+((T*2)%48);x<W+80;x+=48){ctx.beginPath();ctx.moveTo(x,by);ctx.lineTo(x+24,by);ctx.lineTo(x+4,by+68);ctx.lineTo(x-20,by+68);ctx.closePath();ctx.fill()}
       ctx.fillStyle='#b21f1f';rr(14,by+8,W-28,52,10);ctx.fill();ctx.restore();
