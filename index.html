@@ -890,7 +890,7 @@ function openGame(){
   function drawChar(x,y){const c=CH.find(c=>c.k===sel)||CH[0];if(c.svg){if(SALTIMG.complete)ctx.drawImage(SALTIMG,x-19,y-19,38,38)}else emoji(c.e,x,y,c.k==='cro'?28:34)}
   function showTitle(){const c=CH.find(c=>c.k===sel)||CH[0];msg('<div class="tbg"><i></i></div><div class="ttlbox"><div class="ttls">🥐 파리크라상</div><div class="ttlr">RUSH!</div><div class="ttld">진상 손님을 피해서 달려라!</div><div class="ttlh">'+ico(c,64)+'</div><button type="button" class="ttlgo gmlobby">▶ 게임 시작</button><div class="ttlb">🏆 최고 기록 '+best+'점</div></div>','ttl')}
   function showLogin(){const NR=roster();if(gname&&!NR.includes(gname)&&NR.length)gname='';
-    msg('<div class="lbt">🔑 로그인</div><div class="lbs2">내 이름을 눌러 입장해요</div><div class="lgg">'+NR.map(n=>'<button type="button" class="gmnm lgn'+(n===gname?' on':'')+'" data-n="'+esc(n)+'"><span>'+((STAFF[n]||{}).e||'🙂')+'</span><b>'+esc(n)+'</b></button>').join('')+'</div><div class="lbh">이름을 누르면 바로 입장해요</div>','ttl lobby')}
+    msg('<div class="lbt">🔑 로그인</div><div class="lbs2">내 이름을 눌러 입장해요</div><div class="lgg">'+NR.map(n=>'<button type="button" class="gmnm lgn'+(n===gname?' on':'')+'" data-n="'+esc(n)+'"><span>'+((STAFF[n]||{}).e||'🙂')+'</span><b>'+esc(n)+'</b><small class="lgl">Lv '+levelOf(pgGet(n).xp)+'</small></button>').join('')+'</div><div class="lbh">이름을 누르면 바로 입장해요</div>','ttl lobby')}
   function lvView(){
     const pr=pgGet(gname),lv=levelOf(pr.xp),cur=xpFor(lv),nx=lv<MAXLV?xpFor(lv+1):cur,pct=lv>=MAXLV?100:Math.round((pr.xp-cur)/Math.max(1,nx-cur)*100),st=lvDesc(lvStats(lv));
     msg('<b>⭐ '+esc(gname)+' 성장 능력</b><div class="gmlvl">Lv '+lv+(lv>=MAXLV?' (MAX)':'')+'<div class="xpb"><i style="width:'+pct+'%"></i></div><small>경험치 '+pr.xp+(lv<MAXLV?' / '+nx:'')+'</small></div><div class="lvnow">'+(st?'지금 적용 중: '+st:'아직 적용된 능력이 없어요')+'</div><div class="lvl">'+LVT.map(e=>'<div class="lvr'+(e.lv<=lv?' ok':(e.lv===lv+1||(lv<MAXLV&&LVT.find(x=>x.lv>lv)===e)?' nx':''))+'"><b>Lv '+e.lv+'</b><span>'+lvDesc(e)+'</span><i>'+(e.lv<=lv?'✔':'🔒')+'</i></div>').join('')+'</div><button type="button" class="fzgo gmback">돌아가기</button>','ttl lobby')}
@@ -1901,6 +1901,8 @@ html.lk,html.lk body{overflow:hidden!important;overscroll-behavior:none}body.lkb
 .lbmenu{grid-template-columns:repeat(3,1fr)!important}.lbmenu .gmgrow:nth-child(5){background:linear-gradient(180deg,#ff9a9a,#e03131 60%,#a61e1e)!important}.lbmenu .gmgrow:nth-child(4){background:linear-gradient(180deg,#ffb36b,#f76707 60%,#c04a00)!important}.lbmenu .gmgrow:nth-child(6){background:linear-gradient(180deg,#ff9a9a,#e03131 60%,#a61e1e)!important}
 .lvnow{width:92%;padding:6px 10px;border-radius:12px;background:rgba(255,212,59,.18);border:2px solid #ffd43b;color:#ffe9a0;font-size:13px;font-weight:700}
 .lvl{display:flex;flex-direction:column;gap:5px;width:92%;margin:4px 0}.lvr{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:12px;background:linear-gradient(180deg,#2a4690,#142a63);border:3px solid #0a1640;box-shadow:inset 0 3px 0 rgba(255,255,255,.2),0 3px 0 rgba(0,0,0,.4);color:#8fa3cc;text-align:left;font-size:13px}.lvr b{flex:0 0 46px;color:#b6c8ea}.lvr span{flex:1}.lvr i{font-style:normal}.lvr.ok{color:#fff}.lvr.ok b{color:#69db7c}.lvr.nx{border-color:#ffd43b;color:#ffe9a0}.lvr.nx b{color:#ffd43b}
+.lgl{font-size:12px;font-weight:900;color:#d9480f;background:#fff0d6;border-radius:99px;padding:0 8px;line-height:18px;border:1.5px solid #f0a45d}
+.ttl .lgn b,.ttl .lgn{-webkit-text-stroke:0!important;text-shadow:none!important}
 </style>
 <script>
 (function(){
