@@ -863,7 +863,7 @@ function lvStats(lv){const o={mv:0,gb:0,life:0,tiny:0,slow:0,am:0,xpb:0,cn:0};fo
 const partById=id=>PARTS.find(p=>p.id===id);
 function pgLocal(){try{return JSON.parse(localStorage.getItem('gprog')||'{}')||{}}catch(e){return {}}}
 function pgGet(name){
-  const norm=r=>({xp:Math.max(0,+(r&&r.xp)||0),parts:Array.isArray(r&&r.parts)?r.parts.map(p=>p&&PART_OLD[p.id]?Object.assign({},p,{id:PART_OLD[p.id]}):p).filter(p=>p&&p.u&&partById(p.id)&&p.g>=0&&p.g<6).slice(0,80):[],eq:Array.isArray(r&&r.eq)?r.eq.slice(0,3):[],dex:Array.isArray(r&&r.dex)?r.dex.filter(x=>typeof x==='string').slice(0,80):[],coin:Math.max(0,Math.floor(+(r&&r.coin)||0)),ch:Array.isArray(r&&r.ch)?r.ch.filter(x=>typeof x==='string').slice(0,20):[],dq:r&&r.dq&&typeof r.dq.d==='string'?{d:r.dq.d,p:Object.assign({},r.dq.p),c:Array.isArray(r.dq.c)?r.dq.c.slice(0,6):[]}:{d:'',p:{},c:[]},att:r&&r.att&&typeof r.att.d==='string'?{d:r.att.d,n:Math.max(0,+r.att.n||0)}:{d:'',n:0},ach:Array.isArray(r&&r.ach)?r.ach.filter(x=>typeof x==='string').slice(0,40):[],ti:typeof(r&&r.ti)==='string'?r.ti:'',el:Math.max(0,Math.min(10,Math.floor(+(r&&r.el)||0))),ef:Math.max(0,Math.min(10,Math.floor(+(r&&r.ef)||0))),cl:(r&&r.cl&&typeof r.cl==='object')?Object.fromEntries(Object.entries(r.cl).filter(([k,v])=>typeof k==='string'&&+v>0).slice(0,20).map(([k,v])=>[k,Math.min(10,Math.floor(+v))])):{},ml:Array.isArray(r&&r.ml)?r.ml.filter(m=>m&&typeof m.i==='string'&&((m.p&&m.p.u&&partById(m.p.id)&&m.p.g>=0&&m.p.g<5)||+m.c>0)).slice(0,300).map(m=>m.p?{i:m.i,p:m.p}:{i:m.i,c:Math.floor(+m.c),t:String(m.t||'우편').slice(0,20)}):[],mg:Array.isArray(r&&r.mg)?r.mg.filter(x=>typeof x==='string').slice(0,20):[],sk:Array.isArray(r&&r.sk)?r.sk.filter(x=>typeof x==='string').slice(0,20):[],se:typeof(r&&r.se)==='string'?r.se:'',ws:r&&r.ws&&typeof r.ws.s==='number'?{k:+r.ws.k||0,s:r.ws.s}:null,ps:r&&r.ps&&typeof r.ps.s==='number'?{k:+r.ps.k||0,s:r.ps.s}:null,wc:+(r&&r.wc)||0,st:r&&r.st?{g:+r.st.g||0,gi:+r.st.gi||0,bo:+r.st.bo||0,bs:+r.st.bs||0,sw:+r.st.sw||0,sf:(+r.st.sf||0)&7}:{g:0,gi:0,bo:0,bs:0,sw:0,sf:0},t:+(r&&r.t)||0});
+  const norm=r=>({xp:Math.max(0,+(r&&r.xp)||0),parts:Array.isArray(r&&r.parts)?r.parts.map(p=>p&&PART_OLD[p.id]?Object.assign({},p,{id:PART_OLD[p.id]}):p).filter(p=>p&&p.u&&partById(p.id)&&p.g>=0&&p.g<6).slice(0,80):[],eq:Array.isArray(r&&r.eq)?r.eq.slice(0,3):[],dex:Array.isArray(r&&r.dex)?r.dex.filter(x=>typeof x==='string').slice(0,80):[],coin:Math.max(0,Math.floor(+(r&&r.coin)||0)),ch:Array.isArray(r&&r.ch)?r.ch.filter(x=>typeof x==='string').slice(0,20):[],dq:r&&r.dq&&typeof r.dq.d==='string'?{d:r.dq.d,p:Object.assign({},r.dq.p),c:Array.isArray(r.dq.c)?r.dq.c.slice(0,6):[]}:{d:'',p:{},c:[]},att:r&&r.att&&typeof r.att.d==='string'?{d:r.att.d,n:Math.max(0,+r.att.n||0)}:{d:'',n:0},ach:Array.isArray(r&&r.ach)?r.ach.filter(x=>typeof x==='string').slice(0,120):[],ti:typeof(r&&r.ti)==='string'?r.ti:'',el:Math.max(0,Math.min(10,Math.floor(+(r&&r.el)||0))),ef:Math.max(0,Math.min(10,Math.floor(+(r&&r.ef)||0))),cl:(r&&r.cl&&typeof r.cl==='object')?Object.fromEntries(Object.entries(r.cl).filter(([k,v])=>typeof k==='string'&&+v>0).slice(0,20).map(([k,v])=>[k,Math.min(10,Math.floor(+v))])):{},ml:Array.isArray(r&&r.ml)?r.ml.filter(m=>m&&typeof m.i==='string'&&((m.p&&m.p.u&&partById(m.p.id)&&m.p.g>=0&&m.p.g<5)||+m.c>0)).slice(0,300).map(m=>m.p?{i:m.i,p:m.p}:{i:m.i,c:Math.floor(+m.c),t:String(m.t||'우편').slice(0,20)}):[],mg:Array.isArray(r&&r.mg)?r.mg.filter(x=>typeof x==='string').slice(0,20):[],sk:Array.isArray(r&&r.sk)?r.sk.filter(x=>typeof x==='string').slice(0,20):[],se:typeof(r&&r.se)==='string'?r.se:'',ws:r&&r.ws&&typeof r.ws.s==='number'?{k:+r.ws.k||0,s:r.ws.s}:null,ps:r&&r.ps&&typeof r.ps.s==='number'?{k:+r.ps.k||0,s:r.ps.s}:null,wc:+(r&&r.wc)||0,st:r&&r.st?{g:+r.st.g||0,gi:+r.st.gi||0,bo:+r.st.bo||0,bs:+r.st.bs||0,sw:+r.st.sw||0,sf:(+r.st.sf||0)&7}:{g:0,gi:0,bo:0,bs:0,sw:0,sf:0},t:+(r&&r.t)||0});
   if(!name)return norm(null);
   const a=norm(pgLocal()[name]),b=norm(typeof RKR!=='undefined'?RKR['pg_'+name]:null);
   if(a.t||b.t)return b.t>a.t?b:a;return (b.xp>a.xp||(b.xp===a.xp&&b.parts.length>a.parts.length))?b:a;
@@ -874,7 +874,7 @@ async function pgSave(name,rec){
   if(!DB||name==='게스트')return;rkInit();RKR['pg_'+name]=rec;try{applyElStyles()}catch(e){}
   try{const d=DB.doc(FP('shared/ranks'));try{await d.update({['pg_'+name]:rec})}catch(e){await d.set(Object.assign({},RKR,{['pg_'+name]:rec}))}}catch(e){}
 }
-const DROPN=[[6000,6],[4000,5],[3000,4],[2000,3],[1200,2],[100,1]],DROPW=[[300,[94,6,0,0]],[700,[84,15,1,0]],[1200,[70,26,4,0]],[2000,[55,34,10,1]],[3000,[42,38,17,3]],[4500,[30,40,24,6]],[6500,[20,38,30,12]],[9000,[12,32,36,20]],[1e9,[6,26,38,30]]],DROPC=[.5,.4,.35,.3,.25,.2];
+const DROPN=[[10000,8],[8000,7],[6000,6],[4500,5],[3000,4],[2000,3],[1200,2],[100,1]],DROPW=[[300,[94,6,0,0]],[700,[84,15,1,0]],[1200,[70,26,4,0]],[2000,[55,34,10,1]],[3000,[44,37,16,3]],[4000,[36,38,21,5]],[5000,[29,38,26,7]],[6000,[23,37,30,10]],[7000,[18,35,33,14]],[8000,[14,32,36,18]],[9000,[10,29,38,23]],[10000,[7,26,39,28]],[1e9,[5,22,40,33]]],DROPC=[.5,.4,.35,.3,.25,.2,.18,.15];
 function dropParts(sc,pd){
   const n=(DROPN.find(x=>sc>=x[0])||[0,0])[1],W=DROPW.find(x=>sc<x[0])[1],out=[];
   for(let i=0;i<n;i++){if(Math.random()>Math.min(1,DROPC[i]*(1+(pd||0))))continue;let r=Math.random()*100,g=0;for(;g<3&&r>=W[g];g++)r-=W[g];const p=PARTS[Math.floor(Math.random()*PARTS.length)];out.push({u:Date.now().toString(36)+Math.random().toString(36).slice(2,7)+i,id:p.id,g})}
@@ -921,7 +921,41 @@ function openGame(){
   {k:'sd',n:'든든한 방패',d:'🛡️ 방어 3세트로 게임하기',r:200,t:p=>p.st.sf&1},
   {k:'sa',n:'공격대장',d:'⚔️ 공격 3세트로 게임하기',r:200,t:p=>p.st.sf&2},
   {k:'ss',n:'만능 조력자',d:'🧰 보조 3세트로 게임하기',r:200,t:p=>p.st.sf&4},
-  {k:'sall',n:'세트 수집가',d:'세트 3종 모두 완성',r:500,t:p=>p.st.sf===7}];
+  {k:'sall',n:'세트 수집가',d:'세트 3종 모두 완성',r:500,t:p=>p.st.sf===7},
+  {k:'g10',n:'단골 직원',d:'게임 10판 하기',r:100,t:p=>p.st.g>=10},
+  {k:'g50',n:'성실한 직원',d:'게임 50판 하기',r:300,t:p=>p.st.g>=50},
+  {k:'g100',n:'출근 도장 100번',d:'게임 100판 하기',r:600,t:p=>p.st.g>=100},
+  {k:'g300',n:'이촌점 지킴이',d:'게임 300판 하기',r:1500,t:p=>p.st.g>=300},
+  {k:'gi500',n:'선물 부자',d:'선물 누적 500개',r:500,t:p=>p.st.gi>=500},
+  {k:'gi2000',n:'산타 직원',d:'선물 누적 2,000개',r:1500,t:p=>p.st.gi>=2000},
+  {k:'gi5000',n:'선물 공장장',d:'선물 누적 5,000개',r:3000,t:p=>p.st.gi>=5000},
+  {k:'bo50',n:'보스 사냥꾼',d:'보스 누적 50회 넘기',r:700,t:p=>p.st.bo>=50},
+  {k:'bo200',n:'보스 학살자',d:'보스 누적 200회 넘기',r:2000,t:p=>p.st.bo>=200},
+  {k:'s2',n:'이천점 돌파',d:'한 판 2,000점',r:400,t:p=>p.st.bs>=2000},
+  {k:'s3',n:'삼천점 돌파',d:'한 판 3,000점',r:600,t:p=>p.st.bs>=3000},
+  {k:'s7',n:'칠천점 신화',d:'한 판 7,000점',r:1500,t:p=>p.st.bs>=7000},
+  {k:'s10',n:'만점 직원',d:'한 판 10,000점',r:3000,t:p=>p.st.bs>=10000},
+  {k:'l5',n:'수습 탈출',d:'레벨 5 달성',r:100,t:p=>levelOf(p.xp)>=5},
+  {k:'l10',n:'중견 직원',d:'레벨 10 달성',r:200,t:p=>levelOf(p.xp)>=10},
+  {k:'l30',n:'점장급 직원',d:'레벨 30 달성',r:800,t:p=>levelOf(p.xp)>=30},
+  {k:'l40',n:'전설의 직원',d:'레벨 40 달성',r:1200,t:p=>levelOf(p.xp)>=40},
+  {k:'pe',n:'에픽 수집가',d:'에픽 파츠 획득',r:100,t:p=>p.parts.some(x=>x.g===2)||p.dex.some(x=>x.endsWith(':2'))},
+  {k:'pl',n:'전설 수집가',d:'전설 파츠 획득',r:300,t:p=>p.parts.some(x=>x.g===3)||p.dex.some(x=>x.endsWith(':3'))},
+  {k:'pg',n:'레전더리!',d:'레전더리 파츠 획득',r:3000,t:p=>p.parts.some(x=>x.g===5)||p.dex.some(x=>x.endsWith(':5'))},
+  {k:'dx30',n:'도감 탐험가',d:'도감 30칸 채우기',r:500,t:p=>new Set(p.dex.concat(p.parts.map(x=>x.id+':'+x.g))).size>=30},
+  {k:'dx60',n:'도감 마스터',d:'도감 60칸 전부 채우기',r:5000,t:p=>new Set(p.dex.concat(p.parts.map(x=>x.id+':'+x.g))).size>=60},
+  {k:'pt40',n:'파츠 부자',d:'파츠 40개 보유',r:200,t:p=>p.parts.length>=40},
+  {k:'pt80',n:'창고 만석',d:'파츠 80개 가득 채우기',r:300,t:p=>p.parts.length>=80},
+  {k:'cn5k',n:'부자 직원',d:'코인 5,000 보유',r:300,t:p=>p.coin>=5000},
+  {k:'cn20k',n:'코인 재벌',d:'코인 20,000 보유',r:1000,t:p=>p.coin>=20000},
+  {k:'en3',n:'강화 초보',d:'내 이모지 ★3',r:150,t:p=>p.el>=3},
+  {k:'en7',n:'강화 고수',d:'내 이모지 ★7',r:600,t:p=>p.el>=7},
+  {k:'en9',n:'강화 장인',d:'내 이모지 ★9',r:1000,t:p=>p.el>=9},
+  {k:'at3',n:'개근 3일',d:'3일 연속 출석',r:100,t:p=>p.att&&p.att.n>=3},
+  {k:'at7',n:'개근 일주일',d:'7일 연속 출석',r:300,t:p=>p.att&&p.att.n>=7},
+  {k:'at30',n:'개근상',d:'30일 연속 출석',r:1500,t:p=>p.att&&p.att.n>=30},
+  {k:'ch3',n:'빵 수집가',d:'빵 캐릭터 3종 이상 보유',r:300,t:p=>p.ch.length>=3},
+  {k:'sw100',n:'꾸미기 전문가',d:'꾸민 채로 100판 하기',r:1500,t:p=>p.st.sw>=100}];
   const CAT={shield:0,field:0,heal:0,missile:1,blade:1,weather:1,freeze:2,glasses:2,drone:2,amp:2};
   const CATN=['🛡️ 방어','⚔️ 공격','🧰 보조'];
   const SETFX=[['경험치 획득량 +10%','경험치 획득량 +20%'],['파츠 획득량 +10%','파츠 획득량 +20%'],['코인 획득량 +10%','코인 획득량 +20%']];
