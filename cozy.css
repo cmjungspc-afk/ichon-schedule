@@ -312,3 +312,5 @@ html body .pvico[data-pet]{margin-left:20px!important}
 html body .lobav[data-fr]{margin:0 14px 0 12px!important}
 html body .lobav[data-pet]{margin-left:14px!important}
 html body .pvcard b{gap:10px!important}
+html body main .hero p .hico{position:relative;display:inline-block;line-height:1}
+html body main .hero p .hico img.czi{display:block}

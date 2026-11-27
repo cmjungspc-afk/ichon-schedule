@@ -504,7 +504,7 @@
     } catch (e) {}
   }
   var rzT = 0; window.addEventListener('resize', function () { clearTimeout(rzT); rzT = setTimeout(function () { scanMulti(document.body); }, 200); });
-  function start() { stickerCSS(); convert(document.body); obs.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['data-sk'] }); scanMulti(document.body); }
+  function start() { stickerCSS(); setTimeout(function () { try { if (typeof heroIcons === 'function') heroIcons(); } catch (e) {} }, 0); convert(document.body); obs.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['data-sk'] }); scanMulti(document.body); }
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 
 
