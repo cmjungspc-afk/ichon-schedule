@@ -171,7 +171,34 @@
   };
   Object.keys(ANIM).forEach(function (k) { ICON[k] = ANIM[k]; });
 
-  var OVR = { '📖': 'book', '🎒': 'bag', '📅': 'cal', '⭐': 'star', '🌟': 'star', '📮': 'mail', '🛍': 'gift', '🎁': 'gift', '🎀': 'bow', '🏆': 'trophy', '🏅': 'medal', '🪙': 'coin', '🔑': 'key', '🚪': 'door', '🎵': 'note', '📊': 'chart', '👤': 'person', '🎄': 'pine', '❤': 'heart', '🥐': 'c:cro', '💢': 'anger', '🐱': 'cat', '🐈': 'cat', '🐶': 'dog', '🐕': 'dog', '🐰': 'rabbit', '🐇': 'rabbit', '🐻': 'bear', '🐧': 'penguin', '🦊': 'fox', '🐑': 'sheep', '🐥': 'chick', '🐤': 'chick', '🐣': 'hatch', '🐼': 'panda', '🐯': 'tiger', '🐸': 'frog', '🌷': 'tulip', '🌸': 'blossom', '🌿': 'herb', '🍀': 'herb', '🙂': 'smile', '😀': 'sun' };
+
+  // ── 레전더리 꾸미기: 아이콘 둘레를 감싸는 프레임 (가운데는 비어 있음) ──
+  function fw(inner) { return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="' + O + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">' + inner + '</g></svg>'; }
+  function star4(x, y, r, c) { return '<path d="M' + x + ' ' + (y - r) + ' Q' + x + ' ' + y + ' ' + (x + r) + ' ' + y + ' Q' + x + ' ' + y + ' ' + x + ' ' + (y + r) + ' Q' + x + ' ' + y + ' ' + (x - r) + ' ' + y + ' Q' + x + ' ' + y + ' ' + x + ' ' + (y - r) + 'Z" fill="' + c + '" stroke-width="1.2"/>'; }
+  var FRAME = {
+    cat: fw('<path d="M18 60 C6 46 10 24 24 24" fill="none" stroke-width="12"/><path d="M18 60 C6 46 10 24 24 24" fill="none" stroke="#f4b46a" stroke-width="7.4"/><path d="M12 42 l5 1 M13 34 l5 2" stroke="#c97a35" stroke-width="1.6"/>' +
+      '<path d="M16 58 A36 36 0 0 0 84 58" fill="none" stroke-width="20"/><path d="M16 58 A36 36 0 0 0 84 58" fill="none" stroke="#f4b46a" stroke-width="15"/>' +
+      '<path d="M26 76 l4 -6 M38 84 l2 -7 M50 87 v-7 M62 84 l-2 -7 M74 76 l-4 -6" stroke="#c97a35" stroke-width="2"/>' +
+      '<ellipse cx="42" cy="90" rx="6" ry="4" fill="#fff6e6"/><ellipse cx="58" cy="90" rx="6" ry="4" fill="#fff6e6"/>' +
+      '<path d="M71 25 L72 11 L80 19 Z M92 30 L95 17 L85 21 Z" fill="#f4b46a"/><circle cx="82" cy="32" r="13" fill="#f4b46a"/><path d="M82 19.5 v4 M78.5 20 l1 3 M85.5 20 l-1 3" stroke="#c97a35" stroke-width="1.4"/>' +
+      '<circle cx="77.6" cy="32" r="1.5" fill="#3b2a20" stroke="none"/><circle cx="86.4" cy="32" r="1.5" fill="#3b2a20" stroke="none"/><path d="M80 35.5 q1 1.4 2 0 q1 1.4 2 0" fill="none" stroke-width="1.3"/><ellipse cx="74" cy="36" rx="2.4" ry="1.4" fill="#f58fa8" opacity=".7" stroke="none"/><ellipse cx="90" cy="36" rx="2.4" ry="1.4" fill="#f58fa8" opacity=".7" stroke="none"/><path d="M66 31 h-6 M66 34 l-6 2 M98 31 h-4 M98 34 l-4 1.5" stroke-width="1"/>'),
+    wreath: fw((function () { var r = '', i, a, x, y; for (i = 0; i < 14; i++) { a = i / 14 * Math.PI * 2; x = 50 + Math.cos(a) * 40; y = 50 + Math.sin(a) * 40; r += '<ellipse cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" rx="4" ry="8" transform="rotate(' + (a * 180 / Math.PI + 45).toFixed(0) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')" fill="' + (i % 2 ? '#8fcf6d' : '#a9dc8a') + '" stroke-width="1.6"/>'; }
+      [[0, '#f7b6c8'], [1.3, '#fff4f0'], [2.5, '#f9d25a'], [3.8, '#f7b6c8'], [5.0, '#fff4f0']].forEach(function (f) { x = 50 + Math.cos(f[0] - 1.57) * 40; y = 50 + Math.sin(f[0] - 1.57) * 40; r += '<g transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"><circle r="4.2" cx="-4" fill="' + f[1] + '" stroke-width="1.4"/><circle r="4.2" cx="4" fill="' + f[1] + '" stroke-width="1.4"/><circle r="4.2" cy="-4" fill="' + f[1] + '" stroke-width="1.4"/><circle r="4.2" cy="4" fill="' + f[1] + '" stroke-width="1.4"/><circle r="2.8" fill="#ffe27a" stroke-width="1.2"/></g>'; });
+      return r + '<path d="M50 90 C42 84 34 92 40 97 C44 99 48 95 50 90 C52 95 56 99 60 97 C66 92 58 84 50 90 Z" fill="#f2788f"/><circle cx="50" cy="90" r="3" fill="#e94b5a"/>'; })()),
+    bunny: fw('<ellipse cx="36" cy="12" rx="7" ry="15" fill="#fff" transform="rotate(-12 36 12)"/><ellipse cx="36" cy="13" rx="3" ry="9" fill="#f7b6c8" stroke="none" transform="rotate(-12 36 13)"/><ellipse cx="64" cy="12" rx="7" ry="15" fill="#fff" transform="rotate(12 64 12)"/><ellipse cx="64" cy="13" rx="3" ry="9" fill="#f7b6c8" stroke="none" transform="rotate(12 64 13)"/>' +
+      '<ellipse cx="36" cy="88" rx="9" ry="7" fill="#fff"/><ellipse cx="64" cy="88" rx="9" ry="7" fill="#fff"/><path d="M33 86 v4 M38 86 v4 M61 86 v4 M66 86 v4" stroke-width="1.4"/><circle cx="36" cy="91" r="1.6" fill="#f7b6c8" stroke="none"/><circle cx="64" cy="91" r="1.6" fill="#f7b6c8" stroke="none"/>' +
+      '<path d="M84 70 L94 92 L78 80 Z" fill="#f6a03c"/><path d="M84 70 l-3 -6 M86 70 l1 -7 M88 71 l4 -5" stroke="#5aa84a" stroke-width="2.2"/>' + star4(12, 30, 5, '#fff3a8') + star4(90, 26, 4, '#ffd6f0')),
+    rainbow: fw('<path d="M8 62 A42 42 0 0 1 92 62" fill="none" stroke-width="22"/><path d="M8 62 A42 42 0 0 1 92 62" fill="none" stroke="#f7a8b8" stroke-width="18"/><path d="M14 62 A36 36 0 0 1 86 62" fill="none" stroke="#ffd6a5" stroke-width="6"/><path d="M19.5 62 A30.5 30.5 0 0 1 80.5 62" fill="none" stroke="#c4f0bf" stroke-width="5"/><path d="M8 62 A42 42 0 0 1 92 62 M24 62 A26 26 0 0 1 76 62" fill="none" stroke-width="2"/>' +
+      '<g fill="#fff"><circle cx="10" cy="68" r="9"/><circle cx="20" cy="74" r="9"/><circle cx="6" cy="78" r="7"/><circle cx="90" cy="68" r="9"/><circle cx="80" cy="74" r="9"/><circle cx="94" cy="78" r="7"/></g><path d="M3 82 H25 M75 82 H97" stroke="none"/>' + star4(50, 6, 5, '#fff3a8')),
+    bear: fw('<circle cx="34" cy="8" r="6" fill="#b07a4f"/><circle cx="66" cy="8" r="6" fill="#b07a4f"/><path d="M28 22 C28 4 72 4 72 22 Z" fill="#b07a4f"/><circle cx="43" cy="15" r="1.5" fill="#3b2a20" stroke="none"/><circle cx="57" cy="15" r="1.5" fill="#3b2a20" stroke="none"/><ellipse cx="50" cy="19" rx="4.4" ry="3" fill="#f1d3a8" stroke-width="1.2"/><circle cx="50" cy="18" r="1.1" fill="#3b2a20" stroke="none"/>' +
+      '<path d="M14 40 C4 56 10 80 30 86" fill="none" stroke-width="15"/><path d="M14 40 C4 56 10 80 30 86" fill="none" stroke="#b07a4f" stroke-width="10.6"/><path d="M86 40 C96 56 90 80 70 86" fill="none" stroke-width="15"/><path d="M86 40 C96 56 90 80 70 86" fill="none" stroke="#b07a4f" stroke-width="10.6"/>' +
+      '<circle cx="33" cy="86" r="7" fill="#b07a4f"/><circle cx="67" cy="86" r="7" fill="#b07a4f"/><ellipse cx="33" cy="87" rx="3.4" ry="2.6" fill="#f1d3a8" stroke="none"/><ellipse cx="67" cy="87" rx="3.4" ry="2.6" fill="#f1d3a8" stroke="none"/>' +
+      '<path d="M50 92 C47 89 43 91 45 94 L50 98 L55 94 C57 91 53 89 50 92 Z" fill="#f2788f" stroke-width="1.4"/>'),
+    galaxy: fw('<circle cx="50" cy="50" r="42" fill="none" stroke="#c9b8f5" stroke-width="2.4" stroke-dasharray="3 6"/>' + star4(50, 6, 6, '#fff3a8') + star4(92, 44, 5, '#ffd6f0') + star4(74, 88, 4.5, '#c4f0bf') + star4(14, 74, 5, '#b9d8ff') + star4(12, 26, 4, '#fff3a8') +
+      '<circle cx="84" cy="16" r="7" fill="#f7b6c8"/><ellipse cx="84" cy="16" rx="12" ry="3.4" fill="none" stroke="#5b4636" stroke-width="1.8" transform="rotate(-20 84 16)"/><path d="M26 92 C30 88 34 88 36 92 C34 90 30 90 26 92 Z" fill="#fff"/><circle cx="20" cy="50" r="2" fill="#fff3a8" stroke="none"/><circle cx="80" cy="66" r="1.6" fill="#fff" stroke="none"/>')
+  };
+
+  var OVR = { '📖': 'book', '🎒': 'bag', '📅': 'cal', '⭐': 'star', '🌟': 'star', '📮': 'mail', '🛍': 'gift', '🎁': 'gift', '🎀': 'bow', '🏆': 'trophy', '🏅': 'medal', '🪙': 'coin', '🔑': 'key', '🚪': 'door', '🎵': 'note', '📊': 'chart', '👤': 'person', '🎄': 'pine', '❤': 'heart', '🥐': 'c:cro', '💢': 'anger', '🐱': 'cat', '🐈': 'cat', '🐶': 'dog', '🐕': 'dog', '🐰': 'rabbit', '🐇': 'rabbit', '🐻': 'bear', '🐧': 'penguin', '🦊': 'fox', '🐑': 'sheep', '🐥': 'chick', '🐤': 'chick', '🐣': 'hatch', '🐼': 'panda', '🐯': 'tiger', '🐸': 'frog', '🌷': 'tulip', '🌸': 'blossom', '🌿': 'herb', '🍀': 'herb', '🙂': 'smile', '😀': 'sun', '🧶': 'f:cat', '💐': 'f:wreath', '🥕': 'f:bunny', '⛅': 'f:rainbow', '🍯': 'f:bear', '🌠': 'f:galaxy' };
   Object.keys(PEOPLE).forEach(function (e) { OVR[norm(e)] = 'p:' + e; });
   var urls = {}, imgs = {};
   function svgURL(s) { return 'data:image/svg+xml,' + encodeURIComponent(s); }
@@ -180,7 +207,8 @@
   function img(u) { if (imgs[u]) return imgs[u]; var m = new Image(); m.src = u; return (imgs[u] = m); }
   function norm(e) { return String(e).replace(/️/g, ''); }
   function personURL(e) { var key = 'p:' + e; if (!urls[key]) urls[key] = svgURL(wrap(person(PEOPLE[e]))); return urls[key]; }
-  function keyURL(n) { return n.indexOf('c:') === 0 ? charURL(n.slice(2)) : n.indexOf('p:') === 0 ? personURL(n.slice(2)) : iconURL(n); }
+  function frameURL(k) { var key = 'f:' + k; if (!urls[key]) urls[key] = svgURL(FRAME[k]); return urls[key]; }
+  function keyURL(n) { return n.indexOf('f:') === 0 ? frameURL(n.slice(2)) : n.indexOf('c:') === 0 ? charURL(n.slice(2)) : n.indexOf('p:') === 0 ? personURL(n.slice(2)) : iconURL(n); }
   function boss(open) { var key = 'b:' + (open ? 1 : 0); if (!urls[key]) urls[key] = svgURL(wrap(bossSVG(open), '0 0 100 100').replace('stroke-width="2.4"', 'stroke-width="3"')); return img(urls[key]); }
   function icon(e) { var n = OVR[norm(e)]; return n ? img(keyURL(n)) : null; }
   function char(k) { return img(charURL(k)); }
@@ -261,7 +289,7 @@
     for (var i = 0; i < ms.length; i++) { var m = ms[i]; if (m.type === 'characterData') convert(m.target.parentNode); else for (var j = 0; j < m.addedNodes.length; j++) { var a = m.addedNodes[j]; convert(a.nodeType === 3 ? a.parentNode : a); } }
   });
   var watched = null;
-  function setVars(el) { el.style.setProperty('--cz-scene', 'url("' + sceneURL + '")'); el.style.setProperty('--cz-petal', 'url("' + petals + '")'); el.style.setProperty('--cz-cro', 'url("' + charURL('cro') + '")'); el.style.setProperty('--cz-winter', 'url("' + winterURL + '")'); }
+  function setVars(el) { el.style.setProperty('--cz-scene', 'url("' + sceneURL + '")'); el.style.setProperty('--cz-petal', 'url("' + petals + '")'); el.style.setProperty('--cz-cro', 'url("' + charURL('cro') + '")'); el.style.setProperty('--cz-winter', 'url("' + winterURL + '")'); Object.keys(FRAME).forEach(function (k) { el.style.setProperty('--fr-' + k, 'url("' + frameURL(k) + '")'); }); }
   setVars(document.documentElement);
   function start() { convert(document.body); obs.observe(document.body, { childList: true, subtree: true, characterData: true }); }
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
