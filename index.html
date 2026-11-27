@@ -254,7 +254,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <h2>인원별 합계</h2>
   <div id="banner" class="banner"></div>
   <div class="scroll"><table class="sum">
-    <thead><tr><th>이름</th><th>오픈</th><th>중간</th><th>마감</th><th>휴무</th><th class="vh">휴가</th><th>합계</th><th style="text-align:left">검증</th></tr></thead>
+    <thead><tr><th>이름</th><th>오픈</th><th>중간</th><th>마감</th><th>휴무</th><th class="vh">휴가</th><th class="wkh">주말</th><th>합계</th><th style="text-align:left">검증</th></tr></thead>
     <tbody id="rows"></tbody>
   </table></div>
   <p class="hint" id="warn"></p>
@@ -466,11 +466,11 @@ function sum(){
   let bad=0,html='';window._t=[];
   for(const nm of R){
     const r=rec[nm];
-    if(!Object.keys(r).length){html+='<tr class="none"><td>'+esc(nm)+'</td><td colspan="6">기록 없음</td><td></td></tr>';window._t.push('\t\t\t\t');continue}
-    const c={open:0,mid:0,close:0,off:0,vac:0},un=[],du=[];
-    for(let d=p.s;d<=p.e;d++){const a=r[d]||[];if(!a.length)un.push(p.m+'/'+d);else if(a.length>1)du.push(p.m+'/'+d);a.forEach(k=>c[k]++)}
+    if(!Object.keys(r).length){html+='<tr class="none"><td>'+esc(nm)+'</td><td colspan="7">기록 없음</td><td></td></tr>';window._t.push('\t\t\t\t');continue}
+    const c={open:0,mid:0,close:0,off:0,vac:0},un=[],du=[];let wkc=0;
+    for(let d=p.s;d<=p.e;d++){const a=r[d]||[];if(!a.length)un.push(p.m+'/'+d);else if(a.length>1)du.push(p.m+'/'+d);a.forEach(k=>c[k]++);{const wd=new Date(p.y,p.m-1,d).getDay();if((wd===0||wd===6)&&a.some(k=>k==='open'||k==='mid'||k==='close'))wkc++}}
     const t=c.open+c.mid+c.close+c.off+c.vac,ok=t===n&&!un.length&&!du.length;if(!ok)bad++;
-    html+='<tr><td>'+(STAFF[nm]?STAFF[nm].e+' ':'')+esc(nm)+'</td><td class="o">'+c.open+'</td><td class="m">'+c.mid+'</td><td class="c">'+c.close+'</td><td class="f">'+c.off+'</td><td class="vc">'+(c.vac||'<span class="z">0</span>')+'</td><td class="t">'+t+' / '+n+'</td><td class="v">'+(ok?'<span class="pill ok">일치</span>':'<span class="pill bad">불일치</span> '+(un.length?'미배정 '+un.join(', ')+' ':'')+(du.length?'중복 '+du.join(', '):''))+'</td></tr>';
+    html+='<tr><td>'+(STAFF[nm]?STAFF[nm].e+' ':'')+esc(nm)+'</td><td class="o">'+c.open+'</td><td class="m">'+c.mid+'</td><td class="c">'+c.close+'</td><td class="f">'+c.off+'</td><td class="vc">'+(c.vac||'<span class="z">0</span>')+'</td><td class="wkc">'+(wkc||'<span class="z">0</span>')+'</td><td class="t">'+t+' / '+n+'</td><td class="v">'+(ok?'<span class="pill ok">일치</span>':'<span class="pill bad">불일치</span> '+(un.length?'미배정 '+un.join(', ')+' ':'')+(du.length?'중복 '+du.join(', '):''))+'</td></tr>';
     window._t.push([c.open,c.mid,c.close,c.off+c.vac,t].join('\t'));
   }
   $('#rows').innerHTML=html;
@@ -1586,6 +1586,7 @@ initSync();try{updateLock();chips()}catch(e){}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .nm.req .nx{color:#ff8787!important;background:rgba(255,107,107,.18);box-shadow:inset 0 0 0 1.5px #ff8787}}
 :root[data-theme="dark"] .nm.req .nx{color:#ff8787!important;background:rgba(255,107,107,.18);box-shadow:inset 0 0 0 1.5px #ff8787}
 .hint .rq{color:#e03131;font-weight:800}
+td.wkc{color:#7048e8;font-weight:800}td.wkc .z{color:var(--off);font-weight:400}th.wkh{color:#7048e8}
 </style>
 <script>
 (function(){
