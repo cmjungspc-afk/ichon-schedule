@@ -297,3 +297,6 @@ html body main #crew .ico img.czi{width:31px!important;height:31px!important;ver
 #gm .skslot .sksi{font-size:28px;line-height:1;color:#c9b8a0}
 #gm .skslot .sksi img.czi{width:34px;height:34px}
 #gm .skslot small{font-size:11px;color:#fff;background:var(--gc);border-radius:8px;padding:0 6px;margin-top:2px}
+html:root body main #mbBtn.sbgo.mbgo{color:#4a3a2e!important;-webkit-text-fill-color:#4a3a2e!important;text-shadow:0 1px 0 rgba(255,255,255,.6)!important;font-size:19px!important;background:#d6c5f3!important}
+html:root body main #mbBtn .mbs{color:#8c6fd1!important;-webkit-text-fill-color:#8c6fd1!important;text-shadow:none!important}
+html:root body main #mbBtn.sbgo.mbgo{font-family:"Jua","Noto Sans KR",sans-serif!important;font-weight:400!important;border-color:#5b4636!important}
