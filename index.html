@@ -845,7 +845,7 @@ const PARTS=[
   {id:'field',i:'🔮',n:'자기장',v:[34,42,50,60,75],t:v=>'내 둘레에 자기장이 생겨 손님을 밀어내요 (반경 '+v+')'},
   {id:'glasses',i:'🕶️',n:'AI 안경',v:[20,40,60,90,150],t:v=>'부딪힐 손님을 미리 빨갛게 표시 · 맞은 뒤 무적 +'+(Math.round(v/6)/10)+'초'},
   {id:'blade',i:'🧹',n:'빗자루',v:[6,5,4,3,2],t:v=>v+'초마다 내 둘레로 빗자루가 한 바퀴 돌며 손님을 쓸어내요'},
-  {id:'drone',i:'🎈',n:'보너스 드론',v:[14,11,8,6,4],t:v=>v+'초마다 내 앞에 100점짜리 큰 선물이 떨어져요'},
+  {id:'drone',i:'🎈',n:'보너스 드론',v:[14,11,8,6,4],t:v=>v+'초마다 풍선이 날아와 능력치를 랜덤으로 하나 줘요 (하트·자석·속도 등)'},
   {id:'amp',i:'📈',n:'점수 증폭기',v:[.05,.1,.15,.25,.4],t:v=>'달리기 점수 +'+Math.round(v*100)+'%'},
   {id:'weather',i:'🌦️',n:'날씨조정기',v:[28,22,17,13,9],t:(v,g)=>v+'초마다 날씨를 바꿔 화면의 손님이 모두 사라지고, 사라진 손님 1명당 +'+[5,8,12,18,30][g]+'점 · 1초 무적'},
   {id:'heal',i:'💊',n:'응급 간식',v:[700,550,400,300,200],t:v=>'점수 '+v+'점마다 하트 +1 (최대 5)'},
@@ -1088,7 +1088,7 @@ function openGame(){
     for(const m of S.mis){if(!m.o||m.o.dead||m.o.y>H+40){m.dead=1;continue}const dx=m.o.x-m.x,dy=m.o.y-m.y,dd=Math.hypot(dx,dy)||1;if(dd<14){m.dead=1;if(mobHit(m.o)){S.pops.push({x:m.o.x,y:m.o.y,t:0,s:'✨ 사라져요'});burst(m.o.x,m.o.y,16,['#e599f7','#74c0fc','#fff','#ffe066'],4)}else m.o.tg=0;continue}m.x+=dx/dd*13*dt;m.y+=dy/dd*13*dt;S.parts.push({x:m.x,y:m.y,vx:(Math.random()-.5)*.8,vy:.5,l:0,m:18,c:['#e599f7','#74c0fc','#fff'][Math.floor(Math.random()*3)],r:2.2})}
     S.mis=S.mis.filter(m=>!m.dead);
     if(S.bl){S.bl.t-=dt;if(S.bl.t<=0&&S.bl.act<=0){S.bl.t=S.bl.per;S.bl.act=50}if(S.bl.act>0){S.bl.act-=dt;for(const o of S.objs)if(o.k==='c'&&!o.dead&&Math.hypot(o.x-S.x,o.y-S.y)<S.bl.rad+10){if(mobHit(o)){S.pops.push({x:o.x,y:o.y,t:0,s:'🌀'});burst(o.x,o.y,10,['#e9ecef','#74c0fc','#fff'],3)}}}}
-    if(S.dr){S.dr.t-=dt;if(S.dr.t<=0){S.dr.t=S.dr.per;S.objs.push({k:'g',x:Math.max(24,Math.min(W-24,S.x+(Math.random()*80-40))),y:Math.max(40,S.y-190),vy:S.sp,ph:0,e:'🎁',val:100});S.pops.push({x:S.x,y:S.y-34,t:0,s:'🎈 100점 선물 배달!',big:1})}}
+    if(S.dr){S.dr.t-=dt;if(S.dr.t<=0){S.dr.t=S.dr.per;{const pl=AB.filter(a=>a.k!=='heart'||S.lives<MAXL),a=pl[Math.floor(Math.random()*pl.length)];applyAb(a.k);SND('coin');burst(S.x,S.y,14,['#ffd43b','#74c0fc','#fff'],4);S.pops.push({x:S.x,y:S.y-34,t:0,s:'🎈 '+a.i+' '+a.n+'!',big:1})}}}
     if(S.wx){S.wx.t-=dt;if(S.wx.t<=0){S.wx.t=S.wx.per;let n=0;for(const o of S.objs)if(o.k==='c'&&!o.dead){o.dead=1;n++;burst(o.x,o.y,8,['#a5d8ff','#fff','#ffe066'],3)}S.wf=40;SND('wipe');const wv=n*[5,8,12,18,30][S.wx.g|0];S.bonus+=wv;S.inv=Math.max(S.inv,60);S.pops.push({x:W/2,y:H/2-40,t:0,s:'🌦️ 날씨 변경!'+(wv?' +'+wv:''),big:1})}}
     if(S.fz){if(S.fz.act>0)S.fz.act-=dt;else{S.fz.t-=dt;if(S.fz.t<=0){S.fz.t=S.fz.per;S.fz.act=S.fz.dur;S.pops.push({x:W/2,y:200,t:0,s:'⏳ 시간 정지!',big:1})}}}
     const mv=4.2*dt*S.mv;
@@ -1291,9 +1291,9 @@ function openGame(){
     const ch=pool.slice(0,3);
     msg('<b>✨ '+m+'점 달성!</b><div>능력을 하나 골라요</div><div class="gmpicks">'+ch.map(a=>'<button type="button" class="gmpick" data-k="'+a.k+'"><span class="gpi">'+a.i+'</span><span><b>'+a.n+'</b><br><small>'+a.d+'</small></span></button>').join('')+'</div>');
   }
+  function applyAb(k){const A=S.abil;if(k==='heart')S.lives=Math.min(MAXL,S.lives+1);else if(k==='star')S.inv=360;else{A[k]=(A[k]||0)+1;if(k==='speed')S.mv*=1.15}}
   function pick(k){
-    const A=S.abil;
-    if(k==='heart')S.lives=Math.min(MAXL,S.lives+1);else if(k==='star')S.inv=360;else{A[k]=(A[k]||0)+1;if(k==='speed')S.mv*=1.15}
+    applyAb(k);
     S.pause=0;last=0;$('#gov').style.display='none';
   }
   function start(){reset();applySet(pgGet(gname));over=false;$('#gov').style.display='none';last=0}
