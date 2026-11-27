@@ -261,7 +261,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
   <div class="gf"><label for="glo">오픈 조장 가능 (매일 오픈에 1명 이상)</label><input id="glo"></div>
   <div class="gf"><label for="glc">마감 조장 가능 (매일 마감에 1명 이상)</label><input id="glc"></div>
   <div class="gf"><label for="gsp">📝 특이사항 (대충 적어도 자동 인식해서 반영해요)</label><textarea id="gsp" rows="5" placeholder="유진 12/16~20 휴가&#10;12월 5일 은주 휴무&#10;지윤 12일 출근&#10;예지 14일 마감"></textarea>
-  <p class="hint" style="margin:4px 0 0">이름·날짜·종류만 있으면 돼요. 휴가/연차 → "이름휴" · 휴무 → 그날 쉼 · 근무/출근 → 그날 출근 (오픈·미들·마감을 같이 쓰면 그 자리로)</p><div class="hint" id="gprev" style="white-space:pre-line"></div></div>
+  <p class="hint" style="margin:4px 0 0">이름·날짜·종류만 있으면 돼요. 휴가/연차 → "이름휴" · 휴무 → 그날 쉼 · 근무/출근 → 그날 출근 (오픈·미들·마감을 같이 쓰면 그 자리로)<br><span class="rq">🔴 적은 신청 휴무·근무는 근무표에 빨간색으로 표시돼요. 표에서 지우려 하면 한 번 더 물어봐요.</span></p><div class="hint" id="gprev" style="white-space:pre-line"></div></div>
   <div class="gslots"><span>개인 휴무 목표<input type="number" min="0" max="15" id="goff" class="gni">일 <small>(되도록 · 0이면 안 맞춰요)</small></span></div>
   <div class="gslots"><button type="button" class="sec tog on" id="g52">⏱️ 주 52시간 준수 ON</button><span>하루<input type="number" min="1" max="16" id="ghr" class="gni">시간</span></div>
   <p class="hint" style="margin-top:0">52시간은 월~일 한 주 기준이에요. OFF로 바꾸면 시간 제한 없이 만들어요.</p>
@@ -370,6 +370,17 @@ function load(){
 function save(){const p=P();persistLocal(p.key,data);if(DB&&CANWRITE){pend[p.key]=data;clearTimeout(flushT[p.key]);flushT[p.key]=setTimeout(()=>flush(p.key),400)}}
 const STAFF=STORE?{}:{유림:{e:'🌷',k:'#2f9e44',t:'부점장 · 진중'},은주:{e:'🌸',k:'#e64980',t:'부점장 · 발랄'},유진:{e:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1.15em" height="1.15em" style="vertical-align:-.22em"><g stroke="#b9b9c8" stroke-width=".9"><ellipse cx="11" cy="8.5" rx="3.3" ry="7.6" fill="#fff" transform="rotate(-12 11 8.5)"/><ellipse cx="21" cy="8.5" rx="3.3" ry="7.6" fill="#fff" transform="rotate(12 21 8.5)"/><ellipse cx="16" cy="20.5" rx="11.5" ry="9.5" fill="#fff"/></g><ellipse cx="11" cy="8.8" rx="1.5" ry="5.2" fill="#ffb3c7" transform="rotate(-12 11 8.8)"/><ellipse cx="21" cy="8.8" rx="1.5" ry="5.2" fill="#ffb3c7" transform="rotate(12 21 8.8)"/><circle cx="8.6" cy="23.6" r="1.7" fill="#ffc9d6"/><circle cx="23.4" cy="23.6" r="1.7" fill="#ffc9d6"/><circle cx="12" cy="19.2" r="1.3" fill="#333"/><circle cx="20" cy="19.2" r="1.3" fill="#333"/><g fill="rgba(255,255,255,.2)" stroke="#111" stroke-width="1.5"><circle cx="12" cy="19.2" r="3.5"/><circle cx="20" cy="19.2" r="3.5"/></g><path d="M15.5 18.8q.5-.9 1 0" fill="none" stroke="#111" stroke-width="1.3"/><path d="M8.5 18.6L6 17.8M23.5 18.6L26 17.8" stroke="#111" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="16" cy="23.6" rx="1.3" ry=".9" fill="#ff8fab"/><path d="M16 24.4q-.9 1.1-1.9.5M16 24.4q.9 1.1 1.9.5" fill="none" stroke="#666" stroke-width=".7" stroke-linecap="round"/></svg>',k:'#868e96',t:'메인 · 귀여움'},지은:{e:'🐱',k:'#7048e8',t:'메인 · 고양이 느낌'},혜성:{e:'🐻',k:'#a9743f',t:'중간급 · 소심'},예지:{e:'🐧',k:'#f783ac',t:'갓 막내 탈출 · 귀여움'},은지:{e:'<span style="filter:hue-rotate(22deg) saturate(1.4) brightness(1.2)">🦊</span>',k:'#fab005',t:'노란머리 · 기존쎔'},지윤:{e:'🐣',k:'#82c91e',t:'막내'},창민:{e:'⭐',k:'#e03131',t:'점장'},지효:{e:'🌿',k:'#6b8e6b',t:''},지혜:{e:'🌿',k:'#6b8e6b',t:''}};
 function srt(a,R,f){const r=a.map((x,i)=>({x,i,o:(k=>k<0?999:k)(R.indexOf(who(f?f(x):x,R)))}));r.sort((p,q)=>p.o-q.o||p.i-q.i);return r}
+/* 🔴 특이사항에 적은 신청 휴무·근무는 표에서 빨갛게 보여요 (빼려고 하면 한 번 더 물어봐요) */
+let REQC={k:'',v:null};
+function reqs(){const p=P();let sp='';try{sp=(JSON.parse(GENS[p.key]||'{}').sp)||''}catch(e){}
+  if(!sp.trim())return null;const R=roster(),k=p.key+'|'+sp+'|'+R.join(',');if(REQC.k===k)return REQC.v;
+  let ps,v=null;try{ps=genParse(sp,p,R);v={off:{},work:{}};for(const n of R){v.off[n]=new Set([...ps.vk[n],...ps.rq[n]]);v.work[n]=new Map([...ps.mw[n]].map(d=>[d,ps.fr[n].get(d)||'']))}}catch(e){v=null}
+  REQC={k,v};return v}
+function isReq(d,c,nm){const v=reqs();if(!v||!v.off[nm])return '';d=+d;
+  if(c==='off')return v.off[nm].has(d)?'휴무':'';
+  if(c==='open'||c==='mid'||c==='close'){const w=v.work[nm];if(w&&w.has(d)){const r=w.get(d);if(!r||({o:'open',m:'mid',c:'close'})[r]===c)return '근무'}}return ''}
+function reqMissing(d,c,oldV,newV){const R=roster(),keep=new Set((newV||'').split(/[\s,]+/).filter(Boolean).map(t=>who(t,R)||t)),out=[];
+  for(const t of (oldV||'').split(/[\s,]+/).filter(Boolean)){const nm=who(t,R)||t,k=isReq(d,c,nm);if(k&&!keep.has(nm))out.push(nm+' '+P().m+'/'+d+' 신청 '+k)}return out}
 function pv(t){const R=roster();return srt((t||'').split(/[\s,]+/).filter(Boolean),R).map(z=>z.x).map(x=>{const n=who(x,R),s=STAFF[n]||{e:'',k:'#888'};return '<span class="ch" style="--k:'+s.k+'"><i>'+s.e+'</i>'+esc(n||x)+(n&&x.length>n.length?'<s>'+esc(x.slice(n.length))+'</s>':'')+'</span>'}).join('')}
 function lsj(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return {}}}
 let TAGS=lsj('tags'),STK=lsj('stk'),BDAY=lsj('bday'),ICONS=lsj('icons'),MBTI=lsj('mbti');
@@ -385,7 +396,7 @@ $('#crew').addEventListener('click',e=>{const b=e.target.closest('.sk');if(!b||!
 $('#grid').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.d)e.preventDefault()});
 function chips(){setTimeout(applyLockState,0);applyIcons();setTimeout(heroIcons,0);const R=roster(),g=n=>STAFF[n]||{e:'',k:'#888',t:''};$('#chips').innerHTML=R.map(n=>'<button class="sec" type="button" style="--k:'+g(n).k+'" data-n="'+esc(n)+'">'+g(n).e+' '+esc(n)+' <span class="hc" data-h="'+esc(n)+'"></span></button>').join('');setTimeout(hDraw,0);$('#crew').innerHTML=R.map(n=>'<div style="--k:'+g(n).k+'"><b><button type="button" class="ico" data-ico="'+esc(n)+'" title="아이콘 바꾸기">'+g(n).e+'</button> '+esc(n)+'</b><input class="tg" data-n="'+esc(n)+'" value="'+esc(tag(n))+'" placeholder="소개 문구 입력" maxlength="30"><label class="bdl"><span class="ck'+'">'+cakeSvg(24)+'</span><input class="bdi" data-b="'+esc(n)+'" value="'+esc(bday(n))+'" placeholder="" maxlength="10"></label><label class="mbl"><span class="mbt">MBTI</span><input class="mbi" data-m="'+esc(n)+'" value="'+esc(MBTI[n]||'')+'" placeholder="" maxlength="4" autocapitalize="characters"></label>'+(n===R[0]?'':'<div class="stk" data-n="'+esc(n)+'"><span class="sl">칭찬스티커'+(STORE?'':(stk(n)>=5?'<b class="rwok">🎉 상품권 받으러 오세요!</b>':'<span class="rw">🎁 5개 모으면 상품권 1만원</span>'))+'</span>'+[1,2,3,4,5].map(i=>'<button type="button" class="sk'+(i<=stk(n)?' on':'')+'" data-i="'+i+'">💮</button>').join('')+'</div>')+'</div>').join('')}
 function noteHtml(d,c){const n=(data[d]||{}).n||{},k=c+'|전체';return n[k]?esc(n[k]):''}
-function pn(d,c){const pp=P(),R=roster(),txt=((data[d]||{})[c])||'',n=(data[d]||{}).n||{};return srt(txt.split(/[\s,]+/).filter(Boolean),R).map(z=>{const t=z.x,ti=z.i;const nm=who(t,R)||t,v=n[c+'|'+nm],a='data-nd="'+d+'" data-nc="'+c+'" data-nm="'+esc(nm)+'" data-ni="'+ti+'"';return '<span class="nm'+(v?' hn':'')+'"><span class="nx" '+a+'>'+esc(t)+(isBd(nm,pp.m,+d)?'<span class="cake">'+cakeSvg(15)+'</span>':'')+'</span>'+(v?'<span class="bb" '+a+'>'+esc(v)+'</span>':'')+'</span>'}).join('')}
+function pn(d,c){const pp=P(),R=roster(),txt=((data[d]||{})[c])||'',n=(data[d]||{}).n||{};return srt(txt.split(/[\s,]+/).filter(Boolean),R).map(z=>{const t=z.x,ti=z.i;const nm=who(t,R)||t,v=n[c+'|'+nm],a='data-nd="'+d+'" data-nc="'+c+'" data-nm="'+esc(nm)+'" data-ni="'+ti+'"';return '<span class="nm'+(v?' hn':'')+(isReq(d,c,nm)?' req':'')+'"'+(isReq(d,c,nm)?' title="신청 '+isReq(d,c,nm)+'"':'')+'><span class="nx" '+a+'>'+esc(t)+(isBd(nm,pp.m,+d)?'<span class="cake">'+cakeSvg(15)+'</span>':'')+'</span>'+(v?'<span class="bb" '+a+'>'+esc(v)+'</span>':'')+'</span>'}).join('')}
 function findBtn(d,c,nm){return [...document.querySelectorAll('#grid [data-nm]')].find(x=>x.dataset.nd===d&&x.dataset.nc===c&&x.dataset.nm===nm)}
 function closeBub(){const b=$('#bub');if(!b)return;const td=b._td,d=b._d,c=b._c;b.remove();if(td&&td.isConnected&&!td.classList.contains('ed'))td.querySelector('.pn').innerHTML=pn(d,c);maybeRefresh()}
 function tokAt(d,c,ti){const t=((data[d]||{})[c])||'',p=t.split(/([\s,]+)/);let k=-1;for(let i=0;i<p.length;i++){if(i%2===0&&p[i]!==''){k++;if(k===ti)return{p,i}}}return null}
@@ -470,6 +481,11 @@ function say(t){$('#msg').textContent=t;setTimeout(()=>$('#msg').textContent='',
 async function copy(t){try{await navigator.clipboard.writeText(t);say('복사했습니다')}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');say('복사했습니다')}catch(_){say('복사하지 못했습니다')}a.remove()}}
 $('#grid').addEventListener('input',e=>{const i=e.target;if(!i.dataset.d)return;i.style.height='auto';i.style.height=i.scrollHeight+'px'});
 function endEdit(td,apply){
+  if(apply){const ta=td.querySelector('textarea');if(ta){const d=ta.dataset.d,c=ta.dataset.c,nv=ta.value.replace(/\s+/g,' ').trim(),miss=reqMissing(d,c,((data[d]||{})[c])||'',nv);
+    if(miss.length){askYN('⚠️ 신청 휴무·근무가 누락됐어요?\n'+miss.join('\n')+'\n\n그래도 빼시겠어요? (취소하면 계속 고칠 수 있어요)',()=>finEdit(td,true));return}}}
+  finEdit(td,apply)
+}
+function finEdit(td,apply){
   const ta=td.querySelector('textarea'),d=ta.dataset.d,c=ta.dataset.c;
   if(apply){const v=ta.value.replace(/\s+/g,' ').trim(),o=data[d]=data[d]||{};if(v)o[c]=v;else delete o[c];save();sum()}
   ta.value=((data[d]||{})[c])||'';
@@ -549,7 +565,7 @@ function genRead(){return{names:$('#gnames').value,wo:+$('#gwo').value||0,wm:+$(
 function g52Set(v){const b=$('#g52');b.classList.toggle('on',v);b.textContent='⏱️ 주 52시간 준수 '+(v?'ON':'OFF')}
 $('#g52').addEventListener('click',()=>{g52Set(!$('#g52').classList.contains('on'));genSaveForm()});
 function genHead(){if(GK&&P().key!==GK){genLoad();return}genPrev();const p=P();$('#genper').textContent=p.y+'년 '+p.m+'월 '+p.s+'일 ~ '+p.e+'일';$('#gcnt').textContent='(총 '+$('#gnames').value.split(/[\s,]+/).filter(Boolean).length+'명)'}
-document.querySelector('#genc').addEventListener('input',()=>{genSaveForm();genHead()});
+document.querySelector('#genc').addEventListener('input',()=>{genSaveForm();genHead();clearTimeout(window._rqT);window._rqT=setTimeout(()=>{try{drawGrid()}catch(e){}},500)});
 ['#year','#month','#half'].forEach(i=>$(i).addEventListener('change',genHead));$('#year').addEventListener('input',genHead);
 function genPrevInit(p,names,hr){
   let y=p.y,m=p.m,h=p.h;if(h==='2')h='1';else{h='2';m--;if(m<1){m=12;y--}}
@@ -1559,7 +1575,12 @@ initSync();try{updateLock();chips()}catch(e){}
 #insBtn .it small{font-size:12px;color:#5c6b80;margin-top:2px}
 #insBtn .ia{flex:none;width:24px;height:24px;border-radius:50%;background:#1c7ed6;color:#fff;font-size:18px;font-weight:700;line-height:22px;text-align:center;box-shadow:inset 0 -2px 0 #0b3b7a}
 #insBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #0b3b7a}
-#insBtn[hidden]{display:none}#insBar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:9000;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #0b3b7a;border-radius:16px;padding:10px 12px;box-shadow:0 6px 20px rgba(11,59,122,.25);max-width:520px;margin:0 auto}#insBar[hidden]{display:none}#insBar img{width:40px;height:40px;border-radius:10px;flex:none}#insTxt{flex:1;min-width:0;display:flex;flex-direction:column;font-size:13px;line-height:1.35}#insTxt b{font-size:14px;color:#0b3b7a}#insSub{color:#555}#insGo{flex:none;background:#1c7ed6;color:#fff;border:0;border-radius:10px;padding:8px 14px;font-weight:700;font-size:14px}#insGo[hidden]{display:none}#insX{flex:none;background:none;border:0;font-size:18px;color:#888;padding:4px}</style>
+#insBtn[hidden]{display:none}#insBar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:9000;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #0b3b7a;border-radius:16px;padding:10px 12px;box-shadow:0 6px 20px rgba(11,59,122,.25);max-width:520px;margin:0 auto}#insBar[hidden]{display:none}#insBar img{width:40px;height:40px;border-radius:10px;flex:none}#insTxt{flex:1;min-width:0;display:flex;flex-direction:column;font-size:13px;line-height:1.35}#insTxt b{font-size:14px;color:#0b3b7a}#insSub{color:#555}#insGo{flex:none;background:#1c7ed6;color:#fff;border:0;border-radius:10px;padding:8px 14px;font-weight:700;font-size:14px}#insGo[hidden]{display:none}#insX{flex:none;background:none;border:0;font-size:18px;color:#888;padding:4px}
+.nm.req .nx{color:#e03131!important;font-weight:900;background:rgba(224,49,49,.12);box-shadow:inset 0 0 0 1.5px #e03131}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .nm.req .nx{color:#ff8787!important;background:rgba(255,107,107,.18);box-shadow:inset 0 0 0 1.5px #ff8787}}
+:root[data-theme="dark"] .nm.req .nx{color:#ff8787!important;background:rgba(255,107,107,.18);box-shadow:inset 0 0 0 1.5px #ff8787}
+.hint .rq{color:#e03131;font-weight:800}
+</style>
 <script>
 (function(){
   if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
