@@ -443,8 +443,10 @@
     var im = el.querySelector && el.querySelector('img'); if (!im) return null;
     if (!im.complete) { if (!im._czw) { im._czw = 1; im.addEventListener('load', function () { applyMulti(el); }, { once: true }); } }
     var cw = el.clientWidth, ch = el.clientHeight; if (!cw || !ch) return null;
-    var r = el.getBoundingClientRect(), q = im.getBoundingClientRect(); if (!q.width) return null;
-    var g = { x: (q.left - r.left - el.clientLeft) / cw, y: (q.top - r.top - el.clientTop) / ch, w: q.width / cw, h: q.height / ch };
+    var g;
+    if (im.offsetParent === el && im.offsetWidth) g = { x: im.offsetLeft / cw, y: im.offsetTop / ch, w: im.offsetWidth / cw, h: im.offsetHeight / ch };
+    else { var r = el.getBoundingClientRect(), q = im.getBoundingClientRect(); if (!q.width || !r.width) return null; var k = el.offsetWidth / r.width || 1;
+      g = { x: ((q.left - r.left) * k - el.clientLeft) / cw, y: ((q.top - r.top) * k - el.clientTop) / ch, w: q.width * k / cw, h: q.height * k / ch }; }
     el.style.setProperty('--ix', g.x.toFixed(3)); el.style.setProperty('--iy', g.y.toFixed(3)); el.style.setProperty('--iw', g.w.toFixed(3)); el.style.setProperty('--ih', g.h.toFixed(3));
     return g;
   }
