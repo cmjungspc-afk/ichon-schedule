@@ -331,3 +331,6 @@ html body main .lockb{color:#5b4636!important}
 #gm .lobnm em{background:#5f8f3e!important}
 html body main .vh{color:#b3410c!important}
 html body main .mbt{color:#5f6670!important}
+/* 강화 테두리가 이름 가리지 않게 */
+html body #crew .ico[data-el]{margin:4px 14px 4px 6px!important;flex:none}
+html body #crew .ico[data-el][data-fr]{margin:4px 18px 4px 14px!important}

@@ -537,4 +537,5 @@
   document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.getElementById('gm')) { /* 사용자가 전체화면을 나가도 게임은 그대로 */ } });
 
   window.PX = { petImg: function (se) { try { var L = String(se || '').split(','); for (var i = 0; i < L.length; i++) { var k = SKG.find(function (x) { return x.k === L[i]; }); if (k && slotOf(k.e) === 'pet') return img(keyURL(OVR[norm(k.e)])); } } catch (e) {} return null; }, slotOf: slotOf, boss: boss, char: char, charURL: charURL, icon: icon, emoji: icon, draw: draw, convert: convert, FONT: 'Jua,sans-serif' };
+  setTimeout(function () { try { if (typeof staffDecoRefresh === 'function') staffDecoRefresh(); } catch (e) {} }, 300);
 })();
