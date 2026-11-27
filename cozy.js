@@ -405,7 +405,7 @@
       while ((m = RE.exec(s))) {
         var key = OVR[norm(m[0])]; if (!key) continue;
         if (m.index > last) f.appendChild(document.createTextNode(s.slice(last, m.index)));
-        var im = document.createElement('img'); im.className = 'czi'; im.alt = m[0]; im.draggable = false; im.src = keyURL(key); f.appendChild(im); last = m.index + m[0].length;
+        var im = document.createElement('img'); im.className = 'czi'; im.alt = m[0]; im.draggable = false; im.src = (WEAR[norm(m[0])] === 'hand' && p.closest && p.closest('.dcp,.shp,.skslot')) ? handURL(key) : keyURL(key); f.appendChild(im); last = m.index + m[0].length;
       }
       if (last < s.length) f.appendChild(document.createTextNode(s.slice(last)));
       p.replaceChild(f, t);
@@ -434,7 +434,7 @@
   ICON.w_halo = '<ellipse cx="12" cy="12" rx="9" ry="3.4" fill="none" stroke="#f9d25a" stroke-width="3.4"/><ellipse cx="12" cy="12" rx="9" ry="3.4" fill="none" stroke-width="1"/>';
   // 자리: 캐릭터 그림 안에서의 위치(가운데 x·y, 너비·높이, 기울기)
   var SLOT = { head: [.5, .12, .62, .62, -6], halo: [.5, .03, .58, .3, 0], pin: [.72, .14, .36, .36, 18], face: [.5, .436, .44, .44, 0], ears: [.5, .285, .87, .87, 0],
-    hand: [.98, .74, .36, .36, -8], body: [.5, .785, .5, .41, 0], side: [1.0, .72, .4, .4, 0], float: [1.06, .0, .38, .38, 0] };
+    hand: [.8, .72, .34, .34, -8], body: [.5, .785, .5, .41, 0], side: [1.0, .72, .4, .4, 0], float: [1.06, .0, .38, .38, 0] };
   function slotCSS(sl, r) { var a = SLOT[sl], W = a[2] * r, H = a[3] * r, X = (1 - r) / 2 + a[0] * r, Y = (1 - r) / 2 + a[1] * r; function pc(v) { return (v * 100).toFixed(1) + '%!important;'; }
     return 'left:' + pc(X - W / 2) + 'top:' + pc(Y - H / 2) + 'width:' + pc(W) + 'height:' + pc(H) + 'transform:rotate(' + a[4] + 'deg)!important;' + (sl === 'float' ? 'animation:czfloat 2.6s ease-in-out infinite!important;' : 'animation:none!important;'); }
   var WEAR = { '🧢': 'head', '👒': 'head', '🎩': 'head', '🎅': 'head', '👑': 'head', '🍄': 'head', '😇': 'halo', '🎀': 'pin', '🌸': 'pin', '🌻': 'pin', '🌹': 'pin', '🍀': 'pin', '🌱': 'pin', '🦋': 'pin', '🕶': 'face', '👓': 'face', '🎧': 'ears',
@@ -465,11 +465,19 @@
       else { var a = SLOT[sl]; W = a[2] * r; H = a[3] * r; L = (1 - r) / 2 + a[0] * r - W / 2; T = (1 - r) / 2 + a[1] * r - H / 2; }
       var bw = W / 2, bh = H / 2, bx = (L + .5) / 2, by = (T + .5) / 2;
       var px = bw < 1 ? bx / (1 - bw) * 100 : 50, py = bh < 1 ? by / (1 - bh) * 100 : 50;
-      return 'url("' + keyURL(n) + '") ' + px.toFixed(1) + '% ' + py.toFixed(1) + '% / ' + (bw * 100).toFixed(1) + '% ' + (bh * 100).toFixed(1) + '% no-repeat';
+      return 'url("' + stickURL(e) + '") ' + px.toFixed(1) + '% ' + py.toFixed(1) + '% / ' + (bw * 100).toFixed(1) + '% ' + (bh * 100).toFixed(1) + '% no-repeat';
     }).filter(Boolean).join(',');
     el.setAttribute('data-skm', '1'); el.style.setProperty('--skbg', bg);
   }
   function scanMulti(root) { if (!root || !root.querySelectorAll) return; if (root.hasAttribute && (root.hasAttribute('data-sk') || root.hasAttribute('data-pet'))) applyMulti(root); Array.prototype.forEach.call(root.querySelectorAll('[data-sk],[data-skm],[data-pet]'), applyMulti); }
+
+  // 손에 쥔 음식은 얼굴(눈·입·볼터치) 없이
+  function faceless(svg) { return svg.replace(/<ellipse[^>]*fill="#3b2a20"[^>]*\/>/g, '').replace(/<circle[^>]*fill="#3b2a20"[^>]*\/>/g, '').replace(/<ellipse[^>]*fill="#f58fa8"[^>]*\/>/g, '').replace(/<circle[^>]*r="0?\.\d+" fill="#fff" stroke="none"\/>/g, '').replace(/<path d="M[^"]*q[^"]*" fill="none" stroke-width="[\d.]+"\/>/g, ''); }
+  function handURL(n) { var key = 'h:' + n; if (urls[key]) return urls[key];
+    if (n.indexOf('c:') === 0) urls[key] = svgURL(wrap(faceless(CHAR[n.slice(2)] || '')));
+    else urls[key] = svgURL(wrap(faceless(ICON[n] || ''), '0 0 24 24').replace('stroke-width="2.4"', 'stroke-width="1.8"'));
+    return urls[key]; }
+  function stickURL(e) { var n = OVR[norm(e)]; if (!n) return ''; if (WEAR[norm(e)] === 'hand') return handURL(n); if (norm(e) === '😇') return keyURL('w_halo'); return keyURL(n); }
   function stickerCSS() {
     try {
       if (typeof SKG === 'undefined') return;
@@ -479,7 +487,7 @@
         if (sl === 'body') { k.g = 2; } else if (sl === 'head' || sl === 'pin' || sl === 'face' || sl === 'ears' || sl === 'halo') { k.g = 1; k.p = Math.min(2400, Math.max(1000, k.p)); } else { k.g = 0; k.p = Math.min(800, k.p); } });
       var css = '@keyframes czfloat{0%,100%{translate:0 0}50%{translate:0 -3px}}[data-skm]::before{content:""!important;position:absolute!important;left:-50%!important;top:-50%!important;width:200%!important;height:200%!important;transform:none!important;animation:none!important;background:var(--skbg)!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;font-size:0}';
       SKG.forEach(function (k) { var e = norm(k.e), n = OVR[e]; if (!n || n.indexOf('f:') === 0) return; var slot = WEAR[e] || 'float'; if (slot === 'pet') return; if (e === '😇') n = 'w_halo';
-        var bg = 'content:""!important;position:absolute!important;font-size:inherit;background:url("' + keyURL(n) + '") center/contain no-repeat!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;';
+        var bg = 'content:""!important;position:absolute!important;font-size:inherit;background:url("' + stickURL(k.e) + '") center/contain no-repeat!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;';
         css += '[data-sk="' + k.e + '"]::before{' + bg + slotCSS(slot, .84) + '}';
         css += '#crew .ico[data-sk="' + k.e + '"]::before{' + slotCSS(slot, .85) + '}'; });
       var st = document.createElement('style'); st.id = 'czstk'; st.textContent = css; document.head.appendChild(st);
