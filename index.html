@@ -399,7 +399,7 @@ $('#crew').addEventListener('click',e=>{const b=e.target.closest('.sk');if(!b||!
 $('#grid').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.d)e.preventDefault()});
 function chips(){setTimeout(applyLockState,0);applyIcons();setTimeout(heroIcons,0);const R=roster(),g=n=>STAFF[n]||{e:'',k:'#888',t:''};$('#chips').innerHTML=R.map(n=>'<button class="sec" type="button" style="--k:'+g(n).k+'" data-n="'+esc(n)+'">'+g(n).e+' '+esc(n)+' <span class="hc" data-h="'+esc(n)+'"></span></button>').join('');setTimeout(hDraw,0);$('#crew').innerHTML=R.map(n=>'<div style="--k:'+g(n).k+'"><b><button type="button" class="ico" data-ico="'+esc(n)+'" title="아이콘 바꾸기">'+g(n).e+'</button> '+esc(n)+'</b><input class="tg" data-n="'+esc(n)+'" value="'+esc(tag(n))+'" placeholder="소개 문구 입력" maxlength="30"><label class="bdl"><span class="ck'+'">'+cakeSvg(24)+'</span><input class="bdi" data-b="'+esc(n)+'" value="'+esc(bday(n))+'" placeholder="" maxlength="10"></label><label class="mbl"><span class="mbt">MBTI</span><input class="mbi" data-m="'+esc(n)+'" value="'+esc(MBTI[n]||'')+'" placeholder="" maxlength="4" autocapitalize="characters"></label>'+(n===R[0]?'':'<div class="stk" data-n="'+esc(n)+'"><span class="sl">칭찬스티커'+(STORE?'':(stk(n)>=5?'<b class="rwok">🎉 상품권 받으러 오세요!</b>':'<span class="rw">🎁 5개 모으면 상품권 1만원</span>'))+'</span>'+[1,2,3,4,5].map(i=>'<button type="button" class="sk'+(i<=stk(n)?' on':'')+'" data-i="'+i+'">💮</button>').join('')+'</div>')+'</div>').join('')}
 function noteHtml(d,c){const n=(data[d]||{}).n||{},k=c+'|전체';return n[k]?esc(n[k]):''}
-function pn(d,c){const pp=P(),R=roster(),txt=((data[d]||{})[c])||'',n=(data[d]||{}).n||{};return srt(txt.split(/[\s,]+/).filter(Boolean),R).map(z=>{const t=z.x,ti=z.i;const nm=who(t,R)||t,v=n[c+'|'+nm],a='data-nd="'+d+'" data-nc="'+c+'" data-nm="'+esc(nm)+'" data-ni="'+ti+'"';return '<span class="nm'+(v?' hn':'')+(isReq(d,c,nm)?' req':'')+(/^지원필요/.test(t)?' ned':'')+'"'+(isReq(d,c,nm)?' title="신청 '+isReq(d,c,nm)+'"':'')+'><span class="nx" '+a+'>'+esc(t)+(isBd(nm,pp.m,+d)?'<span class="cake">'+cakeSvg(15)+'</span>':'')+'</span>'+(v?'<span class="bb" '+a+'>'+esc(v)+'</span>':'')+'</span>'}).join('')}
+function pn(d,c){const pp=P(),R=roster(),txt=((data[d]||{})[c])||'',n=(data[d]||{}).n||{};return srt(txt.split(/[\s,]+/).filter(Boolean),R).map(z=>{const t=z.x,ti=z.i;const nm=who(t,R)||t,v=n[c+'|'+nm],a='data-nd="'+d+'" data-nc="'+c+'" data-nm="'+esc(nm)+'" data-ni="'+ti+'"';return '<span class="nm'+(v?' hn':'')+(isReq(d,c,nm)?' req':'')+(/^(지원필요|인원부족)/.test(t)?' ned':'')+'"'+(isReq(d,c,nm)?' title="신청 '+isReq(d,c,nm)+'"':'')+'><span class="nx" '+a+'>'+esc(t).replace(/^(지원필요|인원부족)/,'인원 부족')+(isBd(nm,pp.m,+d)?'<span class="cake">'+cakeSvg(15)+'</span>':'')+'</span>'+(v?'<span class="bb" '+a+'>'+esc(v)+'</span>':'')+'</span>'}).join('')}
 function findBtn(d,c,nm){return [...document.querySelectorAll('#grid [data-nm]')].find(x=>x.dataset.nd===d&&x.dataset.nc===c&&x.dataset.nm===nm)}
 function closeBub(){const b=$('#bub');if(!b)return;const td=b._td,d=b._d,c=b._c;b.remove();if(td&&td.isConnected&&!td.classList.contains('ed'))td.querySelector('.pn').innerHTML=pn(d,c);maybeRefresh()}
 function tokAt(d,c,ti){const t=((data[d]||{})[c])||'',p=t.split(/([\s,]+)/);let k=-1;for(let i=0;i<p.length;i++){if(i%2===0&&p[i]!==''){k++;if(k===ti)return{p,i}}}return null}
@@ -462,7 +462,7 @@ function sum(){
   const p=P(),R=roster(),n=p.e-p.s+1,rec={},unk=new Set();
   R.forEach(x=>rec[x]={});
   for(let d=p.s;d<=p.e;d++)for(const c of CATS)for(const t of ((data[d]||{})[c]||'').split(/[\s,]+/).filter(Boolean)){
-    const nm=who(t,R);if(nm){const sf=t.slice(nm.length);(rec[nm][d]=rec[nm][d]||[]).push(sf==='교육'?'mid':c==='off'&&/[^0-9\s-]/.test(sf)?'vac':c)}else unk.add(p.m+'/'+d+' '+t);
+    const nm=who(t,R);if(nm){const sf=t.slice(nm.length);(rec[nm][d]=rec[nm][d]||[]).push(sf==='교육'?'mid':c==='off'&&/[^0-9\s-]/.test(sf)?'vac':c)}else if(!/^(지원필요|인원부족)/.test(t))unk.add(p.m+'/'+d+' '+t);
   }
   let bad=0,html='';window._t=[];
   for(const nm of R){
@@ -686,14 +686,14 @@ function genRun(){
     snap();Object.keys(data).forEach(k=>delete data[k]);
     const sn={o:'오픈',m:'미들',c:'마감'};
     for(const x of r.out){
-      const shs=k=>x.sh[k]>0?['지원필요('+sn[k]+x.sh[k]+'명)']:[];
+      const shs=k=>x.sh[k]>0?['인원부족('+sn[k]+x.sh[k]+'명)']:[];
       const od=a=>a.slice().sort((p,q)=>names.indexOf(p)-names.indexOf(q)),rec={off:od(x.off).map(n=>vk[n].has(x.d)?n+'휴':n).join(' '),open:od(x.open).concat(shs('o')).join(' '),mid:od(x.mid).concat(shs('m')).join(' '),close:od(x.close).concat(shs('c')).join(' ')};
       if(Object.keys(x.n).length)rec.n=x.n;data[x.d]=rec}
     save();draw();
     const nls=r.out.filter(x=>x.nl).map(x=>p.m+'/'+x.d+' '+[x.nl&1?'오픈':'',x.nl&2?'마감':''].filter(Boolean).join('·')+' 조장');const sl=r.out.filter(x=>x.sh.o+x.sh.m+x.sh.c>0).map(x=>p.m+'/'+x.d+' '+['o','m','c'].filter(k=>x.sh[k]).map(k=>sn[k]+x.sh[k]+'명').join(','));
     const unmet=[];for(const x of r.out)for(const n of names){if(!ps.mw[n].has(x.d))continue;const rl=ps.fr[n].get(x.d),w=x.open.includes(n)?'o':x.mid.includes(n)?'m':x.close.includes(n)?'c':'';if(!w||(rl&&rl!==w))unmet.push(n+' '+p.m+'/'+x.d+(rl?'('+({o:'오픈',m:'미들',c:'마감'}[rl])+')':'')+(w?' → 다른 자리':' → 못 넣음'))}
     const cnt=names.map(n=>n+' 오'+r.st[n].o+' 중'+r.st[n].m+' 마'+r.st[n].c+' 휴'+(days.length-r.st[n].w)).join('\n');
-    msg('✅ '+p.m+'월 '+p.s+'~'+p.e+'일 스케줄을 만들었어요. (주 52시간 '+(f.h52?'준수':'해제')+') '+(boss?boss+' 출근 '+r.bossDays+'일(미들 '+(r.bossDays-r.bossOpen)+' · 오픈 '+r.bossOpen+'). ':'')+(sl.length?'\n지원필요: '+sl.join(' / '):'\n지원필요 없음')+(nls.length?'\n⚠️ 조장 없이 배정된 날: '+nls.join(' / ')+' (조장 가능 인원이 주 7일·클로픈·휴무로 모두 빠져요. 직접 조정해 주세요)':'')+'\n'+cnt+(unk.length?'\n※ 명단에 없는 이름: '+unk.join(', '):'')+(ps.warn.length?'\n⚠️ 특이사항 확인: '+ps.warn.join(' / '):'')+(unmet.length?'\n⚠️ 반영 못한 근무 요청: '+unmet.join(', ')+' (규칙·휴가와 겹쳐요)':''));
+    msg('✅ '+p.m+'월 '+p.s+'~'+p.e+'일 스케줄을 만들었어요. (주 52시간 '+(f.h52?'준수':'해제')+') '+(boss?boss+' 출근 '+r.bossDays+'일(미들 '+(r.bossDays-r.bossOpen)+' · 오픈 '+r.bossOpen+'). ':'')+(sl.length?'\n인원 부족: '+sl.join(' / '):'\n인원 부족 없음')+(nls.length?'\n⚠️ 조장 없이 배정된 날: '+nls.join(' / ')+' (조장 가능 인원이 주 7일·클로픈·휴무로 모두 빠져요. 직접 조정해 주세요)':'')+'\n'+cnt+(unk.length?'\n※ 명단에 없는 이름: '+unk.join(', '):'')+(ps.warn.length?'\n⚠️ 특이사항 확인: '+ps.warn.join(' / '):'')+(unmet.length?'\n⚠️ 반영 못한 근무 요청: '+unmet.join(', ')+' (규칙·휴가와 겹쳐요)':''));
   },30)}
 $('#genGo').onclick=()=>gate(()=>{const p=P();const has=Object.values(data).some(r=>Object.values(r).some(v=>v&&(typeof v!=='object'||Object.keys(v).length)));if(has)askYN(plbl()+' 기간에 입력된 내용이 모두 새로 바뀝니다. 계속할까요?',genRun);else genRun()});
 $('#genClr').onclick=()=>gate(()=>askYN(plbl()+' 기간을 지우시겠습니까?',()=>{snap();Object.keys(data).forEach(k=>delete data[k]);save();draw();$('#genMsg').textContent='🧹 '+plbl()+' 기간을 지웠어요.'}));
@@ -1445,12 +1445,12 @@ function sbGen(p,f){
   const sl=r.out.filter(x=>x.sh.o+x.sh.m+x.sh.c>0).map(x=>p.m+'/'+x.d+' '+['o','m','c'].filter(k=>x.sh[k]).map(k=>sn[k]+x.sh[k]+'명').join(','));
   const nls=r.out.filter(x=>x.nl).map(x=>p.m+'/'+x.d+' '+[x.nl&1?'오픈':'',x.nl&2?'마감':''].filter(Boolean).join('·')+' 조장');
   const unmet=[];for(const x of r.out)for(const n of names){if(!ps.mw[n].has(x.d))continue;const rl=ps.fr[n].get(x.d),w=x.open.includes(n)?'o':x.mid.includes(n)?'m':x.close.includes(n)?'c':'';if(!w||(rl&&rl!==w))unmet.push(n+' '+p.m+'/'+x.d+(w?' → 다른 자리':' → 못 넣음'))}
-  const msg='✅ '+p.m+'월 '+p.s+'~'+p.e+'일 연습 스케줄이에요. (주 52시간 '+(f.h52?'준수':'해제')+') '+(names.includes(boss)?boss+' 출근 '+r.bossDays+'일(미들 '+(r.bossDays-r.bossOpen)+' · 오픈 '+r.bossOpen+')':'')+(sl.length?'\n지원필요: '+sl.join(' / '):'\n지원필요 없음')+(nls.length?'\n⚠️ 조장 없이 배정된 날: '+nls.join(' / '):'')+(ps.items.length?'\n📝 반영한 특이사항: '+ps.items.join(' · '):'')+(ps.warn.length?'\n⚠️ 특이사항 확인: '+ps.warn.join(' / '):'')+(unmet.length?'\n⚠️ 반영 못한 근무 요청: '+unmet.join(', '):'');
+  const msg='✅ '+p.m+'월 '+p.s+'~'+p.e+'일 연습 스케줄이에요. (주 52시간 '+(f.h52?'준수':'해제')+') '+(names.includes(boss)?boss+' 출근 '+r.bossDays+'일(미들 '+(r.bossDays-r.bossOpen)+' · 오픈 '+r.bossOpen+')':'')+(sl.length?'\n인원 부족: '+sl.join(' / '):'\n인원 부족 없음')+(nls.length?'\n⚠️ 조장 없이 배정된 날: '+nls.join(' / '):'')+(ps.items.length?'\n📝 반영한 특이사항: '+ps.items.join(' · '):'')+(ps.warn.length?'\n⚠️ 특이사항 확인: '+ps.warn.join(' / '):'')+(unmet.length?'\n⚠️ 반영 못한 근무 요청: '+unmet.join(', '):'');
   const cnt=names.map(n=>({n,o:r.st[n].o,m:r.st[n].m,c:r.st[n].c,f:days.length-r.st[n].w}));
   return{rows,msg,cnt,names,lo,lc,need,days}}
 function sbTables(p,res){
   const L=[['off','휴무','f'],['open','오전조','o'],['mid','중간조','m'],['close','마감조','c']],by={},sk={open:'o',mid:'m',close:'c'},sn={o:'오픈',m:'미들',c:'마감'};res.rows.forEach(x=>by[x.d]=x);
-  const cell=(x,c)=>x[c].map(n=>esc(n)+(c!=='off'&&x.n[c+'|'+n]?'<sup>'+esc(x.n[c+'|'+n])+'</sup>':'')).join(' ')+(sk[c]&&x.sh[sk[c]]?' <span class="need">지원필요('+sn[sk[c]]+x.sh[sk[c]]+'명)</span>':'');
+  const cell=(x,c)=>x[c].map(n=>esc(n)+(c!=='off'&&x.n[c+'|'+n]?'<sup>'+esc(x.n[c+'|'+n])+'</sup>':'')).join(' ')+(sk[c]&&x.sh[sk[c]]?' <span class="need">인원 부족('+sn[sk[c]]+x.sh[sk[c]]+'명)</span>':'');
   const b0=p.s-((new Date(p.y,p.m-1,p.s).getDay()+6)%7);let h='';
   for(let b=b0;b<=p.e;b+=7){const ds=[0,1,2,3,4,5,6].map(i=>b+i);
     h+='<div class="wk"><table class="grid"><thead><tr><th></th>'+ds.map((d,i)=>'<th class="'+(i>4?'we':'')+'">'+'월화수목금토일'[i]+'</th>').join('')+'</tr></thead><tbody><tr><td class="lb">날짜</td>'+ds.map((d,i)=>'<td class="dt '+(i>4?'we':'')+'">'+(by[d]?p.m+'월 '+d+'일':'')+'</td>').join('')+'</tr>';
