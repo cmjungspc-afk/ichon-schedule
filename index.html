@@ -1348,7 +1348,11 @@ function applyS(){const g=$('#grid');if(!g)return;const z=window.gzGet?gzGet():1
   function block(){if(!sfxOn||!ensure())return;if(ac.state!=='running'){const p=ac.resume();if(p&&p.then)p.then(()=>{if(ac.state==='running')blk()}).catch(()=>{});return}blk()}
   function blk(){const t=ac.currentTime,o=ac.createOscillator(),f=ac.createBiquadFilter(),g=ac.createGain();o.type='square';o.frequency.setValueAtTime(1100,t);o.frequency.exponentialRampToValueAtTime(380,t+.05);f.type='lowpass';f.frequency.value=2500;g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.08);o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+.09);
     const b=ac.createBuffer(1,Math.floor(ac.sampleRate*.02),ac.sampleRate),dd=b.getChannelData(0);for(let i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*Math.pow(1-i/dd.length,4);const s=ac.createBufferSource(),g2=ac.createGain();g2.gain.value=.16;s.buffer=b;s.connect(g2);g2.connect(master);s.start(t)}
-  const w=document.createElement('div');w.className='sndbar';w.innerHTML='<button type="button" id="bgmB" aria-label="캐롤 음악 켜기/끄기"></button><button type="button" id="sfxB" aria-label="버튼 효과음 켜기/끄기"></button>';document.body.appendChild(w);
+  const w=document.createElement('div');w.className='sndbar';w.innerHTML='<button type="button" id="bgmB" aria-label="캐롤 음악 켜기/끄기"></button><button type="button" id="sfxB" aria-label="버튼 효과음 켜기/끄기"></button><button type="button" id="dkB" aria-label="다크 모드 켜기/끄기"></button>';document.body.appendChild(w);
+  const mq=window.matchMedia?matchMedia('(prefers-color-scheme:dark)'):null;let th='';try{th=localStorage.getItem('theme')||''}catch(e){}
+  const isDk=()=>th?th==='dark':!!(mq&&mq.matches);
+  function dkApply(){const d=isDk();document.documentElement.setAttribute('data-theme',d?'dark':'light');const b=$('#dkB');if(b){b.textContent=d?'🌙 다크 ON':'☀️ 다크 OFF';b.classList.toggle('on',d)}}dkApply();
+  $('#dkB').addEventListener('click',()=>{th=isDk()?'light':'dark';try{localStorage.setItem('theme',th)}catch(e){}dkApply()});
   function lab(){const a=$('#bgmB'),b=$('#sfxB');a.textContent=musicOn?'🎵 캐롤 ON':'🎵 캐롤 OFF';a.classList.toggle('on',musicOn);b.textContent=sfxOn?'🔊 효과음 ON':'🔇 효과음 OFF';b.classList.toggle('on',sfxOn)}lab();
   $('#bgmB').addEventListener('click',()=>{musicOn=!musicOn;try{localStorage.setItem('bgm',musicOn?'1':'0')}catch(e){}musicOn?startM():stopM();lab()});
   $('#sfxB').addEventListener('click',()=>{sfxOn=!sfxOn;try{localStorage.setItem('sfx',sfxOn?'1':'0')}catch(e){}lab()});
@@ -1588,6 +1592,23 @@ initSync();try{updateLock();chips()}catch(e){}
 :root[data-theme="dark"] .nm.req .nx{color:#ff8787!important;background:none!important;box-shadow:none!important}
 .hint .rq{color:#e03131;font-weight:800}
 td.wkc{color:#7048e8;font-weight:800}td.wkc .z{color:var(--off);font-weight:400}th.wkh{color:#7048e8}
+:root[data-theme="dark"]:root:root{color-scheme:dark;--bg:#0f1626;--card:#1a2437;--ink:#e8ecf3;--mute:#a3b0c9;--line:#34456a;--wk:#222e47;--open:#fbbf24;--mid:#5eead4;--close:#a5b4fc;--off:#9ca3af;--ok:#86efac;--okbg:#14351f;--bad:#fca5a5;--badbg:#3b1717;--acc:#7aa2ff;--accink:#0b1220;--arc:#050b1f;--arc2:#02061a}
+:root[data-theme="dark"]:root:root body{background-color:#070d1f!important;background-image:linear-gradient(rgba(255,255,255,.03) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.03) 2px,transparent 2px),linear-gradient(180deg,#14213f 0,#0b1530 38%,#050a1c 100%)!important}
+:root[data-theme="dark"] .hero{background:linear-gradient(180deg,#27427f,#13235a)!important;box-shadow:0 6px 0 var(--arc2),inset 0 0 0 3px #3d5fa8,inset 0 -18px 0 rgba(0,0,30,.3)}
+:root[data-theme="dark"] .card{box-shadow:0 6px 0 var(--arc2),inset 0 0 0 2px #2a3a63}
+:root[data-theme="dark"] input,:root[data-theme="dark"] select,:root[data-theme="dark"] textarea{background:#101a2e!important;color:var(--ink)!important}
+:root[data-theme="dark"] ::placeholder{color:#7d8aa5}
+.dk,:root[data-theme="dark"] .card h2{color:#bcd0ff}
+:root[data-theme="dark"] label{color:#a9bfee}
+:root[data-theme="dark"] .card h2{border-bottom-color:#3a4f80}
+:root[data-theme="dark"] .grid th,:root[data-theme="dark"] .sum th,:root[data-theme="dark"] .sbt th{background:#24365f;color:#d6e2ff;border-color:#3a4f80}
+:root[data-theme="dark"] th.vh{color:#ffa94d}:root[data-theme="dark"] th.wkh{color:#b197fc}:root[data-theme="dark"] td.wkc{color:#b197fc}
+:root[data-theme="dark"] .tut{background:linear-gradient(180deg,#3a3320,#1a2437)!important}
+:root[data-theme="dark"] .tutl li{background:#222e47;border-color:#34456a}:root[data-theme="dark"] .tutl li small{color:#a3b0c9}
+:root[data-theme="dark"] .sjp{background:#2a2a3a;border-color:#4a4560}:root[data-theme="dark"] .sjp small,:root[data-theme="dark"] .sjp span{color:#c9b98a}
+:root[data-theme="dark"] .sjtd{background:#2a2646}:root[data-theme="dark"] .mbsel b,:root[data-theme="dark"] .mbhint,:root[data-theme="dark"] .mbmsg{color:#b6c2da}
+:root[data-theme="dark"] .mbc{background:#222e47;color:var(--ink)}:root[data-theme="dark"] .mbres{background:linear-gradient(135deg,#1c2b4a,#2a2646)}:root[data-theme="dark"] .mbtop{background:#3a3320;color:var(--ink)}
+:root[data-theme="dark"] .grid td.x,:root[data-theme="dark"] .grid td.dc{color:var(--ink)}
 </style>
 <script>
 (function(){
