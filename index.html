@@ -225,7 +225,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 @media(max-width:640px){.crew{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:8px}.crew>div{padding:4px 5px 5px;font-size:11px;border-left-width:3px;border-radius:5px}.crew b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.crew input{font-size:11px;padding:1px 2px;margin-top:1px;box-shadow:none}.crew .bdl{gap:2px}.crew .bdl>.ck svg{width:15px;height:15px}.crew .stk{gap:2px;margin-top:3px}.crew .sl{font-size:10px;line-height:1.2}.crew .sk{width:15px;height:15px;font-size:8px;border-width:1px}}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) section.card.nextbd{background:linear-gradient(135deg,#5a2a40,#5a4a1a)!important;color:#fff!important;border-color:#ffd43b!important}:root:not([data-theme="light"]) section.card.nextbd b{color:#ffd43b}}
 </style>
-<link rel="stylesheet" href="cozy.css?v=1">
+<link rel="stylesheet" href="cozy.css?v=2">
 </head>
 <body>
 <main>
@@ -1183,11 +1183,12 @@ function openGame(){
   function drawGift(o,T){const p=1+Math.sin(T/8+o.x)*.1;const gr=ctx.createRadialGradient(o.x,o.y,2,o.x,o.y,22);gr.addColorStop(0,'rgba(255,224,102,.7)');gr.addColorStop(1,'rgba(255,224,102,0)');ctx.fillStyle=gr;ctx.beginPath();ctx.arc(o.x,o.y,22,0,6.283);ctx.fill();shadow(o.x,o.y+14,9);ctx.save();ctx.translate(o.x,o.y+Math.sin(T/10+o.x)*2);ctx.scale(p,p);emoji('🎁',0,0,26);ctx.restore()}
   function drawBossFig(cx,cy,T,rage){
     ctx.save();ctx.translate(rage?(Math.random()*3-1.5):0,rage?(Math.random()*2-1):0);
-    const skin='#ffb59a',suit='#2b2d42';
+    const skin='#ffc2a2',suit='#5b6b9a';
     // 양팔 (화면 끝까지 쓸어버림)
-    ctx.fillStyle=suit;rr(-6,cy+8,W/2-44,28,14);ctx.fill();rr(W/2+44,cy+8,W/2-44+6,28,14);ctx.fill();
+    ctx.fillStyle=suit;ctx.strokeStyle='#5b4636';ctx.lineWidth=3;rr(-6,cy+8,W/2-44,28,14);ctx.fill();ctx.stroke();rr(W/2+44,cy+8,W/2-44+6,28,14);ctx.fill();ctx.stroke();
     ctx.fillStyle='#fff';ctx.fillRect(W/2-52,cy+8,6,28);ctx.fillRect(W/2+46,cy+8,6,28);
-    for(const hx of [20,W-20]){ctx.fillStyle=skin;ctx.strokeStyle='#c9694a';ctx.lineWidth=2;ctx.beginPath();ctx.arc(hx,cy+22,19,0,6.283);ctx.fill();ctx.stroke();ctx.beginPath();for(let k=-1;k<=1;k++){ctx.moveTo(hx+k*7,cy+9);ctx.lineTo(hx+k*7,cy+20)}ctx.stroke()}
+    for(const hx of [20,W-20]){ctx.fillStyle=skin;ctx.strokeStyle='#5b4636';ctx.lineWidth=2.6;ctx.beginPath();ctx.arc(hx,cy+22,19,0,6.283);ctx.fill();ctx.stroke();ctx.beginPath();for(let k=-1;k<=1;k++){ctx.moveTo(hx+k*7,cy+9);ctx.lineTo(hx+k*7,cy+20)}ctx.stroke()}
+    const _bi=window.PX&&PX.boss(Math.sin(T/3)>0);if(_bi&&_bi.complete&&_bi.naturalWidth){ctx.drawImage(_bi,cx-75,cy-93,150,150)}else{
     // 몸통
     ctx.fillStyle=suit;rr(cx-48,cy+2,96,74,20);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(cx-14,cy+4);ctx.lineTo(cx+14,cy+4);ctx.lineTo(cx,cy+34);ctx.closePath();ctx.fill();ctx.fillStyle='#e03131';ctx.beginPath();ctx.moveTo(cx-5,cy+10);ctx.lineTo(cx+5,cy+10);ctx.lineTo(cx+8,cy+44);ctx.lineTo(cx,cy+52);ctx.lineTo(cx-8,cy+44);ctx.closePath();ctx.fill();
     // 머리
@@ -1199,6 +1200,7 @@ function openGame(){
     for(const ex of [-17,17]){ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(cx+ex,cy-32,9,8,0,0,6.283);ctx.fill();ctx.fillStyle='#e03131';ctx.beginPath();ctx.arc(cx+ex+(ex<0?2:-2),cy-31,3.4,0,6.283);ctx.fill();ctx.fillStyle='#111';ctx.beginPath();ctx.arc(cx+ex+(ex<0?2:-2),cy-31,1.6,0,6.283);ctx.fill()}
     // 소리치는 입
     const mo=6+Math.abs(Math.sin(T/3))*7;ctx.fillStyle='#4a0d0d';ctx.beginPath();ctx.ellipse(cx,cy-10,17,mo,0,0,6.283);ctx.fill();ctx.fillStyle='#fff';ctx.fillRect(cx-12,cy-10-mo+1,24,5);ctx.fillStyle='#ff6b81';ctx.beginPath();ctx.ellipse(cx,cy-10+mo*.5,9,mo*.4,0,0,6.283);ctx.fill();
+    }
     // 콧김·증기·힘줄
     for(const sx of [-1,1])for(let i=0;i<3;i++){const t=((T/10+i*.34)%1);ctx.globalAlpha=.7*(1-t);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(cx+sx*(46+t*14),cy-38-t*30,5+t*8,0,6.283);ctx.fill()}ctx.globalAlpha=1;
     emoji('💢',cx+30,cy-62+Math.sin(T/3)*2,22);
@@ -2377,6 +2379,6 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#te
   else if(!has&&on){on=false;document.documentElement.classList.remove('lk');document.body.classList.remove('lkb');document.body.style.top='';window.scrollTo(0,y)}}
   new MutationObserver(sync).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});sync()})();
 </script>
-<script src="cozy.js?v=1"></script>
+<script src="cozy.js?v=2"></script>
 </body>
 </html>
