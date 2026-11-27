@@ -451,8 +451,8 @@
   function stickerCSS() {
     try {
       if (typeof SKG === 'undefined') return;
-      SKG.forEach(function (k) { if (k.fr) return; var sl = WEAR[norm(k.e)] || 'float';
-        if (sl === 'body') { k.g = 3; } else if (sl === 'head' || sl === 'pin' || sl === 'face' || sl === 'ears' || sl === 'halo') { k.g = 1; k.p = Math.min(2400, Math.max(1000, k.p)); } else { k.g = 0; k.p = Math.min(800, k.p); } });
+      SKG.forEach(function (k) { if (k.fr) { k.g = 3; return; } var sl = WEAR[norm(k.e)] || 'float';
+        if (sl === 'body') { k.g = 2; } else if (sl === 'head' || sl === 'pin' || sl === 'face' || sl === 'ears' || sl === 'halo') { k.g = 1; k.p = Math.min(2400, Math.max(1000, k.p)); } else { k.g = 0; k.p = Math.min(800, k.p); } });
       var css = '@keyframes czfloat{0%,100%{translate:0 0}50%{translate:0 -3px}}[data-skm]::before{content:""!important;position:absolute!important;left:-50%!important;top:-50%!important;width:200%!important;height:200%!important;transform:none!important;animation:none!important;background:var(--skbg)!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;font-size:0}';
       SKG.forEach(function (k) { var e = norm(k.e), n = OVR[e]; if (!n || n.indexOf('f:') === 0) return; var slot = WEAR[e] || 'float'; if (e === '😇') n = 'w_halo';
         var bg = 'content:""!important;position:absolute!important;font-size:inherit;background:url("' + keyURL(n) + '") center/contain no-repeat!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;';
