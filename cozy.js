@@ -148,7 +148,30 @@
       '<path d="M31 34 L45 40 M69 34 L55 40" stroke-width="4"/><ellipse cx="40" cy="44" rx="3" ry="3.6" fill="#3b2a20" stroke="none"/><ellipse cx="60" cy="44" rx="3" ry="3.6" fill="#3b2a20" stroke="none"/>' + m;
   }
 
-  var OVR = { '📖': 'book', '🎒': 'bag', '📅': 'cal', '⭐': 'star', '🌟': 'star', '📮': 'mail', '🛍': 'gift', '🎁': 'gift', '🎀': 'bow', '🏆': 'trophy', '🏅': 'medal', '🪙': 'coin', '🔑': 'key', '🚪': 'door', '🎵': 'note', '📊': 'chart', '👤': 'person', '🎄': 'pine', '❤': 'heart', '🥐': 'c:cro', '💢': 'anger' };
+
+  function af(cx, cy, dark) { var e = dark ? '#fff' : '#3b2a20'; return '<circle cx="' + (cx - 2.7) + '" cy="' + cy + '" r="1" fill="' + e + '" stroke="none"/><circle cx="' + (cx + 2.7) + '" cy="' + cy + '" r="1" fill="' + e + '" stroke="none"/><path d="M' + (cx - 1.2) + ' ' + (cy + 1.9) + ' q.6 .9 1.2 0 q.6 .9 1.2 0" fill="none" stroke-width="1"/><ellipse cx="' + (cx - 4.6) + '" cy="' + (cy + 1.6) + '" rx="1.3" ry=".8" fill="#f58fa8" opacity=".7" stroke="none"/><ellipse cx="' + (cx + 4.6) + '" cy="' + (cy + 1.6) + '" rx="1.3" ry=".8" fill="#f58fa8" opacity=".7" stroke="none"/>'; }
+  var ANIM = {
+    cat: '<path d="M5 9 L5.5 2.8 L10 6.2 Z M19 9 L18.5 2.8 L14 6.2 Z" fill="#f4b46a"/><circle cx="12" cy="13.5" r="8" fill="#f4b46a"/><path d="M12 5.6 v2.6 M9.5 6 l.6 2.2 M14.5 6 l-.6 2.2" stroke="#c97a35" stroke-width="1.2"/>' + af(12, 13.5),
+    dog: '<circle cx="12" cy="13" r="8" fill="#f1d3a8"/><path d="M5 7.5 C2 9 2.5 15 5 16 C6.5 13 6.5 9 5 7.5 Z M19 7.5 C22 9 21.5 15 19 16 C17.5 13 17.5 9 19 7.5 Z" fill="#a0704a"/><ellipse cx="12" cy="16" rx="3.4" ry="2.4" fill="#fff6e6" stroke-width="1"/><circle cx="12" cy="14.8" r=".9" fill="#3b2a20" stroke="none"/>' + af(12, 12.4).replace(/<path[^>]*q\.6[^>]*\/>/, ''),
+    rabbit: '<ellipse cx="8.6" cy="5" rx="2.4" ry="5" fill="#fff"/><ellipse cx="15.4" cy="5" rx="2.4" ry="5" fill="#fff"/><ellipse cx="8.6" cy="5.4" rx="1" ry="3" fill="#f7b6c8" stroke="none"/><ellipse cx="15.4" cy="5.4" rx="1" ry="3" fill="#f7b6c8" stroke="none"/><circle cx="12" cy="14.5" r="7.6" fill="#fff"/>' + af(12, 14.5),
+    bear: '<circle cx="5.6" cy="7" r="3" fill="#b07a4f"/><circle cx="18.4" cy="7" r="3" fill="#b07a4f"/><circle cx="12" cy="13.5" r="8" fill="#b07a4f"/><ellipse cx="12" cy="16.2" rx="3.6" ry="2.6" fill="#f1d3a8" stroke-width="1"/><circle cx="12" cy="15.2" r=".9" fill="#3b2a20" stroke="none"/>' + af(12, 12.6).replace(/<path[^>]*q\.6[^>]*\/>/, ''),
+    penguin: '<circle cx="12" cy="12.5" r="8.6" fill="#4a4f63"/><path d="M5.5 14 C5.5 8 9 7 12 9.5 C15 7 18.5 8 18.5 14 C18.5 18.5 15.5 20.5 12 20.5 C8.5 20.5 5.5 18.5 5.5 14 Z" fill="#fff" stroke-width="1.2"/><path d="M10.6 15.6 L12 17.4 L13.4 15.6 Z" fill="#f6a03c" stroke-width="1"/>' + af(12, 13.4).replace(/<path[^>]*q\.6[^>]*\/>/, ''),
+    fox: '<path d="M4 4 L9 8 L5 12 Z M20 4 L15 8 L19 12 Z" fill="#f08c3c"/><path d="M4 9 C4 16 8 20.5 12 20.5 C16 20.5 20 16 20 9 C17 7 7 7 4 9 Z" fill="#f08c3c"/><path d="M5 12 C7 13 9.5 15 12 20.5 C14.5 15 17 13 19 12 C18 17 15 20.5 12 20.5 C9 20.5 6 17 5 12 Z" fill="#fff6e6" stroke-width="1"/><circle cx="12" cy="18.6" r=".9" fill="#3b2a20" stroke="none"/>' + af(12, 12.8).replace(/<path[^>]*q\.6[^>]*\/>/, ''),
+    sheep: '<g fill="#fff"><circle cx="6" cy="8" r="3.4"/><circle cx="12" cy="5.6" r="3.6"/><circle cx="18" cy="8" r="3.4"/><circle cx="5" cy="14" r="3.2"/><circle cx="19" cy="14" r="3.2"/><circle cx="12" cy="18.6" r="3.4"/></g><ellipse cx="12" cy="13" rx="5.6" ry="5.8" fill="#f1d3a8"/>' + af(12, 13),
+    chick: '<circle cx="12" cy="13" r="8.4" fill="#ffd84d"/><path d="M11 4.8 q1 -3 2.6 -1.6" fill="none"/><path d="M10.4 14.6 L12 16.4 L13.6 14.6 Z" fill="#f6a03c" stroke-width="1"/>' + af(12, 12.4).replace(/<path[^>]*q\.6[^>]*\/>/, ''),
+    hatch: '<circle cx="12" cy="11" r="7.4" fill="#ffd84d"/><path d="M10.6 12.6 L12 14.2 L13.4 12.6 Z" fill="#f6a03c" stroke-width="1"/>' + af(12, 10.4).replace(/<path[^>]*q\.6[^>]*\/>/, '') + '<path d="M3.5 14 L6.5 12 L9 14.6 L12 12 L15 14.6 L17.5 12 L20.5 14 C20.5 19 17 21.5 12 21.5 C7 21.5 3.5 19 3.5 14 Z" fill="#fff8e8"/>',
+    panda: '<circle cx="5.8" cy="6.8" r="2.8" fill="#3b3550"/><circle cx="18.2" cy="6.8" r="2.8" fill="#3b3550"/><circle cx="12" cy="13.5" r="8" fill="#fff"/><ellipse cx="9" cy="13" rx="2" ry="2.6" fill="#3b3550" stroke="none" transform="rotate(-20 9 13)"/><ellipse cx="15" cy="13" rx="2" ry="2.6" fill="#3b3550" stroke="none" transform="rotate(20 15 13)"/>' + af(12, 13, 1).replace(/<path[^>]*q\.6[^>]*\/>/, '') + '<circle cx="12" cy="16" r=".9" fill="#3b2a20" stroke="none"/>',
+    tiger: '<path d="M5 8.5 L5.4 3.4 L9.6 6 Z M19 8.5 L18.6 3.4 L14.4 6 Z" fill="#f6a03c"/><circle cx="12" cy="13.5" r="8" fill="#f6a03c"/><path d="M12 5.6 v3 M4.4 12 h2.4 M4.8 15.2 h2.2 M19.6 12 h-2.4 M19.2 15.2 h-2.2" stroke-width="1.3"/><ellipse cx="12" cy="16.4" rx="3.6" ry="2.4" fill="#fff6e6" stroke-width="1"/>' + af(12, 12.8),
+    frog: '<circle cx="7.6" cy="6.6" r="3.2" fill="#8fcf6d"/><circle cx="16.4" cy="6.6" r="3.2" fill="#8fcf6d"/><ellipse cx="12" cy="14" rx="9" ry="7" fill="#8fcf6d"/><circle cx="7.6" cy="6.6" r="1.1" fill="#3b2a20" stroke="none"/><circle cx="16.4" cy="6.6" r="1.1" fill="#3b2a20" stroke="none"/><path d="M8.5 15 q3.5 2.6 7 0" fill="none" stroke-width="1.2"/><ellipse cx="6" cy="15" rx="1.4" ry=".9" fill="#f58fa8" opacity=".7" stroke="none"/><ellipse cx="18" cy="15" rx="1.4" ry=".9" fill="#f58fa8" opacity=".7" stroke="none"/>',
+    tulip: '<path d="M12 21 V12 M12 17 C9 17 7 15 6.5 12.5 C9 12.5 11 14 12 17 Z M12 18.5 C15 18.5 17.5 16.5 18 14 C15.5 14 13 15.5 12 18.5 Z" fill="#8fcf6d"/><path d="M7 4 L9.5 7 L12 3.5 L14.5 7 L17 4 C17.5 10 15.5 12.5 12 12.5 C8.5 12.5 6.5 10 7 4 Z" fill="#f2788f"/>',
+    blossom: '<g fill="#f7b6c8"><circle cx="12" cy="6" r="3.8"/><circle cx="17.7" cy="10.2" r="3.8"/><circle cx="15.5" cy="17" r="3.8"/><circle cx="8.5" cy="17" r="3.8"/><circle cx="6.3" cy="10.2" r="3.8"/></g><circle cx="12" cy="12" r="2.6" fill="#ffe27a"/>',
+    herb: '<path d="M12 22 V6" /><path d="M12 10 C8 10 5 8 4 4 C8 4 11 6 12 10 Z M12 15 C16 15 19 13 20 9 C16 9 13 11 12 15 Z M12 19 C8.5 19 6 17.5 5 14.5 C8.5 14.5 11 16 12 19 Z" fill="#8fcf6d"/>',
+    smile: '<circle cx="12" cy="12" r="9" fill="#ffd84d"/>' + af(12, 11),
+    sun: '<circle cx="12" cy="12" r="9" fill="#ffd84d"/>' + af(12, 11) + '<path d="M8 8 q1.5 -1 3 0 M13 8 q1.5 -1 3 0" fill="none" stroke-width="1"/>'
+  };
+  Object.keys(ANIM).forEach(function (k) { ICON[k] = ANIM[k]; });
+
+  var OVR = { '📖': 'book', '🎒': 'bag', '📅': 'cal', '⭐': 'star', '🌟': 'star', '📮': 'mail', '🛍': 'gift', '🎁': 'gift', '🎀': 'bow', '🏆': 'trophy', '🏅': 'medal', '🪙': 'coin', '🔑': 'key', '🚪': 'door', '🎵': 'note', '📊': 'chart', '👤': 'person', '🎄': 'pine', '❤': 'heart', '🥐': 'c:cro', '💢': 'anger', '🐱': 'cat', '🐈': 'cat', '🐶': 'dog', '🐕': 'dog', '🐰': 'rabbit', '🐇': 'rabbit', '🐻': 'bear', '🐧': 'penguin', '🦊': 'fox', '🐑': 'sheep', '🐥': 'chick', '🐤': 'chick', '🐣': 'hatch', '🐼': 'panda', '🐯': 'tiger', '🐸': 'frog', '🌷': 'tulip', '🌸': 'blossom', '🌿': 'herb', '🍀': 'herb', '🙂': 'smile', '😀': 'sun' };
   Object.keys(PEOPLE).forEach(function (e) { OVR[norm(e)] = 'p:' + e; });
   var urls = {}, imgs = {};
   function svgURL(s) { return 'data:image/svg+xml,' + encodeURIComponent(s); }
@@ -184,7 +207,20 @@
     '<g fill="#cfc2a6" stroke="#8a7a5e" stroke-width="2"><ellipse cx="170" cy="505" rx="10" ry="6"/><ellipse cx="192" cy="512" rx="8" ry="5"/><ellipse cx="236" cy="508" rx="11" ry="6"/></g>' +
     pine(40, 720, 1.2) + pine(130, 770, 1.4) + pine(270, 760, 1.3) + pine(360, 710, 1.1) + pine(200, 840, 1.5) + pine(20, 850, 1.1) + pine(380, 850, 1.2) +
     '</svg>';
+
+  // 스케줄표 제목용 겨울숲 그림
+  function wpine(x, y, s) { return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><path d="M0 -60 L22 -28 H12 L30 0 H17 L38 30 H-38 L-17 0 H-30 L-12 -28 H-22 Z" fill="#4f7a4a" stroke="#3b4f37" stroke-width="2.4" stroke-linejoin="round"/><path d="M0 -60 L9 -47 Q4 -43 0 -46 Q-4 -43 -9 -47 Z M-12 -28 L-22 -28 L-17 -21 Q-8 -17 0 -21 Q8 -17 17 -21 L22 -28 L12 -28 Q0 -24 -12 -28 Z M-17 0 L-30 0 L-24 8 Q-12 12 0 8 Q12 12 24 8 L30 0 L17 0 Q0 4 -17 0 Z" fill="#fff" stroke="#c9d6df" stroke-width="1.4" stroke-linejoin="round"/><rect x="-5" y="30" width="10" height="10" fill="#8a6a4a" stroke="#3b4f37" stroke-width="2"/></g>'; }
+  var winterScene = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 210" preserveAspectRatio="xMidYMax slice"><defs><linearGradient id="ws" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe0ea"/><stop offset="1" stop-color="#eef4f3"/></linearGradient></defs>' +
+    '<rect width="400" height="210" fill="url(#ws)"/>' +
+    '<path d="M-10 150 C60 120 120 135 190 125 C260 115 330 130 410 118 V210 H-10 Z" fill="#e6eff3" stroke="#c9d6df" stroke-width="2"/>' +
+    wpine(30, 120, .75) + wpine(78, 112, .6) + wpine(330, 108, .62) + wpine(374, 118, .8) +
+    '<g transform="translate(300 118)"><path d="M-30 0 V-26 H30 V0 Z" fill="#d9944e" stroke="#5b4636" stroke-width="2.4"/><path d="M-36 -24 L0 -48 L36 -24 Z" fill="#a8672e" stroke="#5b4636" stroke-width="2.4" stroke-linejoin="round"/><path d="M-37 -24 L0 -49 L37 -24 Q30 -18 22 -23 Q10 -16 0 -22 Q-12 -16 -22 -23 Q-30 -18 -37 -24 Z" fill="#fff" stroke="#c9d6df" stroke-width="1.4"/><rect x="-22" y="-18" width="12" height="10" rx="2" fill="#ffd77a" stroke="#5b4636" stroke-width="2"/><rect x="8" y="-18" width="12" height="18" rx="2" fill="#a8672e" stroke="#5b4636" stroke-width="2"/><rect x="16" y="-56" width="8" height="14" fill="#b07a4f" stroke="#5b4636" stroke-width="2"/><g fill="#fff" opacity=".85"><circle cx="22" cy="-64" r="4"/><circle cx="27" cy="-73" r="5"/><circle cx="24" cy="-84" r="6"/></g></g>' +
+    '<path d="M-10 178 C70 160 150 172 220 164 C290 156 350 168 410 160 V210 H-10 Z" fill="#ffffff" stroke="#c9d6df" stroke-width="2"/>' +
+    wpine(120, 172, .85) + wpine(170, 182, .55) + wpine(250, 176, .7) +
+    '<g fill="#fff">' + [[40,30],[90,60],[150,20],[210,50],[260,25],[340,45],[380,20],[120,95],[230,90],[60,100]].map(function (p) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="2.4"/>'; }).join('') + '</g>' +
+    '</svg>';
   var sceneURL = svgURL(scene);
+  var winterURL = svgURL(winterScene);
   function petal(x, y, r, c) { return '<ellipse cx="' + x + '" cy="' + y + '" rx="3.2" ry="5.2" transform="rotate(' + r + ' ' + x + ' ' + y + ')" fill="' + c + '" stroke="#5b4636" stroke-width="1" opacity=".85"/>'; }
   function leaf(x, y, r) { return '<path d="M' + x + ' ' + y + ' q6 -6 12 0 q-6 6 -12 0 Z" transform="rotate(' + r + ' ' + x + ' ' + y + ')" fill="#b8d98a" stroke="#4f6b3a" stroke-width="1" opacity=".9"/>'; }
   var petals = svgURL('<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">' + petal(30, 40, 30, '#fbd3dc') + leaf(150, 20, -20) + petal(200, 120, -40, '#fff4f0') + leaf(60, 160, 40) + petal(120, 210, 70, '#fbd3dc') + petal(220, 220, 10, '#fff4f0') + '</svg>');
@@ -225,10 +261,33 @@
     for (var i = 0; i < ms.length; i++) { var m = ms[i]; if (m.type === 'characterData') convert(m.target.parentNode); else for (var j = 0; j < m.addedNodes.length; j++) { var a = m.addedNodes[j]; convert(a.nodeType === 3 ? a.parentNode : a); } }
   });
   var watched = null;
-  new MutationObserver(function () {
-    var gm = document.getElementById('gm');
-    if (gm && gm !== watched) { watched = gm; gm.style.setProperty('--cz-scene', 'url("' + sceneURL + '")'); gm.style.setProperty('--cz-petal', 'url("' + petals + '")'); convert(gm); obs.disconnect(); obs.observe(gm, { childList: true, subtree: true, characterData: true }); }
-  }).observe(document.body, { childList: true });
+  function setVars(el) { el.style.setProperty('--cz-scene', 'url("' + sceneURL + '")'); el.style.setProperty('--cz-petal', 'url("' + petals + '")'); el.style.setProperty('--cz-cro', 'url("' + charURL('cro') + '")'); el.style.setProperty('--cz-winter', 'url("' + winterURL + '")'); }
+  setVars(document.documentElement);
+  function start() { convert(document.body); obs.observe(document.body, { childList: true, subtree: true, characterData: true }); }
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+
+
+  // 게임은 전체화면으로 (브라우저 주소창·이동 버튼 숨김)
+  function fsOn() {
+    var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen;
+    var tip = function () {
+      if (document.fullscreenElement || document.webkitFullscreenElement) return;
+      try { if (sessionStorage.getItem('czfs')) return; sessionStorage.setItem('czfs', '1'); } catch (e) {}
+      var gm = document.getElementById('gm'); if (!gm) return;
+      var kakao = /KAKAOTALK/i.test(navigator.userAgent), t = document.createElement('div'); t.className = 'czfs';
+      t.innerHTML = kakao ? '<span>카톡 안에서는 위아래 바가 남아요</span><button type="button" class="go">크롬으로 열기</button><button type="button" class="x">✕</button>' : '<span>홈 화면에 추가하면 꽉 찬 화면으로 즐길 수 있어요</span><button type="button" class="x">✕</button>';
+      t.addEventListener('click', function (e) { e.stopPropagation(); if (e.target.classList.contains('go')) location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href); t.remove(); });
+      gm.appendChild(t); setTimeout(function () { if (t.parentNode) t.remove(); }, 9000);
+    };
+    if (window.matchMedia && matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches) return;
+    if (!f) { setTimeout(tip, 600); return; }
+    try { var r = f.call(d, { navigationUI: 'hide' }); if (r && r.catch) r.catch(function () { setTimeout(tip, 300); }); setTimeout(tip, 900); } catch (e) { setTimeout(tip, 600); }
+  }
+  var opening = false;
+  function fsOff() { try { if (document.fullscreenElement) document.exitFullscreen(); else if (document.webkitFullscreenElement) document.webkitExitFullscreen(); } catch (e) {} }
+  if (typeof window.openGame === 'function') { var _og = window.openGame; window.openGame = function () { fsOn(); opening = true; try { return _og.apply(this, arguments); } finally { opening = false; } }; }
+  if (typeof window.closeGame === 'function') { var _cg = window.closeGame; window.closeGame = function () { if (!opening) fsOff(); return _cg.apply(this, arguments); }; }
+  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.getElementById('gm')) { /* 사용자가 전체화면을 나가도 게임은 그대로 */ } });
 
   window.PX = { boss: boss, char: char, charURL: charURL, icon: icon, emoji: icon, draw: draw, convert: convert, FONT: 'Jua,sans-serif' };
 })();

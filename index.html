@@ -225,7 +225,7 @@ body:not(.unl) #genc>*:not(#sbBtn):not(#attBtn):not(#attHint):not(#attBtn2):not(
 @media(max-width:640px){.crew{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:8px}.crew>div{padding:4px 5px 5px;font-size:11px;border-left-width:3px;border-radius:5px}.crew b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.crew input{font-size:11px;padding:1px 2px;margin-top:1px;box-shadow:none}.crew .bdl{gap:2px}.crew .bdl>.ck svg{width:15px;height:15px}.crew .stk{gap:2px;margin-top:3px}.crew .sl{font-size:10px;line-height:1.2}.crew .sk{width:15px;height:15px;font-size:8px;border-width:1px}}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) section.card.nextbd{background:linear-gradient(135deg,#5a2a40,#5a4a1a)!important;color:#fff!important;border-color:#ffd43b!important}:root:not([data-theme="light"]) section.card.nextbd b{color:#ffd43b}}
 </style>
-<link rel="stylesheet" href="cozy.css?v=5">
+<link rel="stylesheet" href="cozy.css?v=8">
 </head>
 <body>
 <main>
@@ -1506,7 +1506,7 @@ function renderToday(){
   }
   h+='</div>';
   const doy=Math.floor((t0-new Date(t0.getFullYear(),0,0))/864e5);
-  h+='<div class="cheer fzline"><span>🔮 오늘의 사주, 궁금하지 않아요?</span><button type="button" class="fzgo" id="fzBtn">오늘의 사주보기 ✨</button></div><div class="cheer fzline gmline"><span>🥐 빵이 손님들을 피해야 해요!<small class="v2">🆕 2.0ver 업데이트 됐어요!</small></span><button type="button" class="fzgo gmgo" id="gmBtn">게임 🎮</button></div>';
+  h+='<div class="cheer fzline"><span>🔮 오늘의 사주, 궁금하지 않아요?</span><button type="button" class="fzgo" id="fzBtn">오늘의 사주보기 ✨</button></div><div class="cheer fzline gmline"><span>파리크라상 RUSH!<br><small class="v2">NEW 2.0 숲속 대모험</small></span><button type="button" class="fzgo gmgo" id="gmBtn">▶ 게임 시작</button></div>';
   $('#today').innerHTML=h;renderNextBd();
 }
 
@@ -2380,6 +2380,6 @@ document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#te
   else if(!has&&on){on=false;document.documentElement.classList.remove('lk');document.body.classList.remove('lkb');document.body.style.top='';window.scrollTo(0,y)}}
   new MutationObserver(sync).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});sync()})();
 </script>
-<script src="cozy.js?v=4"></script>
+<script src="cozy.js?v=7"></script>
 </body>
 </html>
