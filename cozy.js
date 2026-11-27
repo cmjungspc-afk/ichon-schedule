@@ -433,7 +433,7 @@
   ICON.w_halo = '<ellipse cx="12" cy="12" rx="9" ry="3.4" fill="none" stroke="#f9d25a" stroke-width="3.4"/><ellipse cx="12" cy="12" rx="9" ry="3.4" fill="none" stroke-width="1"/>';
   // 자리: 캐릭터 그림 안에서의 위치(가운데 x·y, 너비·높이, 기울기)
   var SLOT = { head: [.5, .12, .62, .62, -6], halo: [.5, .03, .58, .3, 0], pin: [.72, .14, .36, .36, 18], face: [.5, .44, .52, .3, 0], ears: [.5, .38, .8, .72, 0],
-    hand: [.78, .72, .38, .38, -8], body: [.5, .785, .5, .41, 0], side: [.02, .7, .42, .42, 0], float: [.94, .02, .42, .42, 0] };
+    hand: [.98, .74, .36, .36, -8], body: [.5, .785, .5, .41, 0], side: [1.0, .72, .4, .4, 0], float: [1.06, .0, .38, .38, 0] };
   function slotCSS(sl, r) { var a = SLOT[sl], W = a[2] * r, H = a[3] * r, X = (1 - r) / 2 + a[0] * r, Y = (1 - r) / 2 + a[1] * r; function pc(v) { return (v * 100).toFixed(1) + '%!important;'; }
     return 'left:' + pc(X - W / 2) + 'top:' + pc(Y - H / 2) + 'width:' + pc(W) + 'height:' + pc(H) + 'transform:rotate(' + a[4] + 'deg)!important;' + (sl === 'float' ? 'animation:czfloat 2.6s ease-in-out infinite!important;' : 'animation:none!important;'); }
   var WEAR = { '🧢': 'head', '👒': 'head', '🎩': 'head', '🎅': 'head', '👑': 'head', '🍄': 'head', '😇': 'halo', '🎀': 'pin', '🌸': 'pin', '🌻': 'pin', '🌹': 'pin', '🍀': 'pin', '🌱': 'pin', '🦋': 'pin', '🕶': 'face', '👓': 'face', '🎧': 'ears',
@@ -453,6 +453,7 @@
       else el._czsk = v;
     }
     var parts = v.split(' ').filter(Boolean);
+    if (parts.some(function (e) { return slotOf(e) === 'frame'; })) el.setAttribute('data-fr', '1'); else el.removeAttribute('data-fr');
     if (parts.length < 2) { if (el.hasAttribute('data-skm')) { el.removeAttribute('data-skm'); el.style.removeProperty('--skbg'); } return; }
     var r = el.closest && el.closest('#crew') ? .85 : .72;
     parts.sort(function (a, b) { return LAYER[slotOf(a)] - LAYER[slotOf(b)]; });

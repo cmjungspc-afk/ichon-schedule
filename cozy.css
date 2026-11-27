@@ -304,3 +304,11 @@ html:root body main #mbBtn.sbgo.mbgo{font-family:"Jua","Noto Sans KR",sans-serif
 [data-pet]{position:relative;overflow:visible!important}
 html body [data-pet]::after,html body #crew .ico[data-pet]::after,html body .lobav[data-pet]::after{content:""!important;display:block!important;position:absolute!important;left:-34%!important;top:46%!important;width:56%!important;height:56%!important;right:auto!important;bottom:auto!important;background:var(--petbg) center/contain no-repeat!important;border:0!important;box-shadow:none!important;padding:0!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3));z-index:7;pointer-events:none;transform-origin:50% 100%;animation:czpet 1.6s ease-in-out infinite!important}
 @keyframes czpet{0%,100%{transform:translate(0,0) scale(1,1)}12%{transform:translate(0,0) scale(1.1,.88)}30%{transform:translate(8%,-26%) scale(.94,1.06) rotate(-6deg)}48%{transform:translate(14%,0) scale(1.08,.92)}62%{transform:translate(14%,0) scale(1)}78%{transform:translate(6%,-16%) rotate(5deg)}92%{transform:translate(0,0) scale(1.06,.94)}}
+/* 장식(프레임)·펫이 이름을 가리지 않게 자리 띄우기 */
+html body #crew .ico[data-fr]{margin:0 16px 0 14px!important}
+html body #crew .ico[data-pet]{margin-left:16px!important}
+html body .pvico[data-fr]{margin:0 22px 0 18px!important}
+html body .pvico[data-pet]{margin-left:20px!important}
+html body .lobav[data-fr]{margin:0 14px 0 12px!important}
+html body .lobav[data-pet]{margin-left:14px!important}
+html body .pvcard b{gap:10px!important}
