@@ -920,7 +920,7 @@ function openGame(){
     over=true;const s=score();let nb=false;
     if(s>best){best=s;nb=true;try{localStorage.setItem('gbest',String(best))}catch(e){}$('#gbest').textContent=best}
     msg('<b>게임 오버! 😵</b><div class="gms">'+s+'점</div>'+(nb?'<div class="gmn">🎉 최고 기록!</div>':'<div>최고 '+best+'점</div>')+'<div class="gmrk" id="grk"></div><button type="button" class="fzgo gmstart">다시 하기</button><button type="button" class="gmchg">이름/캐릭터 바꾸기</button>');
-    rkSave(gname,s,sel).then(()=>{const r=rkRank(gname),g=$('#grk');if(g&&r)g.textContent='📒 '+((STAFF[gname]||{}).e||'')+' '+gname+' 님 최고 기록 '+(rkAll()[gname]||{s:0}).s+'점'});
+    rkSave(gname,s,sel).then(()=>{const r=rkRank(gname),g=$('#grk');if(g&&r)g.innerHTML='📒 '+((STAFF[gname]||{}).e||'')+' '+esc(gname)+' 님 최고 기록 '+(rkAll()[gname]||{s:0}).s+'점'});
   }
   function offer(m){
     S.pause=1;pt=null;keys={};
