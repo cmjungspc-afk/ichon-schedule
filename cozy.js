@@ -323,13 +323,25 @@
   ICON.s_round = '<circle cx="6.8" cy="12" r="4.6" fill="rgba(220,236,250,.55)" stroke="#6b4a32" stroke-width="2.2"/><circle cx="17.2" cy="12" r="4.6" fill="rgba(220,236,250,.55)" stroke="#6b4a32" stroke-width="2.2"/><path d="M11.2 11.4 Q12 10.4 12.8 11.4" fill="none" stroke="#6b4a32" stroke-width="1.8"/><path d="M4.6 10.4 q1 -1.2 2.4 -1" fill="none" stroke="#fff" stroke-width="1"/><path d="M15 10.4 q1 -1.2 2.4 -1" fill="none" stroke="#fff" stroke-width="1"/>';
   Object.keys(OUTFIT).forEach(function (k) { ICON['o_' + k] = OUTFIT[k]; });
 
-  var OVR = { '📖': 'book', '🎒': 'bag', '📅': 'cal', '⭐': 'star', '🌟': 'star', '📮': 'mail', '🛍': 'gift', '🎁': 'gift', '🎀': 'bow', '🏆': 'trophy', '🏅': 'medal', '🪙': 'coin', '🔑': 'key', '🚪': 'door', '🎵': 'note', '📊': 'chart', '👤': 'person', '🎄': 'pine', '❤': 'heart', '🥐': 'c:cro', '💢': 'anger', '🐱': 'cat', '🐈': 'cat', '🐶': 'dog', '🐕': 'dog', '🐰': 'rabbit', '🐇': 'rabbit', '🐻': 'bear', '🐧': 'penguin', '🦊': 'fox', '🐑': 'sheep', '🐥': 'chick', '🐤': 'chick', '🐣': 'hatch', '🐼': 'panda', '🐯': 'tiger', '🐸': 'frog', '🌷': 'tulip', '🌸': 'blossom', '🌿': 'herb', '🍀': 'herb', '🙂': 'smile', '😀': 'sun', '🌻': 's_sunflower', '🌹': 's_rose', '💗': 's_heart2', '🍪': 's_cookie', '🥛': 's_milk', '🌱': 's_sprout2', '🍄': 's_mushroom', '🍓': 's_berry', '☁': 's_cloud', '🍬': 's_candy', '👓': 's_round', '🥼': 'o_apron', '👖': 'o_overalls', '👕': 'o_stripe', '🧥': 'o_hoodie', '🥻': 'o_santa', '👗': 'o_dress', '👘': 'o_hanbok', '🧣': 'o_scarf', '🧢': 's_cap', '👒': 's_straw', '🎩': 's_tophat', '🕶': 's_shades', '🦋': 's_butterfly', '🎓': 's_grad', '🎧': 's_phones', '❄': 's_snow', '🎅': 's_santa', '🔥': 's_fire', '🌈': 's_rainbow', '👑': 's_crown', '💎': 's_diamond', '☕': 's_coffee', '⛄': 's_snowman', '🔔': 's_bell', '🦌': 's_deer', '🌙': 's_moon', '🕊': 's_dove', '😇': 's_halo', '🦄': 's_unicorn', '🌌': 's_galaxy', '🍞': 'c:bread', '🎂': 'c:cream', '🍳': 'c:omu', '🧶': 'f:cat', '💐': 'f:wreath', '🥕': 'f:bunny', '⛅': 'f:rainbow', '🍯': 'f:bear', '🌠': 'f:galaxy' };
+
+  // ── 레전더리 펫: 캐릭터 옆에서 통통 뛰어다니는 아기 친구들 ──
+  var PET = {
+    kitten: chibi({ c: '#d6d9e0', belly: '#fff', ears: '<path d="M6 6 L6.4 1.6 L9.8 4.2 Z M18 6 L17.6 1.6 L14.2 4.2 Z" fill="#d6d9e0" stroke-width="1.2"/><path d="M6.8 5 L7 3 L8.6 4.2 Z M17.2 5 L17 3 L15.4 4.2 Z" fill="#f7b6c8" stroke="none"/>', head: '<path d="M14.6 3.6 C16 2.2 18 3 17.6 4.6 C17 5.6 15.4 5.2 14.6 3.6 Z M14.6 3.6 C14.6 1.6 12.8 1 12.4 2.4 C12.2 3.6 13.6 4 14.6 3.6 Z" fill="#f2788f" stroke-width=".8"/>' + nose(11.2, '#f2788f'), tail: '<path d="M16 21 C20 21 21 17 19.5 15" fill="none" stroke="#d6d9e0" stroke-width="2.2"/><path d="M16 21 C20 21 21 17 19.5 15" fill="none" stroke-width=".7"/>' }),
+    chick: chibi({ c: '#ffd84d', foot: '#f6a03c', head: '<path d="M6.2 6 L8 3.6 L9.6 5.4 L12 3 L14.4 5.4 L16 3.6 L17.8 6 C16 3.2 8 3.2 6.2 6 Z" fill="#fffaf1" stroke-width=".9"/><path d="M11.1 11.2 L12 12.4 L12.9 11.2 Z" fill="#f6a03c" stroke-width=".7"/>', mouth: '' }),
+    fairy: '<g transform="scale(.375)"><ellipse cx="14" cy="18" rx="11" ry="7" fill="#d7f0ff" opacity=".9" stroke-width="2" transform="rotate(-30 14 18)"/><ellipse cx="50" cy="18" rx="11" ry="7" fill="#d7f0ff" opacity=".9" stroke-width="2" transform="rotate(30 50 18)"/>' + CHAR.cro + '<path d="M32 9 L33.4 4 M32 4 l-2 -1.4 l2 -1.6 l2 1.6 Z" fill="#fff3a8" stroke-width="1.4"/></g>' + '<path d="M3 4 Q3 5.6 4.6 5.6 Q3 5.6 3 7.2 Q3 5.6 1.4 5.6 Q3 5.6 3 4 Z" fill="#fff3a8" stroke-width=".6"/><path d="M21 3 Q21 4.4 22.4 4.4 Q21 4.4 21 5.8 Q21 4.4 19.6 4.4 Q21 4.4 21 3 Z" fill="#ffd6f0" stroke-width=".6"/>',
+    unicorn: CHB.unicorn + '<path d="M2.4 3 Q2.4 4.6 4 4.6 Q2.4 4.6 2.4 6.2 Q2.4 4.6 .8 4.6 Q2.4 4.6 2.4 3 Z" fill="#fff3a8" stroke-width=".6"/>',
+    penguin: CHB.penguin + '<path d="M6.6 15.2 C9 16.6 15 16.6 17.4 15.2 L17.6 16.8 C15 18 9 18 6.4 16.8 Z" fill="#e94b5a" stroke-width=".9"/><path d="M14.6 16.6 L15.6 20.4 L17 20 L16.2 16.4 Z" fill="#e94b5a" stroke-width=".9"/>',
+    dragon: chibi({ c: '#a9dc8a', belly: '#fff3c0', ears: '<path d="M2 12 C.4 8 2.6 5 5.4 6.4 L6 11 Z M22 12 C23.6 8 21.4 5 18.6 6.4 L18 11 Z" fill="#b5a2e8" stroke-width="1.1"/><path d="M8.6 3.6 L8 .8 L10.4 2.8 Z M15.4 3.6 L16 .8 L13.6 2.8 Z" fill="#fff3d6" stroke-width=".9"/>', head: nose(11.2, '#5aa84a'), tail: '<path d="M16 20.6 C20 21 22.4 19 23 16.4 C21.4 18 19.4 18.4 16.6 18.2 Z" fill="#a9dc8a" stroke-width="1"/>' })
+  };
+  Object.keys(PET).forEach(function (k) { ICON['p_' + k] = PET[k]; });
+
+  var OVR = { '📖': 'book', '🎒': 'bag', '📅': 'cal', '⭐': 'star', '🌟': 'star', '📮': 'mail', '🛍': 'gift', '🎁': 'gift', '🎀': 'bow', '🏆': 'trophy', '🏅': 'medal', '🪙': 'coin', '🔑': 'key', '🚪': 'door', '🎵': 'note', '📊': 'chart', '👤': 'person', '🎄': 'pine', '❤': 'heart', '🥐': 'c:cro', '💢': 'anger', '🐱': 'cat', '🐈': 'cat', '🐶': 'dog', '🐕': 'dog', '🐰': 'rabbit', '🐇': 'rabbit', '🐻': 'bear', '🐧': 'penguin', '🦊': 'fox', '🐑': 'sheep', '🐥': 'chick', '🐤': 'chick', '🐣': 'hatch', '🐼': 'panda', '🐯': 'tiger', '🐸': 'frog', '🌷': 'tulip', '🌸': 'blossom', '🌿': 'herb', '🍀': 'herb', '🙂': 'smile', '😀': 'sun', '🌻': 's_sunflower', '🌹': 's_rose', '💗': 's_heart2', '🍪': 's_cookie', '🥛': 's_milk', '🌱': 's_sprout2', '🍄': 's_mushroom', '🍓': 's_berry', '☁': 's_cloud', '🍬': 's_candy', '🐾': 'p_kitten', '🪺': 'p_chick', '🧚': 'p_fairy', '🎠': 'p_unicorn', '🧊': 'p_penguin', '🐉': 'p_dragon', '👓': 's_round', '🥼': 'o_apron', '👖': 'o_overalls', '👕': 'o_stripe', '🧥': 'o_hoodie', '🥻': 'o_santa', '👗': 'o_dress', '👘': 'o_hanbok', '🧣': 'o_scarf', '🧢': 's_cap', '👒': 's_straw', '🎩': 's_tophat', '🕶': 's_shades', '🦋': 's_butterfly', '🎓': 's_grad', '🎧': 's_phones', '❄': 's_snow', '🎅': 's_santa', '🔥': 's_fire', '🌈': 's_rainbow', '👑': 's_crown', '💎': 's_diamond', '☕': 's_coffee', '⛄': 's_snowman', '🔔': 's_bell', '🦌': 's_deer', '🌙': 's_moon', '🕊': 's_dove', '😇': 's_halo', '🦄': 's_unicorn', '🌌': 's_galaxy', '🍞': 'c:bread', '🎂': 'c:cream', '🍳': 'c:omu', '🧶': 'f:cat', '💐': 'f:wreath', '🥕': 'f:bunny', '⛅': 'f:rainbow', '🍯': 'f:bear', '🌠': 'f:galaxy' };
   Object.keys(PEOPLE).forEach(function (e) { OVR[norm(e)] = 'p:' + e; });
   (function (m) { Object.keys(m).forEach(function (e) { OVR[norm(e)] = 'k_' + m[e]; }); })({ '🐱': 'cat', '🐈': 'cat', '🐶': 'dog', '🐕': 'dog', '🐰': 'rabbit', '🐇': 'rabbit', '🐻': 'bear', '🐼': 'panda', '🐨': 'koala', '🐯': 'tiger', '🦁': 'lion', '🐮': 'cow', '🐷': 'pig', '🐸': 'frog', '🐵': 'monkey', '🐧': 'penguin', '🐥': 'chick', '🐤': 'chick', '🦊': 'fox', '🐹': 'hamster', '🐭': 'mouse', '🐑': 'sheep', '🦄': 'unicorn', '🦔': 'hedgehog', '🐿': 'squirrel', '🦦': 'otter', '🦥': 'sloth', '🦝': 'raccoon', '🦉': 'owl', '🦆': 'duck', '🐻‍❄': 'polar', '🐴': 'horse', '🐐': 'goat', '🐘': 'elephant', '🦒': 'giraffe', '🦛': 'hippo', '🦙': 'alpaca', '🐢': 'turtle', '🦖': 'dino', '🐺': 'wolf' });
   var urls = {}, imgs = {};
   function svgURL(s) { return 'data:image/svg+xml,' + encodeURIComponent(s); }
   function charURL(k) { var key = 'c:' + k; if (!urls[key]) urls[key] = svgURL(wrap(CHAR[k] || CHAR.cro)); return urls[key]; }
-  function iconURL(n) { var key = 'i:' + n; if (!urls[key]) urls[key] = svgURL(wrap(ICON[n], n.indexOf('k_') === 0 ? '-1 -2 26 26.6' : n.indexOf('o_') === 0 ? '0 0 24 20' : '0 0 24 24').replace('stroke-width="2.4"', 'stroke-width="1.8"')); return urls[key]; }
+  function iconURL(n) { var key = 'i:' + n; if (!urls[key]) urls[key] = svgURL(wrap(ICON[n], (n.indexOf('k_') === 0 || n.indexOf('p_') === 0) ? '-1 -2 26 26.6' : n.indexOf('o_') === 0 ? '0 0 24 20' : '0 0 24 24').replace('stroke-width="2.4"', 'stroke-width="1.8"')); return urls[key]; }
   function img(u) { if (imgs[u]) return imgs[u]; var m = new Image(); m.src = u; return (imgs[u] = m); }
   function norm(e) { return String(e).replace(/️/g, ''); }
   function personURL(e) { var key = 'p:' + e; if (!urls[key]) urls[key] = svgURL(wrap(person(PEOPLE[e]))); return urls[key]; }
@@ -426,13 +438,21 @@
     return 'left:' + pc(X - W / 2) + 'top:' + pc(Y - H / 2) + 'width:' + pc(W) + 'height:' + pc(H) + 'transform:rotate(' + a[4] + 'deg)!important;' + (sl === 'float' ? 'animation:czfloat 2.6s ease-in-out infinite!important;' : 'animation:none!important;'); }
   var WEAR = { '🧢': 'head', '👒': 'head', '🎩': 'head', '🎅': 'head', '👑': 'head', '🍄': 'head', '😇': 'halo', '🎀': 'pin', '🌸': 'pin', '🌻': 'pin', '🌹': 'pin', '🍀': 'pin', '🌱': 'pin', '🦋': 'pin', '🕶': 'face', '👓': 'face', '🎧': 'ears',
     '🍪': 'hand', '🥛': 'hand', '🍓': 'hand', '🍬': 'hand', '☕': 'hand', '🎂': 'hand', '🥐': 'hand', '🍞': 'hand', '🍳': 'hand', '🎁': 'hand', '🔔': 'hand', '💎': 'hand', '🏆': 'hand', '💗': 'hand',
-    '🥼': 'body', '👖': 'body', '👕': 'body', '🧥': 'body', '🥻': 'body', '👗': 'body', '👘': 'body', '🧣': 'body', '⛄': 'side', '🎄': 'side', '🦌': 'side', '🦄': 'side', '🕊': 'float', '🌈': 'float', '☁': 'float', '🌙': 'float', '🌟': 'float', '⭐': 'float', '❄': 'float', '🔥': 'float', '🌌': 'float' };
+    '🐾': 'pet', '🪺': 'pet', '🧚': 'pet', '🎠': 'pet', '🧊': 'pet', '🐉': 'pet', '🥼': 'body', '👖': 'body', '👕': 'body', '🧥': 'body', '🥻': 'body', '👗': 'body', '👘': 'body', '🧣': 'body', '⛄': 'side', '🎄': 'side', '🦌': 'side', '🦄': 'side', '🕊': 'float', '🌈': 'float', '☁': 'float', '🌙': 'float', '🌟': 'float', '⭐': 'float', '❄': 'float', '🔥': 'float', '🌌': 'float' };
 
   // 여러 꾸미기 동시 착용: data-sk 에 이모지가 여러 개면 한 장의 겹친 그림으로
   function slotOf(e) { var n = OVR[norm(e)]; if (n && n.indexOf('f:') === 0) return 'frame'; return WEAR[norm(e)] || 'float'; }
-  var LAYER = { float: 0, pin: 1, head: 2, halo: 2, ears: 3, face: 4, hand: 5, side: 6, body: 7, frame: 8 };
+  var LAYER = { pet: -1, float: 0, pin: 1, head: 2, halo: 2, ears: 3, face: 4, hand: 5, side: 6, body: 7, frame: 8 };
   function applyMulti(el) {
-    var v = el.getAttribute('data-sk') || '', parts = v.split(' ').filter(Boolean);
+    var v = el.getAttribute('data-sk') || '';
+    if (el._czsk !== v) {
+      var all = v.split(' ').filter(Boolean), pets = all.filter(function (e) { return slotOf(e) === 'pet'; }), rest = all.filter(function (e) { return slotOf(e) !== 'pet'; });
+      if (pets.length) { var pn = OVR[norm(pets[0])]; el.setAttribute('data-pet', '1'); el.style.setProperty('--petbg', 'url("' + keyURL(pn) + '")'); }
+      else if (el.hasAttribute('data-pet')) { el.removeAttribute('data-pet'); el.style.removeProperty('--petbg'); }
+      if (pets.length) { var nv = rest.join(' '); el._czsk = nv; if (nv) el.setAttribute('data-sk', nv); else el.removeAttribute('data-sk'); v = nv; }
+      else el._czsk = v;
+    }
+    var parts = v.split(' ').filter(Boolean);
     if (parts.length < 2) { if (el.hasAttribute('data-skm')) { el.removeAttribute('data-skm'); el.style.removeProperty('--skbg'); } return; }
     var r = el.closest && el.closest('#crew') ? .85 : .72;
     parts.sort(function (a, b) { return LAYER[slotOf(a)] - LAYER[slotOf(b)]; });
@@ -447,14 +467,14 @@
     }).filter(Boolean).join(',');
     el.setAttribute('data-skm', '1'); el.style.setProperty('--skbg', bg);
   }
-  function scanMulti(root) { if (!root || !root.querySelectorAll) return; if (root.hasAttribute && root.hasAttribute('data-sk')) applyMulti(root); Array.prototype.forEach.call(root.querySelectorAll('[data-sk],[data-skm]'), applyMulti); }
+  function scanMulti(root) { if (!root || !root.querySelectorAll) return; if (root.hasAttribute && (root.hasAttribute('data-sk') || root.hasAttribute('data-pet'))) applyMulti(root); Array.prototype.forEach.call(root.querySelectorAll('[data-sk],[data-skm],[data-pet]'), applyMulti); }
   function stickerCSS() {
     try {
       if (typeof SKG === 'undefined') return;
-      SKG.forEach(function (k) { if (k.fr) { k.g = 3; return; } var sl = WEAR[norm(k.e)] || 'float';
+      SKG.forEach(function (k) { if (k.fr) { k.g = 3; return; } var sl = WEAR[norm(k.e)] || 'float'; if (sl === 'pet') { k.g = 5; return; }
         if (sl === 'body') { k.g = 2; } else if (sl === 'head' || sl === 'pin' || sl === 'face' || sl === 'ears' || sl === 'halo') { k.g = 1; k.p = Math.min(2400, Math.max(1000, k.p)); } else { k.g = 0; k.p = Math.min(800, k.p); } });
       var css = '@keyframes czfloat{0%,100%{translate:0 0}50%{translate:0 -3px}}[data-skm]::before{content:""!important;position:absolute!important;left:-50%!important;top:-50%!important;width:200%!important;height:200%!important;transform:none!important;animation:none!important;background:var(--skbg)!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;font-size:0}';
-      SKG.forEach(function (k) { var e = norm(k.e), n = OVR[e]; if (!n || n.indexOf('f:') === 0) return; var slot = WEAR[e] || 'float'; if (e === '😇') n = 'w_halo';
+      SKG.forEach(function (k) { var e = norm(k.e), n = OVR[e]; if (!n || n.indexOf('f:') === 0) return; var slot = WEAR[e] || 'float'; if (slot === 'pet') return; if (e === '😇') n = 'w_halo';
         var bg = 'content:""!important;position:absolute!important;font-size:inherit;background:url("' + keyURL(n) + '") center/contain no-repeat!important;filter:drop-shadow(0 1px 1px rgba(58,40,28,.3))!important;z-index:6;pointer-events:none;';
         css += '[data-sk="' + k.e + '"]::before{' + bg + slotCSS(slot, .72) + '}';
         css += '#crew .ico[data-sk="' + k.e + '"]::before{' + slotCSS(slot, .85) + '}'; });
@@ -487,5 +507,5 @@
   if (typeof window.closeGame === 'function') { var _cg = window.closeGame; window.closeGame = function () { if (!opening) fsOff(); return _cg.apply(this, arguments); }; }
   document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && document.getElementById('gm')) { /* 사용자가 전체화면을 나가도 게임은 그대로 */ } });
 
-  window.PX = { slotOf: slotOf, boss: boss, char: char, charURL: charURL, icon: icon, emoji: icon, draw: draw, convert: convert, FONT: 'Jua,sans-serif' };
+  window.PX = { petImg: function (se) { try { var L = String(se || '').split(','); for (var i = 0; i < L.length; i++) { var k = SKG.find(function (x) { return x.k === L[i]; }); if (k && slotOf(k.e) === 'pet') return img(keyURL(OVR[norm(k.e)])); } } catch (e) {} return null; }, slotOf: slotOf, boss: boss, char: char, charURL: charURL, icon: icon, emoji: icon, draw: draw, convert: convert, FONT: 'Jua,sans-serif' };
 })();
